@@ -3,56 +3,57 @@ const steps = [
     number: "01",
     title: "Tell us what you need",
     description:
-      "Fill in the quote form below. Takes 2 minutes. Tell us the product, quantity, and any branding details you have.",
+      "Fill in the quote form in two minutes. Share your logo, business type, rough quantity and budget. No need to have everything figured out.",
   },
   {
     number: "02",
-    title: "We send free mockups",
+    title: "We recommend product options",
     description:
-      "Within 24 hours, you get a free design mockup using your logo and colours. No commitment. No upfront cost.",
+      "We suggest 3 to 5 product options that suit your audience, budget and what you are using them for. Simple recommendations, not a catalogue.",
   },
   {
     number: "03",
-    title: "We deliver",
+    title: "You approve and we handle the rest",
     description:
-      "Once you approve the design, we handle everything. Production, quality checks, and delivery straight to your door.",
+      "Once you are happy with the options, we take care of production and delivery. We keep you updated along the way.",
   },
 ];
 
 export default function HowItWorks() {
   return (
-    <section className="bg-[#0D0D0D] py-24 px-6 border-t border-[#1a1a1a]">
+    <section id="process" className="bg-[#F8FAFC] py-20 px-6 border-t border-[#E2E8F0]">
       <div className="max-w-6xl mx-auto">
-        {/* Section header */}
-        <div className="mb-16">
-          <p className="text-[#005FFF] font-semibold text-sm tracking-widest uppercase mb-3">
-            The Process
+        <div className="max-w-xl mb-14">
+          <p className="text-[#2563EB] font-semibold text-sm tracking-widest uppercase mb-3">
+            How it works
           </p>
-          <h2 className="text-4xl md:text-5xl font-black text-white">
-            Simple from start
-            <br />
-            to delivery.
+          <h2 className="text-3xl md:text-4xl font-black text-[#0F172A] mb-4">
+            We make the whole process simple.
           </h2>
+          <p className="text-[#475569]">
+            Three steps from first enquiry to branded merch in your hands.
+          </p>
         </div>
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((step, index) => (
-            <div key={step.number} className="relative">
-              {/* Connector line (desktop only) */}
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-8 left-[calc(100%+16px)] w-[calc(100%-32px)] h-px bg-gradient-to-r from-[#2a2a2a] to-transparent" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {steps.map((step, i) => (
+            <div
+              key={step.number}
+              className="relative bg-white border border-[#E2E8F0] rounded-2xl p-8 shadow-sm"
+            >
+              {/* Connector arrow on desktop */}
+              {i < steps.length - 1 && (
+                <div className="hidden md:flex absolute top-8 -right-4 z-10 items-center justify-center w-8 h-8">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+                    <path stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" d="M3 8h10M9 4l4 4-4 4" />
+                  </svg>
+                </div>
               )}
-
-              <div className="text-[#005FFF] font-black text-5xl mb-6 opacity-40">
+              <div className="text-[#2563EB] font-black text-4xl mb-5 opacity-30">
                 {step.number}
               </div>
-              <h3 className="text-white font-bold text-xl mb-3">
-                {step.title}
-              </h3>
-              <p className="text-white/50 leading-relaxed text-sm">
-                {step.description}
-              </p>
+              <h3 className="text-[#0F172A] font-bold text-lg mb-3">{step.title}</h3>
+              <p className="text-[#475569] text-sm leading-relaxed">{step.description}</p>
             </div>
           ))}
         </div>

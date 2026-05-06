@@ -9,16 +9,25 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Novamerch | Branded Merchandise for Newcastle and Sydney Businesses",
+  title: "NovaMerch | Branded Merchandise Newcastle",
   description:
-    "Custom branded merchandise for businesses and sports clubs across Newcastle and Sydney. Hoodies, caps, drink bottles, bags and more. Free mockups in 24 hours.",
+    "Custom branded merchandise for Newcastle businesses, sports clubs and teams. Bottles, caps, pens, apparel, tote bags and corporate gift ideas.",
   metadataBase: new URL("https://novamerchau.com"),
+  keywords: [
+    "branded merchandise Newcastle",
+    "custom merch Newcastle",
+    "promotional products Newcastle",
+    "branded water bottles",
+    "custom caps",
+    "corporate gifts Newcastle",
+    "sports club merchandise",
+  ],
   openGraph: {
-    title: "Novamerch | Branded Merchandise for Newcastle and Sydney Businesses",
+    title: "NovaMerch | Branded Merchandise Newcastle",
     description:
-      "Custom branded merchandise for businesses and sports clubs. Free mockups in 24 hours. Source direct, better prices.",
+      "Custom branded merchandise for Newcastle businesses, sports clubs and teams. Bottles, caps, pens, apparel, tote bags and corporate gift ideas.",
     url: "https://novamerchau.com",
-    siteName: "Novamerch",
+    siteName: "NovaMerch",
     type: "website",
   },
 };

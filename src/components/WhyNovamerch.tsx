@@ -1,70 +1,45 @@
 const reasons = [
-  {
-    icon: "💰",
-    title: "Better prices",
-    description:
-      "We source direct from manufacturer. No middlemen, no inflated margins. You get more for your budget.",
-  },
-  {
-    icon: "⚡",
-    title: "Mockups in 24 hours",
-    description:
-      "Send an enquiry today, get a free design mockup tomorrow. See exactly what your merch will look like before you commit.",
-  },
-  {
-    icon: "📍",
-    title: "NSW-based",
-    description:
-      "We know the Newcastle and Sydney market. Easy to reach, fast to respond, and accountable if anything goes wrong.",
-  },
-  {
-    icon: "✅",
-    title: "No minimum order nonsense",
-    description:
-      "Order what you need. Whether you need 10 caps or 500 hoodies, we make it work.",
-  },
+  "Simple recommendations instead of overwhelming catalogues",
+  "Product options matched to your budget and what you need them for",
+  "Suitable for small teams, local businesses and growing companies",
+  "Clear communication from quote to delivery",
+  "Based around Newcastle and focused on local business relationships",
 ];
 
 export default function WhyNovamerch() {
   return (
-    <section className="bg-[#080808] py-24 px-6 border-t border-[#1a1a1a]">
+    <section className="bg-white py-20 px-6 border-t border-[#E2E8F0]">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left: heading and CTA */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+          {/* Left */}
           <div>
-            <p className="text-[#005FFF] font-semibold text-sm tracking-widest uppercase mb-3">
-              Why Novamerch
+            <p className="text-[#2563EB] font-semibold text-sm tracking-widest uppercase mb-3">
+              Why NovaMerch
             </p>
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
-              Built for businesses
-              <br />
-              that move fast.
+            <h2 className="text-3xl md:text-4xl font-black text-[#0F172A] mb-5">
+              Why local businesses choose NovaMerch.
             </h2>
-            <p className="text-white/50 leading-relaxed mb-8">
-              You should not have to chase a supplier for weeks just to put your
-              logo on a cap. We make it fast, affordable, and actually worth
-              your time.
+            <p className="text-[#475569] leading-relaxed mb-8">
+              You should not have to chase a supplier for weeks just to put your logo on a product. We keep it simple and handle everything for you.
             </p>
             <a
               href="#quote"
-              className="inline-flex items-center justify-center bg-[#005FFF] hover:bg-[#0052e0] text-white font-bold px-8 py-4 rounded-full transition-colors duration-200"
+              className="inline-flex items-center justify-center bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-bold px-8 py-4 rounded-full transition-colors duration-200 shadow-lg shadow-blue-200"
             >
               Get a Free Quote
             </a>
           </div>
 
-          {/* Right: reasons grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* Right: checklist */}
+          <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-8 space-y-5">
             {reasons.map((reason) => (
-              <div
-                key={reason.title}
-                className="bg-[#111111] border border-[#2a2a2a] rounded-2xl p-6"
-              >
-                <div className="text-2xl mb-3">{reason.icon}</div>
-                <h3 className="text-white font-bold mb-2">{reason.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">
-                  {reason.description}
-                </p>
+              <div key={reason} className="flex items-start gap-4">
+                <div className="w-6 h-6 rounded-full bg-[#2563EB]/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <svg width="12" height="12" fill="none" viewBox="0 0 12 12">
+                    <path stroke="#2563EB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" d="M2 6l3 3 5-5" />
+                  </svg>
+                </div>
+                <p className="text-[#0F172A] font-medium text-sm leading-relaxed">{reason}</p>
               </div>
             ))}
           </div>

@@ -1,56 +1,85 @@
+import Image from "next/image";
+
+const navLinks = [
+  { label: "Products", href: "#products" },
+  { label: "Industries", href: "#industries" },
+  { label: "Process", href: "#process" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "#quote" },
+];
+
 export default function Footer() {
   return (
-    <footer className="bg-[#080808] border-t border-[#1a1a1a] py-12 px-6">
+    <footer className="bg-[#0F172A] py-14 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           {/* Brand */}
           <div>
-            <p className="text-white font-black text-xl tracking-widest mb-2">
-              NOVAMERCH
+            <div className="flex items-center gap-2 mb-3">
+              <Image
+                src="/logo.svg"
+                alt="NovaMerch"
+                width={28}
+                height={36}
+                className="h-7 w-auto brightness-0 invert"
+              />
+              <span className="text-white font-black text-base tracking-widest">
+                NOVAMERCH
+              </span>
+            </div>
+            <p className="text-[#64748B] text-sm leading-relaxed">
+              Branded merchandise for Newcastle businesses, clubs and teams.
             </p>
-            <p className="text-white/30 text-sm">
-              Branded merchandise for Newcastle and Sydney businesses.
+          </div>
+
+          {/* Links */}
+          <div>
+            <p className="text-[#94A3B8] text-xs font-semibold uppercase tracking-widest mb-4">
+              Navigate
             </p>
+            <div className="flex flex-col gap-3">
+              {navLinks.map((l) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  className="text-[#64748B] hover:text-white text-sm transition-colors duration-200"
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Contact */}
-          <div className="flex flex-col gap-2 text-sm">
-            <a
-              href="mailto:support@novamerchau.com"
-              className="text-white/50 hover:text-white transition-colors"
-            >
-              support@novamerchau.com
-            </a>
-            <a
-              href="tel:0422518149"
-              className="text-white/50 hover:text-white transition-colors"
-            >
-              0422 518 149
-            </a>
-          </div>
-
-          {/* Nav links */}
-          <div className="flex gap-6 text-sm">
-            <a
-              href="#products"
-              className="text-white/40 hover:text-white transition-colors"
-            >
-              Products
-            </a>
-            <a
-              href="#quote"
-              className="text-white/40 hover:text-white transition-colors"
-            >
-              Get a Quote
-            </a>
+          <div>
+            <p className="text-[#94A3B8] text-xs font-semibold uppercase tracking-widest mb-4">
+              Contact
+            </p>
+            <div className="flex flex-col gap-3">
+              <a
+                href="mailto:support@novamerchau.com"
+                className="text-[#64748B] hover:text-white text-sm transition-colors duration-200"
+              >
+                support@novamerchau.com
+              </a>
+              <a
+                href="mailto:support@novamerchau.com"
+                className="text-[#64748B] hover:text-white text-sm transition-colors duration-200"
+              >
+                support@novamerchau.com
+              </a>
+              <p className="text-[#64748B] text-sm">Newcastle, NSW, Australia</p>
+            </div>
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-[#1a1a1a] flex flex-col md:flex-row justify-between items-center gap-3">
-          <p className="text-white/20 text-xs">
-            &copy; {new Date().getFullYear()} Novamerch. All rights reserved.
+        <div className="pt-8 border-t border-[#1E293B] flex flex-col md:flex-row justify-between items-center gap-3">
+          <p className="text-[#334155] text-xs">
+            &copy; {new Date().getFullYear()} NovaMerch. All rights reserved.
           </p>
-          <p className="text-white/20 text-xs">Newcastle, NSW, Australia</p>
+          <p className="text-[#334155] text-xs">
+            Custom branded merchandise Newcastle
+          </p>
         </div>
       </div>
     </footer>
