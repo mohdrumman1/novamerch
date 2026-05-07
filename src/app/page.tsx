@@ -6,7 +6,6 @@ import HowItWorks from "@/components/HowItWorks";
 import Products from "@/components/Products";
 import Industries from "@/components/Industries";
 import ShortlistCTA from "@/components/ShortlistCTA";
-import WhyNovamerch from "@/components/WhyNovamerch";
 import FAQ from "@/components/FAQ";
 import QuoteForm from "@/components/QuoteForm";
 import Footer from "@/components/Footer";
@@ -22,7 +21,6 @@ export default function Home() {
       <Products />
       <Industries />
       <ShortlistCTA />
-      <WhyNovamerch />
       <FAQ />
       <QuoteForm />
       <Footer />

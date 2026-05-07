@@ -1,61 +1,221 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
 const steps = [
   {
     number: "01",
-    title: "Tell us what you need",
-    description:
-      "Fill in the quote form in two minutes. Share your logo, business type, rough quantity and budget. No need to have everything figured out.",
+    title: "Send your logo",
+    description: "Share your logo file in any common format. We handle artwork setup from there.",
   },
   {
     number: "02",
-    title: "We recommend product options",
-    description:
-      "We suggest 3 to 5 product options that suit your audience, budget and what you are using them for. Simple recommendations, not a catalogue.",
+    title: "Tell us your budget and quantity",
+    description: "Give us a rough idea of how many units and what you are comfortable spending. No firm commitment needed.",
   },
   {
     number: "03",
-    title: "You approve and we handle the rest",
-    description:
-      "Once you are happy with the options, we take care of production and delivery. We keep you updated along the way.",
+    title: "Review curated options",
+    description: "We come back with 3 to 5 product options matched to your brief, audience and price range.",
+  },
+  {
+    number: "04",
+    title: "Approve your quote",
+    description: "Choose what works for you, sign off on the proof and confirm the order. Straightforward.",
+  },
+  {
+    number: "05",
+    title: "Receive your merch",
+    description: "We manage production and keep you updated. Your finished merch arrives ready to use.",
   },
 ];
 
 export default function HowItWorks() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const els = sectionRef.current?.querySelectorAll<HTMLElement>(".anim-fade-up");
+    if (!els) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.08 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="process" className="bg-[#F8FAFC] py-20 px-6 border-t border-[#E2E8F0]">
-      <div className="max-w-6xl mx-auto">
-        <div className="max-w-xl mb-14">
-          <p className="text-[#2563EB] font-semibold text-sm tracking-widest uppercase mb-3">
-            How it works
-          </p>
-          <h2 className="text-3xl md:text-4xl font-black text-[#0F172A] mb-4">
-            We make the whole process simple.
-          </h2>
-          <p className="text-[#475569]">
-            Three steps from first enquiry to branded merch in your hands.
-          </p>
+    <section
+      id="process"
+      ref={sectionRef}
+      style={{
+        background: "var(--bg-mid)",
+        padding: "7rem 1.5rem",
+        borderTop: "1px solid rgba(255,255,255,0.05)",
+      }}
+    >
+      <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
+        {/* Label */}
+        <p
+          className="anim-fade-up"
+          style={{
+            fontFamily: "var(--font-dm-sans)",
+            fontSize: "0.72rem",
+            fontWeight: 500,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: "var(--cyan)",
+            marginBottom: "1.25rem",
+          }}
+        >
+          002 / How It Works
+        </p>
+
+        {/* Heading */}
+        <h2
+          className="anim-fade-up"
+          style={{
+            fontFamily: "var(--font-syne)",
+            fontWeight: 800,
+            fontSize: "clamp(2.2rem, 4.5vw, 3.75rem)",
+            lineHeight: 1.08,
+            color: "var(--text-primary)",
+            letterSpacing: "-0.02em",
+            marginBottom: "4rem",
+            animationDelay: "0.08s",
+          }}
+        >
+          From logo file to<br />branded experience.
+        </h2>
+
+        {/* Steps with connecting line */}
+        <div style={{ position: "relative" }}>
+          {/* Desktop connecting line - sits behind the step circles */}
+          <div
+            className="hidden lg:block"
+            style={{
+              position: "absolute",
+              top: 19,
+              left: 0,
+              right: 0,
+              height: 1,
+              background: "linear-gradient(to right, rgba(0,207,255,0.25), rgba(139,92,246,0.2), rgba(0,207,255,0.25))",
+              pointerEvents: "none",
+            }}
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+            {steps.map((step, i) => (
+              <div
+                key={step.number}
+                className="anim-fade-up"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
+                {/* Step circle - bg matches section to "punch through" the connector line */}
+                <div
+                  style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: "50%",
+                    background: "var(--bg-mid)",
+                    border: "1.5px solid rgba(0,207,255,0.5)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontFamily: "var(--font-syne)",
+                    fontWeight: 700,
+                    fontSize: "0.78rem",
+                    color: "var(--cyan)",
+                    marginBottom: "1.25rem",
+                    position: "relative",
+                    zIndex: 1,
+                    letterSpacing: "0.04em",
+                    boxShadow: "0 0 16px rgba(0,207,255,0.15)",
+                  }}
+                >
+                  {step.number}
+                </div>
+
+                {/* Title */}
+                <h3
+                  style={{
+                    fontFamily: "var(--font-syne)",
+                    fontWeight: 700,
+                    fontSize: "0.95rem",
+                    color: "var(--text-primary)",
+                    marginBottom: "0.6rem",
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {step.title}
+                </h3>
+
+                {/* Description */}
+                <p
+                  style={{
+                    fontFamily: "var(--font-dm-sans)",
+                    fontSize: "0.85rem",
+                    color: "var(--text-secondary)",
+                    lineHeight: 1.65,
+                  }}
+                >
+                  {step.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {steps.map((step, i) => (
-            <div
-              key={step.number}
-              className="relative bg-white border border-[#E2E8F0] rounded-2xl p-8 shadow-sm"
-            >
-              {/* Connector arrow on desktop */}
-              {i < steps.length - 1 && (
-                <div className="hidden md:flex absolute top-8 -right-4 z-10 items-center justify-center w-8 h-8">
-                  <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
-                    <path stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" d="M3 8h10M9 4l4 4-4 4" />
-                  </svg>
-                </div>
-              )}
-              <div className="text-[#2563EB] font-black text-4xl mb-5 opacity-30">
-                {step.number}
-              </div>
-              <h3 className="text-[#0F172A] font-bold text-lg mb-3">{step.title}</h3>
-              <p className="text-[#475569] text-sm leading-relaxed">{step.description}</p>
-            </div>
-          ))}
+        {/* Bottom CTA */}
+        <div
+          className="anim-fade-up"
+          style={{
+            marginTop: "4rem",
+            paddingTop: "3rem",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            gap: "1rem",
+            animationDelay: "0.5s",
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "var(--font-dm-sans)",
+              fontSize: "0.9rem",
+              color: "var(--text-secondary)",
+            }}
+          >
+            Ready to get started? It takes about two minutes to send us your brief.
+          </p>
+          <a
+            href="#quote"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontFamily: "var(--font-syne)",
+              fontWeight: 700,
+              fontSize: "0.9rem",
+              color: "var(--cyan)",
+              textDecoration: "none",
+              transition: "opacity 0.2s",
+            }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.75")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
+          >
+            Get a Free Merch Quote
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
         </div>
       </div>
     </section>

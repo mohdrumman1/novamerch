@@ -1,129 +1,200 @@
-const productCards = [
-  {
-    icon: "💧",
-    name: "Drink Bottles",
-    tag: "Most popular",
-    bg: "from-blue-50 to-sky-100",
-    accent: "#2563EB",
-  },
-  {
-    icon: "🧢",
-    name: "Caps & Apparel",
-    tag: "Sports clubs",
-    bg: "from-slate-50 to-slate-100",
-    accent: "#0F172A",
-  },
-  {
-    icon: "🖊️",
-    name: "Pens & Office",
-    tag: "Corporate",
-    bg: "from-indigo-50 to-indigo-100",
-    accent: "#4338CA",
-  },
-  {
-    icon: "👜",
-    name: "Tote Bags",
-    tag: "Events",
-    bg: "from-teal-50 to-teal-100",
-    accent: "#0D9488",
-  },
-  {
-    icon: "📦",
-    name: "Gift Packs",
-    tag: "Premium",
-    bg: "from-amber-50 to-amber-100",
-    accent: "#D97706",
-  },
-];
+"use client";
 
 export default function Hero() {
   return (
-    <section className="relative bg-[#F8FAFC] overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24">
-      {/* Subtle blue glow top-right */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#2563EB] opacity-[0.06] rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+    <section
+      id="home"
+      className="relative w-full h-screen min-h-[600px] overflow-hidden flex items-end"
+      style={{ background: "linear-gradient(135deg, #060C18 0%, #0D1526 100%)" }}
+    >
+      {/* Background video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ zIndex: 0 }}
+      >
+        <source src="/videos/novamerch-hero-loop2.mp4" type="video/mp4" />
+      </video>
 
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left: copy */}
-          <div>
-            {/* Tag */}
-            <div className="inline-flex items-center gap-2 bg-[#2563EB]/10 border border-[#2563EB]/25 rounded-full px-4 py-1.5 mb-6">
-              <span className="w-2 h-2 bg-[#2563EB] rounded-full" />
-              <span className="text-[#2563EB] text-sm font-semibold">
-                Newcastle, NSW
-              </span>
-            </div>
+      {/* Dark gradient overlay - heavier at bottom for text legibility */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to top, #060C18 0%, rgba(6,12,24,0.65) 45%, rgba(6,12,24,0.15) 100%)",
+          zIndex: 1,
+        }}
+      />
 
-            <h1 className="text-5xl md:text-6xl font-black text-[#0F172A] leading-[1.05] tracking-tight mb-5">
-              Branded merchandise for{" "}
-              <span className="text-[#2563EB]">Newcastle businesses.</span>
-            </h1>
+      {/* Ambient glow orbs */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          top: "20%",
+          left: "10%",
+          width: "500px",
+          height: "500px",
+          background: "radial-gradient(circle, rgba(0,207,255,0.07) 0%, transparent 70%)",
+          zIndex: 1,
+        }}
+      />
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          top: "30%",
+          right: "5%",
+          width: "400px",
+          height: "400px",
+          background: "radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)",
+          zIndex: 1,
+        }}
+      />
 
-            <p className="text-lg text-[#475569] leading-relaxed mb-8 max-w-lg">
-              NovaMerch helps local businesses, sports clubs and teams source
-              custom branded products including bottles, caps, pens, tote bags,
-              apparel and corporate gifts. No hassle, no confusing suppliers.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a
-                href="#quote"
-                className="inline-flex items-center justify-center bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-bold text-base px-8 py-4 rounded-full transition-colors duration-200 shadow-lg shadow-blue-200"
-              >
-                Get a Free Merch Quote
-              </a>
-              <a
-                href="#products"
-                className="inline-flex items-center justify-center border-2 border-[#E2E8F0] hover:border-[#2563EB] text-[#0F172A] font-semibold text-base px-8 py-4 rounded-full transition-colors duration-200"
-              >
-                View Product Ideas
-              </a>
-            </div>
-
-            {/* Trust line */}
-            <p className="text-sm text-[#94A3B8] mt-6">
-              Carefully sourced products · Matched to your budget · Managed for you
-            </p>
-          </div>
-
-          {/* Right: product cards grid */}
-          <div className="relative">
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              {productCards.map((card, i) => (
-                <div
-                  key={card.name}
-                  className={`bg-gradient-to-br ${card.bg} rounded-2xl p-5 shadow-sm border border-white ${
-                    i === 4 ? "col-span-2 sm:col-span-1" : ""
-                  }`}
-                >
-                  <div className="text-3xl mb-3">{card.icon}</div>
-                  <p className="text-[#0F172A] font-bold text-sm mb-1">{card.name}</p>
-                  <span
-                    className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                    style={{
-                      background: `${card.accent}18`,
-                      color: card.accent,
-                    }}
-                  >
-                    {card.tag}
-                  </span>
-                </div>
-              ))}
-              {/* 6th card: CTA card */}
-              <div className="bg-[#0F172A] rounded-2xl p-5 shadow-sm flex flex-col justify-between col-span-1">
-                <p className="text-white font-bold text-sm mb-2">
-                  Not sure what to order?
-                </p>
-                <a
-                  href="#quote"
-                  className="text-[#38BDF8] text-sm font-semibold hover:underline"
-                >
-                  Get a free shortlist →
-                </a>
-              </div>
-            </div>
-          </div>
+      {/* Text content - bottom-left */}
+      <div
+        className="relative w-full max-w-7xl mx-auto px-6 pb-20 md:pb-24"
+        style={{ zIndex: 2 }}
+      >
+        {/* Location tag */}
+        <div
+          className="inline-flex items-center gap-2 mb-6"
+          style={{
+            animation: "heroReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both",
+          }}
+        >
+          <span
+            className="w-1.5 h-1.5 rounded-full"
+            style={{ background: "var(--cyan)" }}
+          />
+          <span
+            style={{
+              color: "var(--cyan)",
+              fontSize: "0.75rem",
+              fontFamily: "var(--font-dm-sans)",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+            }}
+          >
+            Newcastle · NSW
+          </span>
         </div>
+
+        {/* CTAs */}
+        <div
+          className="flex flex-col sm:flex-row gap-4"
+          style={{
+            animation: "heroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both",
+          }}
+        >
+          <a
+            href="#quote"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "var(--blue)",
+              color: "#fff",
+              fontFamily: "var(--font-syne)",
+              fontWeight: 700,
+              fontSize: "0.95rem",
+              padding: "1rem 2rem",
+              borderRadius: "9999px",
+              textDecoration: "none",
+              transition: "background 0.2s, transform 0.2s",
+              boxShadow: "0 0 32px rgba(59,130,246,0.35)",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.background = "#2563EB";
+              (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.background = "var(--blue)";
+              (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+            }}
+          >
+            Get a Free Merch Quote
+          </a>
+          <a
+            href="#products"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "rgba(255,255,255,0.06)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              color: "var(--text-primary)",
+              fontFamily: "var(--font-syne)",
+              fontWeight: 600,
+              fontSize: "0.95rem",
+              padding: "1rem 2rem",
+              borderRadius: "9999px",
+              border: "1px solid rgba(255,255,255,0.14)",
+              textDecoration: "none",
+              transition: "background 0.2s, border-color 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,207,255,0.4)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.14)";
+            }}
+          >
+            Explore Product Ideas
+          </a>
+        </div>
+
+        {/* Trust line */}
+        <p
+          style={{
+            marginTop: "1.5rem",
+            fontSize: "0.8rem",
+            color: "var(--text-secondary)",
+            fontFamily: "var(--font-dm-sans)",
+            letterSpacing: "0.04em",
+            animation: "heroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both",
+          }}
+        >
+          Carefully sourced · Matched to your budget · Managed for you
+        </p>
+      </div>
+
+      {/* Scroll chevron */}
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+        style={{ zIndex: 2 }}
+        aria-hidden="true"
+      >
+        <span
+          style={{
+            width: "1px",
+            height: "32px",
+            background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.3))",
+            display: "block",
+          }}
+        />
+        <svg
+          width="16"
+          height="10"
+          viewBox="0 0 16 10"
+          fill="none"
+          style={{ animation: "chevronBounce 1.8s ease-in-out infinite" }}
+        >
+          <path
+            d="M1 1L8 8L15 1"
+            stroke="rgba(255,255,255,0.4)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </div>
     </section>
   );

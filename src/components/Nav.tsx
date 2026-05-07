@@ -6,9 +6,8 @@ import Image from "next/image";
 const links = [
   { label: "Products", href: "#products" },
   { label: "Industries", href: "#industries" },
-  { label: "Process", href: "#process" },
+  { label: "How It Works", href: "#process" },
   { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "#quote" },
 ];
 
 export default function Nav() {
@@ -16,87 +15,178 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/95 backdrop-blur-sm shadow-sm border-b border-[#E2E8F0]"
-          : "bg-white/80 backdrop-blur-sm"
-      }`}
+    <header
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      style={{
+        background: scrolled ? "rgba(6, 12, 24, 0.88)" : "transparent",
+        backdropFilter: scrolled ? "blur(16px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
+      }}
     >
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2 shrink-0">
+        <a href="#home" className="flex items-center gap-2.5 shrink-0">
           <Image
             src="/logo.svg"
             alt="NovaMerch"
-            width={32}
-            height={40}
-            className="h-8 w-auto text-[#0F172A]"
-            style={{ filter: "brightness(0) saturate(100%) invert(7%) sepia(19%) saturate(1800%) hue-rotate(195deg) brightness(95%) contrast(97%)" }}
+            width={30}
+            height={30}
+            style={{ filter: "brightness(0) invert(1)" }}
           />
-          <span className="text-[#0F172A] font-black text-lg tracking-widest hidden sm:inline">
+          <span
+            style={{
+              fontFamily: "var(--font-syne)",
+              fontWeight: 700,
+              fontSize: "1.05rem",
+              color: "var(--text-primary)",
+              letterSpacing: "0.02em",
+            }}
+          >
             NOVAMERCH
           </span>
         </a>
 
-        {/* Desktop nav links */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="text-[#475569] hover:text-[#0F172A] text-sm font-medium transition-colors duration-200"
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                color: "var(--text-secondary)",
+                textDecoration: "none",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLElement).style.color = "var(--text-primary)")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")
+              }
             >
               {l.label}
             </a>
           ))}
-        </div>
+        </nav>
 
-        {/* CTA + mobile toggle */}
-        <div className="flex items-center gap-3">
-          <a
-            href="#quote"
-            className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-bold text-sm px-5 py-2.5 rounded-full transition-colors duration-200 whitespace-nowrap"
-          >
-            Get a Free Quote
-          </a>
-          <button
-            className="md:hidden p-2 text-[#0F172A]"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
-          >
-            <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-              {open ? (
-                <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M6 6l12 12M6 18L18 6" />
-              ) : (
-                <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
+        {/* Desktop CTA */}
+        <a
+          href="#quote"
+          className="hidden md:inline-flex items-center"
+          style={{
+            fontFamily: "var(--font-syne)",
+            fontWeight: 600,
+            fontSize: "0.85rem",
+            color: "var(--cyan)",
+            border: "1px solid rgba(0,207,255,0.3)",
+            padding: "0.5rem 1.25rem",
+            borderRadius: "9999px",
+            textDecoration: "none",
+            transition: "background 0.2s, border-color 0.2s",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLElement).style.background = "rgba(0,207,255,0.08)";
+            (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,207,255,0.6)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLElement).style.background = "transparent";
+            (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,207,255,0.3)";
+          }}
+        >
+          Get a Quote
+        </a>
+
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden flex flex-col justify-center items-center gap-1.5 w-10 h-10"
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
+        >
+          <span
+            className="block w-6 h-px transition-all duration-200"
+            style={{
+              background: "var(--text-primary)",
+              transform: open ? "rotate(45deg) translate(3px, 3px)" : "none",
+            }}
+          />
+          <span
+            className="block w-6 h-px transition-all duration-200"
+            style={{
+              background: "var(--text-primary)",
+              opacity: open ? 0 : 1,
+            }}
+          />
+          <span
+            className="block w-6 h-px transition-all duration-200"
+            style={{
+              background: "var(--text-primary)",
+              transform: open ? "rotate(-45deg) translate(3px, -3px)" : "none",
+            }}
+          />
+        </button>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden bg-white border-t border-[#E2E8F0] px-6 py-4 flex flex-col gap-4">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="text-[#475569] hover:text-[#0F172A] text-base font-medium py-1"
-            >
-              {l.label}
-            </a>
-          ))}
+        <div
+          style={{
+            background: "rgba(6,12,24,0.97)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            padding: "1.5rem 1.5rem 2rem",
+          }}
+        >
+          <nav className="flex flex-col gap-5 mb-6">
+            {links.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                style={{
+                  fontFamily: "var(--font-syne)",
+                  fontWeight: 600,
+                  fontSize: "1.1rem",
+                  color: "var(--text-primary)",
+                  textDecoration: "none",
+                }}
+              >
+                {l.label}
+              </a>
+            ))}
+          </nav>
+          <a
+            href="#quote"
+            onClick={() => setOpen(false)}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              background: "var(--blue)",
+              color: "#fff",
+              fontFamily: "var(--font-syne)",
+              fontWeight: 700,
+              fontSize: "0.95rem",
+              padding: "0.875rem",
+              borderRadius: "9999px",
+              textDecoration: "none",
+            }}
+          >
+            Get a Free Merch Quote
+          </a>
         </div>
       )}
-    </nav>
+    </header>
   );
 }

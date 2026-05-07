@@ -1,28 +1,71 @@
 const items = [
   "Drink Bottles",
-  "Caps",
-  "Pens",
-  "Apparel",
+  "Caps & Apparel",
+  "Pens & Stationery",
   "Tote Bags",
   "Corporate Gifts",
   "Event Packs",
+  "Sports Club Merch",
+  "Custom Sourcing",
 ];
 
 export default function TrustStrip() {
+  const repeated = [...items, ...items];
+
   return (
-    <section className="bg-[#0F172A] py-4 px-6">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
-        <p className="text-[#94A3B8] text-sm font-medium shrink-0 text-center sm:text-left">
-          For businesses, teams and clubs across Newcastle
-        </p>
-        <div className="w-px bg-[#1E293B] hidden sm:block self-stretch" />
-        <div className="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-2">
-          {items.map((item) => (
+    <section
+      style={{
+        background: "var(--bg-mid)",
+        borderTop: "1px solid rgba(255,255,255,0.05)",
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        padding: "1.75rem 0",
+        overflow: "hidden",
+      }}
+    >
+      {/* Label */}
+      <p
+        className="text-center mb-5"
+        style={{
+          fontFamily: "var(--font-dm-sans)",
+          fontSize: "0.7rem",
+          fontWeight: 500,
+          color: "var(--text-muted)",
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+        }}
+      >
+        For Newcastle businesses, clubs and teams
+      </p>
+
+      {/* Marquee */}
+      <div style={{ overflow: "hidden" }}>
+        <div className="marquee-track">
+          {repeated.map((item, i) => (
             <span
-              key={item}
-              className="text-[#38BDF8] text-sm font-semibold"
+              key={i}
+              className="flex items-center gap-6 px-6"
+              style={{
+                fontFamily: "var(--font-syne)",
+                fontWeight: 700,
+                fontSize: "1rem",
+                color: "var(--text-secondary)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+              }}
             >
               {item}
+              <span
+                style={{
+                  display: "inline-block",
+                  width: 4,
+                  height: 4,
+                  borderRadius: "50%",
+                  background: "var(--cyan)",
+                  opacity: 0.5,
+                  flexShrink: 0,
+                }}
+              />
             </span>
           ))}
         </div>
