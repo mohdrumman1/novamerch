@@ -97,8 +97,8 @@ export default function Hero() {
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "var(--blue)",
-              color: "#fff",
+              background: "var(--cyan)",
+              color: "#060C18",
               fontFamily: "var(--font-syne)",
               fontWeight: 700,
               fontSize: "0.95rem",
@@ -106,14 +106,14 @@ export default function Hero() {
               borderRadius: "9999px",
               textDecoration: "none",
               transition: "background 0.2s, transform 0.2s",
-              boxShadow: "0 0 32px rgba(59,130,246,0.35)",
+              boxShadow: "0 0 32px rgba(0,207,255,0.35)",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "#2563EB";
+              (e.currentTarget as HTMLElement).style.background = "#00b8e6";
               (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "var(--blue)";
+              (e.currentTarget as HTMLElement).style.background = "var(--cyan)";
               (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
             }}
           >
