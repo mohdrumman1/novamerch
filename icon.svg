@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Dark background -->
+  <rect width="200" height="200" rx="32" fill="#060C18"/>
+  <!-- Square box (white) -->
+  <rect x="10" y="10" width="180" height="180" stroke="#ffffff" stroke-width="14" fill="none"/>
+  <!-- Bold N letterform (white) -->
+  <path d="M48 48 L48 152 L72 152 L72 100 L128 152 L152 152 L152 48 L128 48 L128 100 L72 48 Z" fill="#ffffff"/>
+</svg>
