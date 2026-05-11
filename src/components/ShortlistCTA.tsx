@@ -182,7 +182,7 @@ export default function ShortlistCTA() {
               marginTop: "1rem",
             }}
           >
-            We&apos;re based in Newcastle and work with Australian businesses, clubs and teams.
+            Newcastle-based. We work with businesses, clubs and teams across Australia.
           </p>
         </div>
       </div>

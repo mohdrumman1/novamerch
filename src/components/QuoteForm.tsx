@@ -172,7 +172,7 @@ export default function QuoteForm() {
               {[
                 "Free mockups using your logo — no commitment required",
                 "3 product ideas matched to your budget and audience",
-                "Newcastle-based — available for local enquiries",
+                "Newcastle-based — serving businesses across Australia",
               ].map((point) => (
                 <div key={point} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
                   <div

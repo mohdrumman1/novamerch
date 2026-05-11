@@ -51,7 +51,7 @@ const industries: Industry[] = [
       </svg>
     ),
     name: "Clinics, Schools & Local Businesses",
-    description: "Staff merch, event giveaways, branded bags, pens, bottles and practical promotional products for everyday brand visibility around Newcastle.",
+    description: "Staff merch, event giveaways, branded bags, pens, bottles and practical promotional products for everyday brand visibility across Australia.",
     glow: "var(--violet)",
   },
 ];
@@ -131,7 +131,7 @@ export default function Industries() {
             animationDelay: "0.16s",
           }}
         >
-          Whether you run a local footy club, a real estate agency or a construction business, we&apos;ll suggest branded merch that suits your audience and budget around Newcastle.
+          Whether you run a local footy club, a real estate agency or a construction business, we&apos;ll suggest branded merch that suits your audience and budget anywhere in Australia.
         </p>
 
         {/* Grid */}

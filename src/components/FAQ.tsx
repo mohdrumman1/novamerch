@@ -16,7 +16,7 @@ const faqs = [
   {
     question: "Can you work with sports clubs?",
     answer:
-      "Absolutely. We work with local sports clubs across Newcastle. Whether you need caps, water bottles, bags or apparel for your team, sponsors or members, we can put together a package that fits your club's budget and branding.",
+      "Absolutely. We work with sports clubs across Australia. Whether you need caps, water bottles, bags or apparel for your team, sponsors or members, we can put together a package that fits your club's budget and branding.",
   },
   {
     question: "What logo files do I need?",

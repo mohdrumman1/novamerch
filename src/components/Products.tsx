@@ -61,7 +61,7 @@ const products: Product[] = [
       </svg>
     ),
     name: "Pens, Notebooks & Desk Items",
-    description: "Branded pens, notebooks and desk accessories. A reliable option for client gifts, conference packs and office branding around Newcastle.",
+    description: "Branded pens, notebooks and desk accessories. A reliable option for client gifts, conference packs and office branding across Australia.",
     accent: "var(--cyan)",
   },
   {

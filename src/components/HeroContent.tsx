@@ -85,7 +85,7 @@ export default function HeroContent() {
             maxWidth: "560px",
           }}
         >
-          Perfect for sports clubs, construction teams, real estate agencies, schools, clinics and local businesses around Newcastle.
+          Perfect for sports clubs, construction teams, real estate agencies, schools, clinics and local businesses across Australia.
         </p>
       </div>
     </section>

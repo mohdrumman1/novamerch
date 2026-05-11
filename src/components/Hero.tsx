@@ -138,7 +138,7 @@ export default function Hero() {
             animation: "heroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both",
           }}
         >
-          No upfront cost · No obligation · Newcastle-based · We handle sourcing, mockups and supplier communication
+          No upfront cost · No obligation · Newcastle-based, Australia-wide · We handle sourcing, mockups and supplier communication
         </p>
       </div>
 

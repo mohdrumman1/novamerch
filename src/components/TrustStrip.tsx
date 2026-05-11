@@ -34,7 +34,7 @@ export default function TrustStrip() {
           textTransform: "uppercase",
         }}
       >
-        For Newcastle businesses, clubs and teams
+        For Australian businesses, clubs and teams
       </p>
 
       {/* Marquee */}

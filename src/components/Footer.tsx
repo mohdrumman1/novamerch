@@ -59,7 +59,7 @@ export default function Footer() {
                 maxWidth: "220px",
               }}
             >
-              Branded merchandise for Newcastle businesses, sports clubs and local teams.
+              Newcastle-based branded merchandise for Australian businesses, sports clubs and local teams.
             </p>
           </div>
 
@@ -151,7 +151,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} NovaMerch. All rights reserved.
           </p>
           <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "0.75rem", color: "var(--text-muted)" }}>
-            Serving Newcastle · Lake Macquarie · Hunter Valley and the wider Hunter Region
+            Newcastle-based · Serving businesses across Australia
           </p>
         </div>
       </div>
