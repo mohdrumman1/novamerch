@@ -79,7 +79,7 @@ export default function ShortlistCTA() {
             position: "relative",
           }}
         >
-          005 / Free Shortlist
+          Free Mockup Pack
         </p>
 
         <h2
@@ -96,7 +96,7 @@ export default function ShortlistCTA() {
             animationDelay: "0.08s",
           }}
         >
-          Not sure what to order?
+          Want to See What Your Brand
           <br />
           <span
             style={{
@@ -106,7 +106,7 @@ export default function ShortlistCTA() {
               backgroundClip: "text",
             }}
           >
-            Start with a free merch shortlist.
+            Could Look Like?
           </span>
         </h2>
 
@@ -117,18 +117,34 @@ export default function ShortlistCTA() {
             fontSize: "1rem",
             color: "var(--text-secondary)",
             lineHeight: 1.7,
-            maxWidth: "520px",
-            margin: "0 auto 2.5rem",
+            maxWidth: "560px",
+            margin: "0 auto 0.75rem",
             position: "relative",
             animationDelay: "0.16s",
           }}
         >
-          Send us your logo, business type and rough budget. We&apos;ll suggest 3–5 branded product ideas that suit your audience, quantity and price range.
+          Send us your logo and we&apos;ll create 3 quick merch mockups with rough pricing. No upfront cost and no obligation.
+        </p>
+
+        <p
+          className="anim-fade-up"
+          style={{
+            fontFamily: "var(--font-dm-sans)",
+            fontSize: "0.85rem",
+            color: "rgba(255,255,255,0.4)",
+            lineHeight: 1.6,
+            maxWidth: "480px",
+            margin: "0 auto 2.5rem",
+            position: "relative",
+            animationDelay: "0.2s",
+          }}
+        >
+          Not sure what to choose? We&apos;ll suggest the best options based on your budget and audience.
         </p>
 
         <div
           className="anim-fade-up"
-          style={{ position: "relative", animationDelay: "0.24s" }}
+          style={{ position: "relative", animationDelay: "0.28s" }}
         >
           <a
             href="#quote"
@@ -156,7 +172,7 @@ export default function ShortlistCTA() {
               (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
             }}
           >
-            Request My Free Shortlist
+            Get My Free Mockup Pack
           </a>
           <p
             style={{
@@ -166,7 +182,7 @@ export default function ShortlistCTA() {
               marginTop: "1rem",
             }}
           >
-            No commitment. No upfront cost.
+            We&apos;re based in Newcastle and work with Australian businesses, clubs and teams.
           </p>
         </div>
       </div>

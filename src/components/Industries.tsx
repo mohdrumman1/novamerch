@@ -20,7 +20,7 @@ const industries: Industry[] = [
       </svg>
     ),
     name: "Sports Clubs",
-    description: "Caps, bottles, bags and apparel for football, cricket, netball and more. Great for member packs and sponsor giveaways.",
+    description: "Club hoodies, caps, drink bottles, supporter merch, sponsor packs and fundraising ideas. We make sports club merchandise simple and affordable.",
     glow: "var(--cyan)",
   },
   {
@@ -29,8 +29,8 @@ const industries: Industry[] = [
         <path d="M2 20h20M4 20V8l8-5 8 5v12M9 20v-5h6v5" />
       </svg>
     ),
-    name: "Construction Companies",
-    description: "Branded workwear, water bottles and site gear. Keep your crew looking professional on every job.",
+    name: "Construction & Trades",
+    description: "Branded caps, work shirts, bottles, hi-vis gear, site packs and client handover gifts. Keep your crew looking professional on every job.",
     glow: "var(--violet)",
   },
   {
@@ -40,19 +40,8 @@ const industries: Industry[] = [
       </svg>
     ),
     name: "Real Estate Agencies",
-    description: "Branded gifts for open homes, settlement days and client thank-yous. Stay front of mind with buyers and vendors.",
+    description: "Settlement gifts, open-home packs, notebooks, pens, bottles and local promo items. Stay front of mind with buyers, vendors and the community.",
     glow: "var(--cyan)",
-  },
-  {
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="7" width="20" height="14" rx="2" />
-        <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2M12 12v4M10 14h4" />
-      </svg>
-    ),
-    name: "Legal & Finance Firms",
-    description: "Polished stationery, corporate gift packs and client welcome kits that reflect your firm's standards.",
-    glow: "var(--violet)",
   },
   {
     icon: (
@@ -61,43 +50,8 @@ const industries: Industry[] = [
         <path d="M12 8v8M8 12h8" />
       </svg>
     ),
-    name: "Healthcare Clinics",
-    description: "Branded pens, notepads and bags for clinics, allied health practices and medical teams.",
-    glow: "var(--cyan)",
-  },
-  {
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 20V10M12 20V4M6 20v-6" />
-      </svg>
-    ),
-    name: "Finance & Accounting",
-    description: "Refined branded merchandise for client meetings, onboarding kits and team recognition.",
-    glow: "var(--violet)",
-  },
-  {
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="4" width="18" height="18" rx="2" />
-        <path d="M16 2v4M8 2v4M3 10h18" />
-        <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
-      </svg>
-    ),
-    name: "Local Events",
-    description: "Event packs, branded giveaways and promotional items for markets, launches and community events.",
-    glow: "var(--cyan)",
-  },
-  {
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 00-3-3.87" />
-        <path d="M16 3.13a4 4 0 010 7.75" />
-      </svg>
-    ),
-    name: "Corporate Teams",
-    description: "New starter kits, team gifting and branded merchandise programs for organisations of all sizes.",
+    name: "Clinics, Schools & Local Businesses",
+    description: "Staff merch, event giveaways, branded bags, pens, bottles and practical promotional products for everyday brand visibility around Newcastle.",
     glow: "var(--violet)",
   },
 ];
@@ -162,7 +116,7 @@ export default function Industries() {
             animationDelay: "0.08s",
           }}
         >
-          Made for the businesses that move Newcastle.
+          Built for Local Teams, Clubs and Businesses
         </h2>
 
         <p
@@ -177,14 +131,14 @@ export default function Industries() {
             animationDelay: "0.16s",
           }}
         >
-          Whether you run a local footy club or a law firm, we can suggest products that suit your audience and budget.
+          Whether you run a local footy club, a real estate agency or a construction business, we&apos;ll suggest branded merch that suits your audience and budget around Newcastle.
         </p>
 
         {/* Grid */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
             gap: "1.25rem",
           }}
         >

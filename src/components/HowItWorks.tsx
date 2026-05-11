@@ -6,27 +6,22 @@ const steps = [
   {
     number: "01",
     title: "Send your logo",
-    description: "Share your logo file in any common format. We handle artwork setup from there.",
+    description: "Upload your logo or send us your website or social page. Any format works — we handle the artwork from there.",
   },
   {
     number: "02",
-    title: "Tell us your budget and quantity",
-    description: "Give us a rough idea of how many units and what you are comfortable spending. No firm commitment needed.",
+    title: "Tell us what you need",
+    description: "Let us know your rough budget, quantity and who the merch is for. No firm commitment needed at this stage.",
   },
   {
     number: "03",
-    title: "Review curated options",
-    description: "We come back with 3 to 5 product options matched to your brief, audience and price range.",
+    title: "Get 3 mockup ideas",
+    description: "We'll send back a simple shortlist with branded mockups and rough pricing, matched to your brief.",
   },
   {
     number: "04",
-    title: "Approve your quote",
-    description: "Choose what works for you, sign off on the proof and confirm the order. Straightforward.",
-  },
-  {
-    number: "05",
-    title: "Receive your merch",
-    description: "We manage production and keep you updated. Your finished merch arrives ready to use.",
+    title: "Order only if it makes sense",
+    description: "No pressure. If you like the options, we'll finalise pricing and production. If not, no obligation.",
   },
 ];
 
@@ -91,7 +86,7 @@ export default function HowItWorks() {
             animationDelay: "0.08s",
           }}
         >
-          From logo file to<br />branded experience.
+          How It Works
         </h2>
 
         {/* Steps with connecting line */}
@@ -110,7 +105,7 @@ export default function HowItWorks() {
             }}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, i) => (
               <div
                 key={step.number}
@@ -211,7 +206,7 @@ export default function HowItWorks() {
             onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.75")}
             onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
           >
-            Get a Free Merch Quote
+            Get My Free Mockup Pack
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>

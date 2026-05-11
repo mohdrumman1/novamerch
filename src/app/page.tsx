@@ -1,7 +1,8 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
+import HeroContent from "@/components/HeroContent";
 import TrustStrip from "@/components/TrustStrip";
-import ProblemSection from "@/components/ProblemSection";
+import WhatYouGet from "@/components/WhatYouGet";
 import HowItWorks from "@/components/HowItWorks";
 import Products from "@/components/Products";
 import Industries from "@/components/Industries";
@@ -15,8 +16,9 @@ export default function Home() {
     <main>
       <Nav />
       <Hero />
+      <HeroContent />
       <TrustStrip />
-      <ProblemSection />
+      <WhatYouGet />
       <HowItWorks />
       <Products />
       <Industries />

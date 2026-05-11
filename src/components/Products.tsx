@@ -18,8 +18,8 @@ const products: Product[] = [
         <line x1="6" y1="13" x2="18" y2="13" />
       </svg>
     ),
-    name: "Drink Bottles",
-    description: "Insulated stainless bottles and reusable drink bottles. A daily-use product that keeps your brand front of mind.",
+    name: "Drink Bottles & Tumblers",
+    description: "Great for staff packs, sports clubs, client gifts, gyms, events and everyday brand visibility. Custom branded drink bottles and insulated tumblers.",
     accent: "var(--cyan)",
   },
   {
@@ -28,19 +28,18 @@ const products: Product[] = [
         <path d="M20 7L18 3h-4a2 2 0 01-4 0H6L4 7l4 2v11h8V9l4-2z" />
       </svg>
     ),
-    name: "Caps & Apparel",
-    description: "Embroidered caps, printed tees, hoodies and vests. Suited to sports teams, tradies and corporate use.",
+    name: "Caps & Headwear",
+    description: "Branded caps for sports clubs, construction teams, real estate agencies and corporate use. Embroidered or printed with your logo.",
     accent: "var(--violet)",
   },
   {
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 3l4 4L7 21H3v-4L17 3z" />
-        <path d="M14.5 5.5l4 4" />
+        <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H5v10a2 2 0 002 2h10a2 2 0 002-2V10h1.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z" />
       </svg>
     ),
-    name: "Pens & Office Merch",
-    description: "Branded pens, notebooks and desk accessories. Works well for client gifts and conference packs.",
+    name: "Hoodies, Shirts & Workwear",
+    description: "Club hoodies, branded work shirts and hi-vis gear. Ideal for sports teams, construction crews, schools and staff uniforms.",
     accent: "var(--cyan)",
   },
   {
@@ -50,9 +49,20 @@ const products: Product[] = [
         <path d="M8 7V5a4 4 0 018 0v2" />
       </svg>
     ),
-    name: "Tote Bags",
-    description: "Cotton and non-woven tote bags with your branding. Useful for events, retail, markets and staff packs.",
+    name: "Tote Bags & Backpacks",
+    description: "Branded totes and backpacks for events, markets, schools, clinics and giveaway packs. Practical and high-visibility.",
     accent: "var(--violet)",
+  },
+  {
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 3l4 4L7 21H3v-4L17 3z" />
+        <path d="M14.5 5.5l4 4" />
+      </svg>
+    ),
+    name: "Pens, Notebooks & Desk Items",
+    description: "Branded pens, notebooks and desk accessories. A reliable option for client gifts, conference packs and office branding around Newcastle.",
+    accent: "var(--cyan)",
   },
   {
     icon: (
@@ -64,9 +74,9 @@ const products: Product[] = [
         <path d="M12 6c0-1.5 2.5-4 4-3a2 2 0 010 3h-4z" />
       </svg>
     ),
-    name: "Corporate Gift Packs",
-    description: "Curated branded gift sets for clients, new starters and team rewards. Matched to your budget.",
-    accent: "var(--cyan)",
+    name: "Corporate Gifts & Event Packs",
+    description: "Curated branded gift sets and event packs for clients, settlements, new starters and team rewards. Matched to your budget.",
+    accent: "var(--violet)",
   },
   {
     icon: (
@@ -75,18 +85,8 @@ const products: Product[] = [
         <path d="M9 12l2 2 4-4" />
       </svg>
     ),
-    name: "Sports Club Merch",
-    description: "Caps, bottles, bags and apparel for clubs and teams. For training gear, sponsor giveaways and club merchandise.",
-    accent: "var(--violet)",
-  },
-  {
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-      </svg>
-    ),
-    name: "Event Packs",
-    description: "Branded merchandise bundles for launches, conferences, markets and community events.",
+    name: "Sports Club Merchandise",
+    description: "Custom sports club merchandise for football, cricket, netball and more. Caps, hoodies, drink bottles, supporter merch and sponsor packs.",
     accent: "var(--cyan)",
   },
   {
@@ -97,8 +97,8 @@ const products: Product[] = [
         <path d="M8 11h6M11 8v6" />
       </svg>
     ),
-    name: "Custom Product Sourcing",
-    description: "Can't find what you need? We can source almost any branded product. Tell us what you have in mind.",
+    name: "Custom Sourcing",
+    description: "Need something specific? We source promotional products across Australia. Tell us what you have in mind and we'll find it.",
     accent: "var(--violet)",
   },
 ];

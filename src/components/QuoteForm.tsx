@@ -148,7 +148,7 @@ export default function QuoteForm() {
                 animationDelay: "0.08s",
               }}
             >
-              Ready to get your<br />branded merch sorted?
+              Request Your Free<br />3-Product Mockup Pack
             </h2>
 
             <p
@@ -162,7 +162,7 @@ export default function QuoteForm() {
                 animationDelay: "0.16s",
               }}
             >
-              Fill in the form and we will follow up with product options matched to your brief. No commitment needed to get a quote.
+              Send your logo and a few details. We&apos;ll come back with 3 branded product mockups and rough pricing, matched to your budget and use case. No upfront cost, no obligation.
             </p>
 
             <div
@@ -170,9 +170,9 @@ export default function QuoteForm() {
               style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2.5rem", animationDelay: "0.24s" }}
             >
               {[
-                "Free product shortlist, no commitment required",
-                "Product options suited to your budget",
-                "Based in Newcastle, available for local enquiries",
+                "Free mockups using your logo — no commitment required",
+                "3 product ideas matched to your budget and audience",
+                "Newcastle-based — available for local enquiries",
               ].map((point) => (
                 <div key={point} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
                   <div
@@ -266,10 +266,10 @@ export default function QuoteForm() {
                     marginBottom: "0.75rem",
                   }}
                 >
-                  Enquiry sent.
+                  Request received.
                 </h3>
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "0.875rem", color: "var(--text-secondary)", lineHeight: 1.65 }}>
-                  We will be in touch with product options and a quote, usually within one business day.
+                  We&apos;ll be in touch with your 3 branded mockup ideas and rough pricing within 24–48 hours. If you have a logo file ready, reply to our confirmation email with it attached.
                 </p>
               </div>
             ) : (
@@ -339,7 +339,19 @@ export default function QuoteForm() {
                 </div>
 
                 <div>
-                  <label style={labelStyle}>Product type</label>
+                  <label style={labelStyle}>Website or social page</label>
+                  <input
+                    type="text"
+                    name="website"
+                    placeholder="e.g. instagram.com/yourclub"
+                    style={inputStyle}
+                    onFocus={focusInput}
+                    onBlur={blurInput}
+                  />
+                </div>
+
+                <div>
+                  <label style={labelStyle}>What type of merch are you interested in?</label>
                   <select
                     name="product"
                     style={{ ...inputStyle, cursor: "pointer" }}
@@ -387,12 +399,15 @@ export default function QuoteForm() {
                   <label style={labelStyle}>Anything else to add?</label>
                   <textarea
                     name="message"
-                    rows={4}
-                    placeholder="Event date, logo details, specific requirements..."
+                    rows={3}
+                    placeholder="Event date, specific requirements, logo details..."
                     style={{ ...inputStyle, resize: "none" }}
                     onFocus={focusInput}
                     onBlur={blurInput}
                   />
+                  <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.5rem" }}>
+                    You can also reply to our confirmation email with your logo file attached.
+                  </p>
                 </div>
 
                 {error && (
@@ -433,7 +448,7 @@ export default function QuoteForm() {
                     (e.currentTarget as HTMLElement).style.background = "var(--blue)";
                   }}
                 >
-                  {loading ? "Sending..." : "Send My Enquiry"}
+                  {loading ? "Sending..." : "Request My Free Mockup Pack"}
                 </button>
               </form>
             )}

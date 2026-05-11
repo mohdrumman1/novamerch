@@ -54,41 +54,17 @@ export default function Hero() {
         }}
       />
 
-      {/* Text content - bottom-left */}
+
+      {/* CTAs and trust line — bottom-left, overlaid on video */}
       <div
         className="relative w-full max-w-7xl mx-auto px-6 pb-20 md:pb-24"
         style={{ zIndex: 2 }}
       >
-        {/* Location tag */}
-        <div
-          className="inline-flex items-center gap-2 mb-6"
-          style={{
-            animation: "heroReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both",
-          }}
-        >
-          <span
-            className="w-1.5 h-1.5 rounded-full"
-            style={{ background: "var(--cyan)" }}
-          />
-          <span
-            style={{
-              color: "var(--cyan)",
-              fontSize: "0.75rem",
-              fontFamily: "var(--font-dm-sans)",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              fontWeight: 500,
-            }}
-          >
-            Newcastle · NSW
-          </span>
-        </div>
-
         {/* CTAs */}
         <div
           className="flex flex-col sm:flex-row gap-4"
           style={{
-            animation: "heroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both",
+            animation: "heroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both",
           }}
         >
           <a
@@ -117,7 +93,7 @@ export default function Hero() {
               (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
             }}
           >
-            Get a Free Merch Quote
+            Get My Free Mockup Pack
           </a>
           <a
             href="#products"
@@ -147,22 +123,22 @@ export default function Hero() {
               (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.14)";
             }}
           >
-            Explore Product Ideas
+            See Product Ideas
           </a>
         </div>
 
-        {/* Trust line */}
+        {/* Trust points */}
         <p
           style={{
-            marginTop: "1.5rem",
-            fontSize: "0.8rem",
+            marginTop: "1.25rem",
+            fontSize: "0.78rem",
             color: "var(--text-secondary)",
             fontFamily: "var(--font-dm-sans)",
             letterSpacing: "0.04em",
-            animation: "heroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both",
+            animation: "heroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both",
           }}
         >
-          Carefully sourced · Matched to your budget · Managed for you
+          No upfront cost · No obligation · Newcastle-based · We handle sourcing, mockups and supplier communication
         </p>
       </div>
 
