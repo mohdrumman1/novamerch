@@ -6,7 +6,7 @@ const steps = [
   {
     number: "01",
     title: "Send your logo",
-    description: "Upload your logo or send us your website or social page. Any format works — we handle the artwork from there.",
+    description: "Upload your logo or send us your website or social page. Any format works. We handle the artwork from there.",
   },
   {
     number: "02",

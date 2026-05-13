@@ -55,7 +55,7 @@ export default function Hero() {
       />
 
 
-      {/* CTAs and trust line — bottom-left, overlaid on video */}
+      {/* CTAs and trust line: bottom-left, overlaid on video */}
       <div
         className="relative w-full max-w-7xl mx-auto px-6 pb-20 md:pb-24"
         style={{ zIndex: 2 }}

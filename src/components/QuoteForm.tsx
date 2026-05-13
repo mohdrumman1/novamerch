@@ -170,9 +170,9 @@ export default function QuoteForm() {
               style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2.5rem", animationDelay: "0.24s" }}
             >
               {[
-                "Free mockups using your logo — no commitment required",
+                "Free mockups using your logo. No commitment required.",
                 "3 product ideas matched to your budget and audience",
-                "Newcastle-based — serving businesses across Australia",
+                "Newcastle-based, serving businesses across Australia",
               ].map((point) => (
                 <div key={point} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
                   <div

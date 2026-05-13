@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const links = [
-  { label: "Products", href: "#products" },
-  { label: "Industries", href: "#industries" },
-  { label: "How It Works", href: "#process" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Products", href: "/#products" },
+  { label: "Catalogue", href: "/#catalogue" },
+  { label: "Industries", href: "/#industries" },
+  { label: "Sports Clubs", href: "/sports-clubs/" },
+  { label: "How It Works", href: "/#process" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 export default function Nav() {
@@ -32,7 +35,7 @@ export default function Nav() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
         {/* Logo */}
-        <a href="#home" className="flex items-center gap-2.5 shrink-0">
+        <Link href="/" className="flex items-center gap-2.5 shrink-0" style={{ textDecoration: "none" }}>
           <Image
             src="/logo.svg"
             alt="NovaMerch"
@@ -51,37 +54,40 @@ export default function Nav() {
           >
             NOVAMERCH
           </span>
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              style={{
-                fontFamily: "var(--font-dm-sans)",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                color: "var(--text-secondary)",
-                textDecoration: "none",
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLElement).style.color = "var(--text-primary)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")
-              }
-            >
-              {l.label}
-            </a>
-          ))}
+          {links.map((l) => {
+            const isPage = !l.href.startsWith("/#");
+            return (
+              <a
+                key={l.href}
+                href={l.href}
+                style={{
+                  fontFamily: "var(--font-dm-sans)",
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  color: isPage ? "var(--violet)" : "var(--text-secondary)",
+                  textDecoration: "none",
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={(e) =>
+                  ((e.currentTarget as HTMLElement).style.color = "var(--text-primary)")
+                }
+                onMouseLeave={(e) =>
+                  ((e.currentTarget as HTMLElement).style.color = isPage ? "var(--violet)" : "var(--text-secondary)")
+                }
+              >
+                {l.label}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Desktop CTA */}
-        <a
-          href="#quote"
+        <Link
+          href="/#quote"
           className="hidden md:inline-flex items-center"
           style={{
             fontFamily: "var(--font-syne)",
@@ -104,7 +110,7 @@ export default function Nav() {
           }}
         >
           Get a Quote
-        </a>
+        </Link>
 
         {/* Mobile hamburger */}
         <button
@@ -165,8 +171,8 @@ export default function Nav() {
               </a>
             ))}
           </nav>
-          <a
-            href="#quote"
+          <Link
+            href="/#quote"
             onClick={() => setOpen(false)}
             style={{
               display: "inline-flex",
@@ -184,7 +190,7 @@ export default function Nav() {
             }}
           >
             Get a Free Merch Quote
-          </a>
+          </Link>
         </div>
       )}
     </header>

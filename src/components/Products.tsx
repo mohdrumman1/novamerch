@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 type Product = {
   icon: React.ReactNode;
@@ -180,6 +181,29 @@ export default function Products() {
             >
               Curated product options across all major categories, carefully sourced and managed for you.
             </p>
+
+            <div
+              className="anim-fade-up"
+              style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.25rem", animationDelay: "0.22s" }}
+            >
+              {["Any Size", "Any Colour", "Any Shape", "Any Design"].map((label) => (
+                <span
+                  key={label}
+                  style={{
+                    fontFamily: "var(--font-dm-sans)",
+                    fontSize: "0.72rem",
+                    fontWeight: 500,
+                    color: "var(--cyan)",
+                    background: "rgba(0,207,255,0.08)",
+                    border: "1px solid rgba(0,207,255,0.2)",
+                    borderRadius: "9999px",
+                    padding: "0.22rem 0.8rem",
+                  }}
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
           </div>
 
           {/* Bottle image - desktop only */}
@@ -215,8 +239,8 @@ export default function Products() {
               }}
             >
               <Image
-                src="/bottle2.png"
-                alt="Branded drink bottle"
+                src="/products-showcase.png"
+                alt="Branded product showcase"
                 width={180}
                 height={240}
                 style={{ objectFit: "contain", width: "90%", height: "90%" }}
@@ -312,8 +336,8 @@ export default function Products() {
           <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "0.75rem" }}>
             Looking for something specific? We can source almost anything with your branding.
           </p>
-          <a
-            href="#quote"
+          <Link
+            href="/#quote"
             style={{
               fontFamily: "var(--font-syne)",
               fontWeight: 600,
@@ -332,7 +356,7 @@ export default function Products() {
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M2 6.5h9M7.5 3l3.5 3.5L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

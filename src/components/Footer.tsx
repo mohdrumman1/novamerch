@@ -3,11 +3,12 @@
 import Image from "next/image";
 
 const navLinks = [
-  { label: "Products", href: "#products" },
-  { label: "Industries", href: "#industries" },
-  { label: "How It Works", href: "#process" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Get a Quote", href: "#quote" },
+  { label: "Products", href: "/#products" },
+  { label: "Industries", href: "/#industries" },
+  { label: "Sports Clubs", href: "/sports-clubs/" },
+  { label: "How It Works", href: "/#process" },
+  { label: "FAQ", href: "/#faq" },
+  { label: "Get a Quote", href: "/#quote" },
 ];
 
 export default function Footer() {

@@ -7,7 +7,7 @@ const items = [
     number: "01",
     title: "3 branded product ideas",
     description:
-      "We choose practical merch options based on your audience, budget and quantity — no scrolling through endless catalogues.",
+      "We choose practical merch options based on your audience, budget and quantity. No endless catalogues.",
     accent: "var(--cyan)",
     accentRgb: "0,207,255",
   },

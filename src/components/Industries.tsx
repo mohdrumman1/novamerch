@@ -1,6 +1,14 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Image from "next/image";
+
+const industryImages: Record<string, string> = {
+  "Sports Clubs": "/sports-clubs.png",
+  "Construction & Trades": "/construction.png",
+  "Real Estate Agencies": "/real-estate.png",
+  "Clinics, Schools & Local Businesses": "/clinic-business.png",
+};
 
 type Industry = {
   icon: React.ReactNode;
@@ -155,6 +163,8 @@ export default function Industries() {
                   transition: "box-shadow 0.3s, transform 0.3s",
                   cursor: "default",
                   animationDelay: `${i * 0.07}s`,
+                  position: "relative",
+                  overflow: "hidden",
                 }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLElement).style.boxShadow = `0 0 28px rgba(${glowRgb},0.1)`;
@@ -165,44 +175,57 @@ export default function Industries() {
                   (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                 }}
               >
-                {/* Icon container */}
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 12,
-                    background: `rgba(${glowRgb}, 0.1)`,
-                    border: `1px solid rgba(${glowRgb}, 0.2)`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: ind.glow,
-                    marginBottom: "0.875rem",
-                  }}
-                >
-                  {ind.icon}
+                {/* Low-opacity background image watermark */}
+                {industryImages[ind.name] && (
+                  <Image
+                    src={industryImages[ind.name]}
+                    alt=""
+                    fill
+                    style={{ objectFit: "cover", opacity: 0.12 }}
+                    sizes="280px"
+                  />
+                )}
+                {/* Content sits above the bg image */}
+                <div style={{ position: "relative" }}>
+                  {/* Icon container */}
+                  <div
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 12,
+                      background: `rgba(${glowRgb}, 0.1)`,
+                      border: `1px solid rgba(${glowRgb}, 0.2)`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: ind.glow,
+                      marginBottom: "0.875rem",
+                    }}
+                  >
+                    {ind.icon}
+                  </div>
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-syne)",
+                      fontWeight: 700,
+                      fontSize: "0.95rem",
+                      color: "var(--text-primary)",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    {ind.name}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-dm-sans)",
+                      fontSize: "0.83rem",
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.65,
+                    }}
+                  >
+                    {ind.description}
+                  </p>
                 </div>
-                <h3
-                  style={{
-                    fontFamily: "var(--font-syne)",
-                    fontWeight: 700,
-                    fontSize: "0.95rem",
-                    color: "var(--text-primary)",
-                    marginBottom: "0.5rem",
-                  }}
-                >
-                  {ind.name}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: "var(--font-dm-sans)",
-                    fontSize: "0.83rem",
-                    color: "var(--text-secondary)",
-                    lineHeight: 1.65,
-                  }}
-                >
-                  {ind.description}
-                </p>
               </div>
             );
           })}
