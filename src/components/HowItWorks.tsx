@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useParallax } from "@/hooks/useParallax";
 
 const steps = [
   {
@@ -27,6 +28,7 @@ const steps = [
 
 export default function HowItWorks() {
   const sectionRef = useRef<HTMLElement>(null);
+  const orbY = useParallax(0.15, sectionRef);
 
   useEffect(() => {
     const els = sectionRef.current?.querySelectorAll<HTMLElement>(".anim-fade-up");
@@ -50,12 +52,30 @@ export default function HowItWorks() {
       id="process"
       ref={sectionRef}
       style={{
+        position: "relative",
+        overflow: "hidden",
         background: "var(--bg-mid)",
         padding: "7rem 1.5rem",
         borderTop: "1px solid rgba(255,255,255,0.05)",
       }}
     >
-      <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
+      {/* Ambient parallax orb */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "10%",
+          left: "50%",
+          transform: `translateX(-50%) translateY(${orbY}px)`,
+          width: "800px",
+          height: "800px",
+          background: "radial-gradient(circle, rgba(0,207,255,0.05) 0%, transparent 65%)",
+          pointerEvents: "none",
+          willChange: "transform",
+          zIndex: 0,
+        }}
+      />
+      <div style={{ position: "relative", zIndex: 1, maxWidth: "72rem", margin: "0 auto" }}>
         {/* Label */}
         <p
           className="anim-fade-up"
