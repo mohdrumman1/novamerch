@@ -1001,8 +1001,8 @@ function QuoteCalculator() {
           >
             <div className="flex items-center justify-between mb-4">
               <h3
-                className="text-sm font-bold uppercase tracking-widest"
-                style={{ fontFamily: "var(--font-syne, serif)", color: "var(--text)" }}
+                className="text-sm font-bold uppercase tracking-wide"
+                style={{ fontFamily: "var(--font-sans)", color: "var(--text)" }}
               >
                 Order Summary
               </h3>

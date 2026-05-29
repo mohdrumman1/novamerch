@@ -49,11 +49,10 @@ export function Sidebar() {
           <div>
             <div
               style={{
-                fontFamily: "var(--font-syne, serif)",
-                fontWeight: 800,
+                fontFamily: "var(--font-sans)",
+                fontWeight: 700,
                 fontSize: "15px",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
+                letterSpacing: 0,
                 color: "white",
                 lineHeight: 1.1,
               }}
@@ -66,7 +65,7 @@ export function Sidebar() {
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.35)",
-                fontFamily: "var(--font-dm-mono, monospace)",
+                fontFamily: "var(--font-mono)",
                 marginTop: 2,
               }}
             >
@@ -106,16 +105,17 @@ export function Sidebar() {
       </nav>
 
       {/* Logout */}
-      <button
-        className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm w-full mt-4 border-0 cursor-pointer transition-colors"
-        style={{ background: "transparent", color: "rgba(255,255,255,0.5)" }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,59,48,0.12)"; (e.currentTarget as HTMLElement).style.color = "var(--red)"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.5)"; }}
-        onClick={() => { if (typeof window !== "undefined") { sessionStorage.clear(); window.location.href = "/"; } }}
-      >
-        <LogoutIcon size={18} />
-        Logout
-      </button>
+      <form action="/admin/api/auth/logout" method="post" className="mt-4">
+        <button
+          className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm w-full border-0 cursor-pointer transition-colors"
+          style={{ background: "transparent", color: "rgba(255,255,255,0.5)" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,59,48,0.12)"; (e.currentTarget as HTMLElement).style.color = "var(--red)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.5)"; }}
+        >
+          <LogoutIcon size={18} />
+          Logout
+        </button>
+      </form>
     </aside>
   );
 }

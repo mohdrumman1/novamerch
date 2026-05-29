@@ -11,9 +11,9 @@ export function PageHeader({ title, actions }: PageHeaderProps) {
       <h1
         className="text-[27px] text-[var(--text)]"
         style={{
-          fontFamily: "var(--font-syne, serif)",
-          fontWeight: 800,
-          letterSpacing: "-0.02em",
+          fontFamily: "var(--font-sans)",
+          fontWeight: 700,
+          letterSpacing: 0,
           margin: 0,
         }}
       >

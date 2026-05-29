@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "novamerch-admin",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-05-27",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "ADMIN_USERNAME": "admin",
+    "AIRTABLE_BASE_ID": "appxYYtl9qnkcgUVx"
+  },
+  "routes": [
+    {
+      "pattern": "novamerchau.com/admin*",
+      "zone_name": "novamerchau.com"
+    }
+  ]
+}

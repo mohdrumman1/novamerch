@@ -18,6 +18,11 @@ const baseState: AppState = {
 
 const LOCAL_GOODS_KEY = "novamerch-goods-v1";
 const LOCAL_SETTINGS_KEY = "novamerch-settings-v1";
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+function apiPath(path: string): string {
+  return `${BASE_PATH}${path}`;
+}
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
@@ -91,19 +96,19 @@ function reducer(state: AppState, action: Action): AppState {
 // ─── API helpers ─────────────────────────────────────────────────────────────
 
 async function post<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const res = await fetch(apiPath(path), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
   if (!res.ok) throw new Error(await res.text());
   return res.json() as Promise<T>;
 }
 
 async function patch<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(path, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const res = await fetch(apiPath(path), { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
   if (!res.ok) throw new Error(await res.text());
   return res.json() as Promise<T>;
 }
 
 async function del(path: string): Promise<void> {
-  const res = await fetch(path, { method: "DELETE" });
+  const res = await fetch(apiPath(path), { method: "DELETE" });
   if (!res.ok) throw new Error(await res.text());
 }
 
@@ -171,7 +176,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (fetched.current) return;
     fetched.current = true;
-    fetch("/api/bootstrap")
+    fetch(apiPath("/api/bootstrap"))
       .then((r) => r.json())
       .then((data: { customers: Customer[]; quotes: Quote[]; orders: Order[]; invoices: Invoice[]; shipments: Shipment[] }) => {
         dispatch({ type: "HYDRATE_REMOTE", ...data });

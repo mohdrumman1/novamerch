@@ -5,7 +5,10 @@ node_modules/
 
 # production
 .next/
+.open-next/
+.wrangler/
 out/
+tsconfig.tsbuildinfo
 
 # misc
 .DS_Store
