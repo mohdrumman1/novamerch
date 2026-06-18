@@ -57,6 +57,12 @@ interface IntakeItem {
   notes?: string;
   qty: number;
   unitPrice: number;
+  // Optional logo data-URIs from the mockup builder canvas.
+  // Included so the admin email can display the actual uploaded logos.
+  logoFrontSrc?: string;
+  logoFrontSize?: number;
+  logoBackSrc?: string;
+  logoBackSize?: number;
 }
 
 interface IntakePayload {
@@ -269,6 +275,13 @@ async function sendEmail(input: EmailDispatchInput): Promise<{ ok: boolean; stat
 
   const total = items.reduce((s, it) => s + it.qty * it.unitPrice, 0);
 
+  // Validate a logo src: must be a base64 data-URI for a known image type.
+  // We do NOT forward arbitrary strings as <img src> values into the email.
+  function isValidLogoSrc(src: unknown): src is string {
+    if (typeof src !== "string") return false;
+    return /^data:image\/(png|jpeg|jpg|gif|webp|svg\+xml);base64,[A-Za-z0-9+/=]+$/.test(src);
+  }
+
   const rowsHtml = items
     .map((it) => {
       const label = escapeHtml(it.label || it.product || "Item");
@@ -284,8 +297,20 @@ async function sendEmail(input: EmailDispatchInput): Promise<{ ok: boolean; stat
       ].filter(Boolean);
       const details = detailLines.join("<br>");
       const lineTotal = (it.qty * it.unitPrice).toFixed(2);
+
+      // Build inline logo preview thumbnails for the email.
+      // Only embed validated base64 data-URIs; skip anything that looks wrong.
+      const logoHtml = [
+        isValidLogoSrc(it.logoFrontSrc)
+          ? `<div style="margin-top:6px"><div style="font-size:10px;color:#888;margin-bottom:2px">Front logo:</div><img src="${it.logoFrontSrc}" style="max-height:60px;max-width:120px;border:1px solid #e2e8f0;border-radius:4px;background:#f8fafc;padding:3px;display:block"></div>`
+          : null,
+        isValidLogoSrc(it.logoBackSrc)
+          ? `<div style="margin-top:6px"><div style="font-size:10px;color:#888;margin-bottom:2px">Back logo:</div><img src="${it.logoBackSrc}" style="max-height:60px;max-width:120px;border:1px solid #e2e8f0;border-radius:4px;background:#f8fafc;padding:3px;display:block"></div>`
+          : null,
+      ].filter(Boolean).join("");
+
       return `<tr style="border-bottom:1px solid #F1F5F9">
-  <td style="padding:10px 12px;font-weight:700">${label}</td>
+  <td style="padding:10px 12px;font-weight:700">${label}${logoHtml}</td>
   <td style="padding:10px 12px;font-size:11px;color:#444;line-height:1.7">${details}</td>
   <td style="padding:10px 12px;text-align:center">${it.qty}</td>
   <td style="padding:10px 12px;text-align:right">$${it.unitPrice.toFixed(2)}</td>
@@ -591,6 +616,15 @@ export async function POST(req: Request) {
     if (runningTotal > MAX_TOTAL) {
       return badRequest(`total exceeds max ${MAX_TOTAL}`, origin);
     }
+    // Validate logo src: must be a base64 data-URI (≤ 350 KB chars) for a known image type.
+    const MAX_LOGO_CHARS = 350 * 1024;
+    const LOGO_DATA_URI_RE = /^data:image\/(png|jpeg|jpg|gif|webp|svg\+xml);base64,[A-Za-z0-9+/=]+$/;
+    function sanitizeLogo(v: unknown): string | undefined {
+      if (typeof v !== "string" || v.length === 0) return undefined;
+      if (v.length > MAX_LOGO_CHARS) return undefined;
+      return LOGO_DATA_URI_RE.test(v) ? v : undefined;
+    }
+
     items.push({
       product: clampString(raw.product || "", 200),
       label: clampString(raw.label || "", 200),
@@ -604,6 +638,10 @@ export async function POST(req: Request) {
       notes: clampString(raw.notes || "", 500),
       qty: raw.qty,
       unitPrice: raw.unitPrice,
+      logoFrontSrc: sanitizeLogo(raw.logoFrontSrc),
+      logoFrontSize: typeof raw.logoFrontSize === "number" ? raw.logoFrontSize : undefined,
+      logoBackSrc: sanitizeLogo(raw.logoBackSrc),
+      logoBackSize: typeof raw.logoBackSize === "number" ? raw.logoBackSize : undefined,
     });
   }
 

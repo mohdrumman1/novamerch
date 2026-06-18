@@ -754,7 +754,7 @@ const COLOURS = [
     { id: 'dark-grey',     label: 'Dark Grey',      hex: '#404040' },
     { id: 'dark-orange',   label: 'Dark Orange',    hex: '#c85a00' },
     { id: 'deep-pink',     label: 'Deep Pink',      hex: '#c0186a' },
-    { id: 'dark-gray',    label: 'Dark Gray',      hex: '#94A3B8555' },
+    { id: 'dark-gray',    label: 'Dark Gray',      hex: '#444B55' },
     { id: 'emerald',      label: 'Emerald',        hex: '#1c7c4a' },
     { id: 'gold',         label: 'Gold',           hex: '#c8a000' },
     { id: 'gray',         label: 'Gray',           hex: '#909090' },
@@ -802,7 +802,19 @@ function renderOpts() {
             : COLOURS;
     document.getElementById('swatches').innerHTML = swatchList.map(c => {
         const bg = c.hex2 ? `linear-gradient(135deg, ${c.hex} 50%, ${c.hex2} 50%)` : c.hex;
-        const border = (c.id === 'white' || c.hex2) ? '#999' : c.hex;
+        // For very dark swatches (black, navy, dark-gray, dark-grey, forest,
+        // burgundy, dark-purple, crimson, etc.) the swatch colour itself is too
+        // close to the dark sidebar (#0D1526) to be visible, so we always use a
+        // light semi-transparent border instead of the colour itself.
+        // White gets a medium-grey border so it stays distinct on light canvas too.
+        // All other colours use their own hex (readable on dark bg).
+        const isDark = c.hex && parseInt(c.hex.slice(1, 3) || '0', 16) < 80
+            && parseInt(c.hex.slice(3, 5) || '0', 16) < 80
+            && parseInt(c.hex.slice(5, 7) || '0', 16) < 80;
+        const border = c.hex2 ? 'rgba(255,255,255,0.35)'
+            : (c.id === 'white' || c.id === 'cream' || c.id === 'bluish-white') ? '#999'
+            : isDark ? 'rgba(255,255,255,0.30)'
+            : c.hex;
         return `
         <div class="sw-wrap">
             <div class="swatch ${S.colour === c.id ? 'sel' : ''}"
@@ -1566,19 +1578,32 @@ function submitQuoteRequest() {
 
     // Build the payload. Each item carries its full spec so the server can
     // render the email + persist a description on the Quote line item.
+    // logoFrontSrc / logoBackSrc are base64 data-URIs from the canvas uploads.
+    // We include them so the admin email can show the actual logo images.
+    // To keep email sizes sane, we cap each at ~300 KB (base64 chars) before
+    // sending; if a logo is larger the admin still sees the spec text.
+    const MAX_LOGO_B64 = 300 * 1024; // 300 KB in base64 chars
+    function capLogo(src) {
+        if (!src) return '';
+        return src.length > MAX_LOGO_B64 ? '' : src;
+    }
     const items = quoteItems.map(item => ({
-        product:    item.product,
-        label:      PRODUCTS[item.product]?.label || item.product,
-        style:      item.style      || '',
-        colour:     item.colour     || '',
-        size:       item.size       || '',
-        plFront:    item.plFront    || '',
-        plBack:     item.plBack     || '',
-        decoration: item.decoration || '',
-        sockText:   item.sockText   || '',
-        notes:      item.notes      || '',
-        qty:        item.qty,
-        unitPrice:  item.unitPrice,
+        product:       item.product,
+        label:         PRODUCTS[item.product]?.label || item.product,
+        style:         item.style      || '',
+        colour:        item.colour     || '',
+        size:          item.size       || '',
+        plFront:       item.plFront    || '',
+        plBack:        item.plBack     || '',
+        decoration:    item.decoration || '',
+        sockText:      item.sockText   || '',
+        notes:         item.notes      || '',
+        qty:           item.qty,
+        unitPrice:     item.unitPrice,
+        logoFrontSrc:  capLogo(item.logoFrontSrc),
+        logoFrontSize: item.logoFrontSize || 20,
+        logoBackSrc:   capLogo(item.logoBackSrc),
+        logoBackSize:  item.logoBackSize  || 20,
     }));
 
     fetch(quoteEndpoint(), {
