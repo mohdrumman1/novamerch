@@ -21,7 +21,7 @@ export const STYLES_CSS = `
            its own chrome (admin panel). The shell owns the viewport-locked
            flex column: header → product-bar → main grid → (preview rows). */
         .mockup-shell {
-            --sum-height: 88px; /* default natural summary bar height; JS overrides via --sum-height on :root */
+            --sum-height: 120px; /* tall enough for wrapped actions; JS overrides via --sum-height */
             position: relative;
             width: 100%;
             height: 100vh;
@@ -524,7 +524,7 @@ export const STYLES_CSS = `
             /* Resizable height driven by --sum-height (set by the horizontal
                splitter). Clamped to a min that fits the current single row +
                actions, and a max of 50vh so the canvas can't be squeezed out. */
-            height: clamp(72px, var(--sum-height, 88px), 50vh);
+            height: clamp(112px, var(--sum-height, 120px), 50vh);
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: rgba(255,255,255,0.08) transparent;

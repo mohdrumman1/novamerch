@@ -1612,8 +1612,8 @@ function initSplitter() {
 
 // ── Summary splitter ──────────────────────────────────────────────────────────
 const SUMMARY_SPLITTER_STORAGE_KEY = 'novamerch.summaryHeight';
-const SUMMARY_MIN = 72;
-const SUMMARY_DEFAULT = 88;
+const SUMMARY_MIN = 112;
+const SUMMARY_DEFAULT = 120;
 const SUMMARY_KEY_STEP = 16;
 
 function summaryMax() {
