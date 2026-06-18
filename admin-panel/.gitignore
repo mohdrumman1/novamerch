@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# production
+.next/
+.open-next/
+.wrangler/
+out/
+tsconfig.tsbuildinfo
+
+# misc
+.DS_Store
+*.pem
+.env*.local
+npm-debug.log*

@@ -155,6 +155,19 @@ html {
   background: var(--surface-hover);
 }
 
+/* ─── Reduced Motion ─── */
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-up,
+  .anim-fade-in,
+  .anim-slide-left,
+  .anim-slide-right {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
 /* ─── Marquee ─── */
 
 .marquee-track {

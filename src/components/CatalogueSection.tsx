@@ -255,7 +255,7 @@ export default function CatalogueSection() {
             animationDelay: "0.16s",
           }}
         >
-          Explore branded product ideas for teams, clubs, events and client gifts. These are example concepts only — every product can be fully customised around your brand.
+          Explore branded product ideas for teams, clubs, events and client gifts. These are example concepts only. Every product can be fully customised around your brand.
         </p>
 
         <div

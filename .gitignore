@@ -40,5 +40,17 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local catalogue templates — not for deployment
+# local catalogue templates, not for deployment
 /local-catalogues/
+
+# graphify code-analysis cache
+/graphify-out/
+
+# nested build outputs from sibling projects (e.g. admin-panel)
+**/.next/
+**/out/
+**/.open-next/
+**/dist/
+
+# OS junk anywhere in the tree
+**/.DS_Store
