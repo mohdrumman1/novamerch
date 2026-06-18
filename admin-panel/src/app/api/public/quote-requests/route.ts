@@ -35,9 +35,10 @@ const IDEMPOTENCY_CAP = 1000;
 const FETCH_TIMEOUT_MS = 10_000;
 
 const EMAILJS_SERVICE_ID = "service_fs3k0qg";
-const EMAILJS_TEMPLATE_ID = "template_rfe3dtp";
+const EMAILJS_TEMPLATE_ID = "template_9whbuxm";
 const EMAILJS_PUBLIC_KEY = "vW_7lZvAVXxPXaAcV";
 const EMAILJS_ENDPOINT = "https://api.emailjs.com/api/v1.0/email/send";
+const EMAILJS_PRIVATE_KEY = process.env.EMAILJS_PRIVATE_KEY;
 
 const RECIPIENT_EMAIL = "novamerch.au@gmail.com";
 
@@ -255,6 +256,11 @@ interface EmailDispatchInput {
 async function sendEmail(input: EmailDispatchInput): Promise<{ ok: boolean; status?: number; error?: string }> {
   const { quoteNumber, customer, items, notes } = input;
 
+  if (!EMAILJS_PRIVATE_KEY) {
+    console.error("[quote-requests] EMAILJS_PRIVATE_KEY is not configured");
+    return { ok: false, error: "emailjs_not_configured" };
+  }
+
   const date = new Date().toLocaleDateString("en-AU", {
     day: "2-digit",
     month: "long",
@@ -314,11 +320,36 @@ async function sendEmail(input: EmailDispatchInput): Promise<{ ok: boolean; stat
     })
     .join("\n\n");
 
+  const message = [
+    `Quote: ${quoteNumber}`,
+    `Submitted: ${date}`,
+    "",
+    "CUSTOMER",
+    `Name: ${customer.name}`,
+    `Email: ${customer.email}`,
+    `Phone: ${customer.phone || "Not provided"}`,
+    `Company: ${customer.company || "Not provided"}`,
+    "",
+    "REQUESTED PRODUCTS",
+    itemsText,
+    "",
+    `Quoted total: $${total.toFixed(2)}`,
+    "",
+    "NOTES",
+    notes || "None",
+  ].join("\n");
+
   const body = {
     service_id: EMAILJS_SERVICE_ID,
     template_id: EMAILJS_TEMPLATE_ID,
     user_id: EMAILJS_PUBLIC_KEY,
+    accessToken: EMAILJS_PRIVATE_KEY,
     template_params: {
+      title: quoteNumber,
+      name: customer.name,
+      email: customer.email,
+      time: date,
+      message,
       from_name: escapeHtml(customer.name),
       from_email: escapeHtml(customer.email),
       phone: escapeHtml(customer.phone || "Not provided"),
