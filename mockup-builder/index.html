@@ -1,0 +1,1157 @@
+<!DOCTYPE html><!--4z1UsihydbnGHup7MZWcp--><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" href="/_next/static/media/636a5ac981f94f8b-s.p.woff2" as="font" crossorigin="" type="font/woff2"/><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" crossorigin="" type="font/woff2"/><link rel="stylesheet" href="/_next/static/css/2fd3fa406e5fe8da.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-11996adc700736b6.js"/><script src="/_next/static/chunks/4bd1b696-c023c6e3521b1417.js" async=""></script><script src="/_next/static/chunks/255-dda36e826969d334.js" async=""></script><script src="/_next/static/chunks/main-app-f873a9d8518c57da.js" async=""></script><script src="/_next/static/chunks/app/mockup-builder/page-6425832e43e40e85.js" async=""></script><meta name="next-size-adjust" content=""/><title>Nova Merch Mockup Builder</title><meta name="description" content="Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs."/><meta name="keywords" content="branded merchandise Australia,custom merch Australia,promotional products Australia,branded merchandise Newcastle,branded water bottles,custom caps,corporate gifts Australia,sports club merchandise"/><meta property="og:title" content="NovaMerch | Branded Merchandise Australia"/><meta property="og:description" content="Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs."/><meta property="og:url" content="https://novamerchau.com/"/><meta property="og:site_name" content="NovaMerch"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="NovaMerch | Branded Merchandise Australia"/><meta name="twitter:description" content="Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs."/><link rel="icon" href="/icon.svg?0f026029fd3a8ff8" type="image/svg+xml" sizes="any"/><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body class="__variable_a11773 __variable_37ef13 antialiased"><div hidden=""><!--$--><!--/$--></div><style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #060C18;
+            color: #F1F5F9;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            background: #0A1020;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 0 28px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        header h1 { font-size: 17px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        header h1 span { color: #00CFFF; }
+        header small { font-size: 12px; color: #475569; }
+
+        /* Product tab bar */
+        .product-bar {
+            background: #131313;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 0 20px;
+            display: flex;
+            gap: 2px;
+            overflow-x: auto;
+            flex-shrink: 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.08) transparent;
+            height: 46px;
+            align-items: flex-end;
+        }
+
+        .prod-tab {
+            padding: 8px 14px;
+            border-radius: 6px 6px 0 0;
+            border: 1px solid transparent;
+            border-bottom: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            color: #94A3B8;
+            white-space: nowrap;
+            transition: all 0.12s;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+            height: 36px;
+        }
+
+        .prod-tab:hover:not(.active) { color: #999; background: #0A1020; }
+        .prod-tab.active { background: #1e1e1e; color: #fff; border-color: #2e2e2e; }
+        .prod-tab .ti { font-size: 14px; }
+
+        /* Main layout */
+        .main {
+            display: grid;
+            grid-template-columns: 272px 1fr;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* Options panel */
+        .opts {
+            background: #0D1526;
+            border-right: 1px solid rgba(255,255,255,0.08);
+            overflow-y: auto;
+            padding: 18px 14px 24px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.08) transparent;
+        }
+
+        .opt-sec { margin-bottom: 20px; }
+
+        .opt-lbl {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.9px;
+            color: #475569;
+            margin-bottom: 9px;
+        }
+
+        /* Style list */
+        .style-list { display: flex; flex-direction: column; gap: 5px; }
+
+        .style-opt {
+            padding: 8px 11px;
+            border-radius: 5px;
+            border: 1px solid #232323;
+            background: #1e1e1e;
+            color: #999;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.1s;
+            user-select: none;
+        }
+
+        .style-opt:hover { border-color: #363636; color: #ddd; }
+        .style-opt.sel { border-color: #00CFFF; color: #fff; background: rgba(0,207,255,0.15); }
+
+        /* Colour swatches */
+        .swatches { display: flex; flex-wrap: wrap; gap: 7px; }
+
+        .sw-wrap { position: relative; }
+
+        .swatch {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.1s;
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+
+        .swatch:hover { transform: scale(1.13); }
+        .swatch.sel { outline-color: #00CFFF; }
+
+        .sw-tip {
+            position: absolute;
+            bottom: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.08);
+            border: 1px solid #383838;
+            color: #ddd;
+            font-size: 10px;
+            padding: 3px 7px;
+            border-radius: 4px;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.1s;
+            z-index: 20;
+        }
+
+        .sw-wrap:hover .sw-tip { opacity: 1; }
+
+        /* Placement */
+        .place-list { display: flex; flex-direction: column; gap: 4px; }
+
+        .place-btn {
+            padding: 7px 10px;
+            border-radius: 5px;
+            border: 1px solid #232323;
+            background: #1e1e1e;
+            color: #888;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.1s;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .place-btn:hover { border-color: #363636; color: #ddd; }
+        .place-btn.sel { border-color: #00CFFF; color: #fff; background: rgba(0,207,255,0.15); }
+        .pi { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
+
+        /* Sizes */
+        .size-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+
+        .size-btn {
+            min-width: 38px;
+            height: 32px;
+            padding: 0 8px;
+            border-radius: 4px;
+            border: 1px solid #232323;
+            background: #1e1e1e;
+            color: #888;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.1s;
+            user-select: none;
+        }
+
+        .size-btn:hover { border-color: #363636; color: #ddd; }
+        .size-btn.sel { border-color: #00CFFF; color: #fff; background: rgba(0,207,255,0.15); }
+
+        /* Qty */
+        .qty-row {
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 5px;
+            overflow: hidden;
+            width: fit-content;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            background: #1e1e1e;
+            border: none;
+            color: #999;
+            font-size: 17px;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .qty-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+        .qty-val {
+            width: 48px;
+            height: 32px;
+            background: #161616;
+            border: none;
+            border-left: 1px solid rgba(255,255,255,0.08);
+            border-right: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Notes */
+        .notes-ta {
+            width: 100%;
+            background: #1e1e1e;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 5px;
+            color: #bbb;
+            padding: 8px 10px;
+            font-size: 12px;
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+            line-height: 1.5;
+            transition: border-color 0.1s;
+        }
+
+        .notes-ta:focus { outline: none; border-color: #383838; }
+        .notes-ta::placeholder { color: #475569; }
+
+        .divider { height: 1px; background: #202020; margin: 14px 0; }
+
+        /* Preview */
+        .preview {
+            display: grid;
+            grid-template-rows: 1fr auto;
+            background: #0e0e0e;
+            min-height: 0;
+        }
+
+        .stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mockup-wrap {
+            position: relative;
+            max-width: 430px;
+            width: 100%;
+            background: #F1F5F9;
+            border-radius: 10px;
+            overflow: hidden;
+            isolation: isolate; /* keeps multiply blend inside the wrap, away from dark stage */
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+        }
+
+        .mockup-img {
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            max-height: calc(100vh - 265px);
+            display: block;
+            margin: 0 auto;
+        }
+
+
+        .mockup-ph {
+            width: 100%;
+            max-width: 430px;
+            min-height: 340px;
+            background: #171717;
+            border-radius: 10px;
+            border: 2px dashed #242424;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #333;
+        }
+
+        .ph-icon { font-size: 48px; }
+        .ph-msg { font-size: 13px; text-align: center; max-width: 220px; line-height: 1.6; color: #475569; }
+
+        /* Colour note badge */
+        .colour-note {
+            position: absolute;
+            top: 28px;
+            right: 28px;
+            background: #1e1e1e;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 11px;
+            color: #94A3B8;
+            display: none;
+        }
+
+        .colour-note.visible { display: block; }
+
+        .colour-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        /* Placement dot */
+        .pdot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0,207,255,0.9);
+            border: 2px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 900;
+            color: #fff;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.4);
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .pdot.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        /* Summary bar */
+        .sum-bar {
+            background: #141414;
+            border-top: 1px solid #222;
+            padding: 12px 22px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .si { display: flex; flex-direction: column; gap: 2px; }
+
+        .sk {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #475569;
+        }
+
+        .sv { font-size: 12px; font-weight: 600; color: #ccc; }
+        .sv.dim { color: #333; font-style: italic; font-weight: 400; }
+
+        .sum-actions { margin-left: auto; display: flex; gap: 7px; }
+
+        .btn {
+            padding: 7px 14px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.1s;
+        }
+
+        .btn-ghost { background: #1c1c1c; border: 1px solid rgba(255,255,255,0.08); color: #999; }
+        .btn-ghost:hover { background: #222; color: #fff; }
+        /* WCAG AA: dark text on cyan (contrast ratio ~9.5:1). Do NOT use #fff here. */
+        .btn-primary { background: #00CFFF; color: #0A1020; }
+        .btn-primary:hover { background: #00B8E6; color: #0A1020; }
+
+        /* Dual canvas (front + back) */
+        .dual-wrap {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 16px;
+        }
+
+        .view-item {
+            flex: 1;
+            max-width: 390px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .view-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #475569;
+        }
+
+        .canvas-dual {
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            max-height: calc(100vh - 250px);
+            display: block;
+            border-radius: 8px;
+            background: #F1F5F9;
+            box-shadow: 0 6px 28px rgba(0,0,0,0.45);
+        }
+
+        /* Logo upload */
+        .logo-drop {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 14px 10px;
+            border-radius: 6px;
+            border: 1px dashed #2e2e2e;
+            background: #0A1020;
+            color: #94A3B8;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.12s;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo-drop:hover, .logo-drop.drag-over {
+            border-color: #00CFFF;
+            color: #00CFFF;
+            background: rgba(0,207,255,0.15);
+        }
+
+        .logo-drop input { display: none; }
+        .logo-drop-icon { font-size: 22px; }
+
+        .logo-loaded {
+            display: none;
+            margin-top: 10px;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .logo-loaded.show { display: flex; }
+
+        .logo-thumb {
+            width: 100%;
+            max-height: 72px;
+            object-fit: contain;
+            background: repeating-conic-gradient(#222 0% 25%, #0A1020 0% 50%) 0 0 / 10px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 6px;
+        }
+
+        .logo-size-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-size-row span {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #475569;
+            white-space: nowrap;
+        }
+
+        .logo-size-row input[type=range] {
+            flex: 1;
+            accent-color: #00CFFF;
+            height: 3px;
+        }
+
+        .logo-size-val {
+            font-size: 11px;
+            color: #94A3B8;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .logo-remove {
+            padding: 5px 10px;
+            border-radius: 4px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #94A3B8;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.1s;
+            align-self: flex-start;
+        }
+
+        .logo-remove:hover { border-color: #c0392b; color: #c0392b; }
+
+        /* Logo position offsets */
+        .logo-offsets { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+
+        .offset-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .offset-icon { font-size: 12px; color: #475569; width: 14px; flex-shrink: 0; text-align: center; }
+
+        .offset-lbl { font-size: 10px; color: #475569; width: 14px; flex-shrink: 0; }
+
+        .offset-row input[type=range] {
+            flex: 1;
+            accent-color: #00CFFF;
+            height: 3px;
+        }
+
+        .offset-val { font-size: 10px; color: #94A3B8; min-width: 22px; text-align: right; }
+
+        /* Quote panel */
+        .preview {
+            display: grid;
+            grid-template-rows: 1fr auto auto;
+            background: #0e0e0e;
+            min-height: 0;
+        }
+
+        .quote-panel {
+            background: #141414;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            height: 200px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.08) transparent;
+            transition: height 0.2s ease;
+        }
+
+        .quote-panel.collapsed {
+            height: 0;
+            border-top: none;
+            overflow: hidden;
+        }
+
+        .qp-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+            border-bottom: 1px solid #1e1e1e;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #94A3B8;
+            position: sticky;
+            top: 0;
+            background: #141414;
+        }
+
+        .qp-total-badge {
+            margin-left: auto;
+            font-size: 12px;
+            font-weight: 700;
+            color: #00CFFF;
+        }
+
+        .qp-clear {
+            background: none;
+            border: none;
+            color: #444;
+            font-size: 11px;
+            cursor: pointer;
+            padding: 2px 6px;
+        }
+        .qp-clear:hover { color: #c0392b; }
+
+        .qp-list { padding: 6px 0; }
+
+        .qp-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px;
+            border-bottom: 1px solid #0A1020;
+            font-size: 12px;
+        }
+
+        .qp-item:last-child { border-bottom: none; }
+
+        .qp-item-thumb {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            align-items: center;
+        }
+
+        .qp-thumb {
+            width: auto;
+            height: 110px;
+            object-fit: contain;
+            background: #F1F5F9;
+            border-radius: 5px;
+        }
+
+        .qp-item-info { flex: 1; min-width: 0; }
+        .qp-item-name { font-weight: 600; color: #ddd; }
+        .qp-item-desc { color: #94A3B8; font-size: 11px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .qp-item-price {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .qp-item-total { font-weight: 700; color: #F1F5F9; font-size: 13px; }
+        .qp-item-unit  { color: #444; font-size: 10px; margin-top: 1px; }
+
+        .qp-remove {
+            background: none; border: none;
+            color: #333; font-size: 14px;
+            cursor: pointer; padding: 2px 4px;
+            flex-shrink: 0;
+        }
+        .qp-remove:hover { color: #c0392b; }
+
+        /* Print quote */
+        #print-quote { display: none; }
+
+        .print-header,
+        .print-footer-mark { display: none; }
+
+        @page { margin: 12mm 12mm 18mm 12mm; }
+
+        @media print {
+            html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body > *:not(#print-quote):not(.print-header):not(.print-footer-mark) { display: none !important; }
+            #print-quote {
+                display: block !important;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                font-size: 12px;
+                color: #111;
+                background: #fff;
+                padding: 32px 40px;
+            }
+            .print-header {
+                display: flex !important;
+                position: fixed;
+                top: 6mm;
+                left: 12mm;
+                align-items: center;
+                gap: 8px;
+                color: #111;
+                font-size: 12px;
+                font-weight: 800;
+                letter-spacing: 0.4px;
+                z-index: 9999;
+            }
+            .print-header img { height: 40px; width: auto; color: #111; }
+            .print-footer-mark {
+                display: flex !important;
+                position: fixed;
+                bottom: 6mm;
+                right: 12mm;
+                opacity: 0.5;
+                z-index: 9999;
+            }
+            .print-footer-mark img { height: 20px; width: auto; color: #111; }
+        }
+
+        .pq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #111;
+        }
+
+        .pq-brand { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .pq-brand span { color: #00CFFF; }
+
+        .pq-meta { text-align: right; }
+        .pq-quote-num { font-size: 15px; font-weight: 700; }
+        .pq-date { color: #666; margin-top: 2px; }
+
+        .pq-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .pq-table th {
+            background: #111;
+            color: #fff;
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pq-table th:last-child,
+        .pq-table td:last-child { text-align: right; }
+
+        .pq-table th:nth-child(3),
+        .pq-table td:nth-child(3) { text-align: center; }
+
+        .pq-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #F1F5F9;
+            vertical-align: top;
+        }
+
+        .pq-item-label { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+        .pq-desc { color: #444; line-height: 1.7; font-size: 11px; }
+
+        .pq-totals {
+            margin-left: auto;
+            width: 240px;
+            border-top: 2px solid #111;
+            padding-top: 10px;
+        }
+
+        .pq-total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 12px;
+            color: #444;
+        }
+
+        .pq-grand {
+            font-size: 15px;
+            font-weight: 800;
+            color: #111;
+            border-top: 1px solid #ccc;
+            margin-top: 6px;
+            padding-top: 8px;
+        }
+
+        .pq-footer {
+            margin-top: 32px;
+            color: #888;
+            font-size: 11px;
+            border-top: 1px solid #F1F5F9;
+            padding-top: 12px;
+        }
+        /* Customer request modal */
+        .rq-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.72);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        .rq-overlay.open { display: flex; }
+
+        .rq-modal {
+            background: #1e1e1e;
+            border: 1px solid #2e2e2e;
+            border-radius: 10px;
+            padding: 28px 30px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 16px 60px rgba(0,0,0,0.7);
+        }
+
+        .rq-modal h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .rq-modal p {
+            font-size: 12px;
+            color: #94A3B8;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        .rq-field { margin-bottom: 14px; }
+
+        .rq-field label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .rq-field input {
+            width: 100%;
+            background: #161616;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 5px;
+            color: #ddd;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.1s;
+        }
+
+        .rq-field input:focus { border-color: #00CFFF; }
+        .rq-field input::placeholder { color: #333; }
+
+        .rq-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 22px;
+        }
+
+        .rq-status {
+            font-size: 12px;
+            margin-top: 14px;
+            text-align: center;
+            min-height: 18px;
+        }
+
+        .rq-status.ok  { color: #7dd87d; }
+        .rq-status.err { color: #e05050; }
+</style><div>
+
+<header>
+    <h1>Nova<span>merch</span> Mockup Builder</h1>
+    <small>Internal Design Tool</small>
+</header>
+
+<!-- Product tab bar -->
+<div class="product-bar" id="product-bar"></div>
+
+<div class="main">
+
+    <!-- Options panel -->
+    <div class="opts">
+
+        <div class="opt-sec">
+            <div class="opt-lbl">Style</div>
+            <div class="style-list" id="style-list"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="opt-sec">
+            <div class="opt-lbl">Colour</div>
+            <div class="swatches" id="swatches"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="opt-sec">
+            <div class="opt-lbl">Front Logo</div>
+            <label class="logo-drop"
+                   ondragover="event.preventDefault(); this.classList.add('drag-over')"
+                   ondragleave="this.classList.remove('drag-over')"
+                   ondrop="event.preventDefault(); this.classList.remove('drag-over'); handleLogoFile('front', event.dataTransfer.files[0])">
+                <input type="file" id="logo-file-front" accept="image/*"
+                       onchange="handleLogoFile('front', this.files[0])">
+                <span class="logo-drop-icon">&#127912;&#65039;</span>
+                <span>Click or drag &amp; drop</span>
+                <span style="font-size:10px; color:#475569;">PNG, SVG, JPG</span>
+            </label>
+            <div class="logo-loaded" id="logo-loaded-front">
+                <img class="logo-thumb" id="logo-thumb-front" src="" alt="">
+                <div class="logo-size-row">
+                    <span>Size</span>
+                    <input type="range" min="3" max="50" value="20" id="logo-size-front"
+                           oninput="onLogoSize('front', this.value)">
+                    <span class="logo-size-val" id="logo-size-val-front">20%</span>
+                </div>
+                <button class="logo-remove" onclick="removeLogo('front')">&#10005; Remove</button>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="opt-sec">
+            <div class="opt-lbl">Logo Placement</div>
+            <div class="place-list" id="place-list-front"></div>
+            <div class="logo-offsets">
+                <div class="offset-row">
+                    <span class="offset-icon">&#8596;</span>
+                    <span class="offset-lbl">H</span>
+                    <input type="range" min="-30" max="30" value="0" id="offset-front-x"
+                           oninput="onOffsetChange('front','x',this.value)">
+                    <span class="offset-val" id="offset-front-x-val">0</span>
+                </div>
+                <div class="offset-row">
+                    <span class="offset-icon">&#8597;</span>
+                    <span class="offset-lbl">V</span>
+                    <input type="range" min="-30" max="30" value="0" id="offset-front-y"
+                           oninput="onOffsetChange('front','y',this.value)">
+                    <span class="offset-val" id="offset-front-y-val">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back logo + placement only shown for products with a back view -->
+        <div id="back-logo-wrap" style="display:none;">
+            <div class="divider"></div>
+
+            <div class="opt-sec">
+                <div class="opt-lbl">Back Logo</div>
+                <label class="logo-drop"
+                       ondragover="event.preventDefault(); this.classList.add('drag-over')"
+                       ondragleave="this.classList.remove('drag-over')"
+                       ondrop="event.preventDefault(); this.classList.remove('drag-over'); handleLogoFile('back', event.dataTransfer.files[0])">
+                    <input type="file" id="logo-file-back" accept="image/*"
+                           onchange="handleLogoFile('back', this.files[0])">
+                    <span class="logo-drop-icon">&#127912;&#65039;</span>
+                    <span>Click or drag &amp; drop</span>
+                    <span style="font-size:10px; color:#475569;">PNG, SVG, JPG</span>
+                </label>
+                <div class="logo-loaded" id="logo-loaded-back">
+                    <img class="logo-thumb" id="logo-thumb-back" src="" alt="">
+                    <div class="logo-size-row">
+                        <span>Size</span>
+                        <input type="range" min="3" max="50" value="20" id="logo-size-back"
+                               oninput="onLogoSize('back', this.value)">
+                        <span class="logo-size-val" id="logo-size-val-back">20%</span>
+                    </div>
+                    <button class="logo-remove" onclick="removeLogo('back')">&#10005; Remove</button>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="opt-sec">
+                <div class="opt-lbl">Back Logo Placement</div>
+                <div class="place-list" id="place-list-back"></div>
+                <div class="logo-offsets">
+                    <div class="offset-row">
+                        <span class="offset-icon">&#8596;</span>
+                        <span class="offset-lbl">H</span>
+                        <input type="range" min="-30" max="30" value="0" id="offset-back-x"
+                               oninput="onOffsetChange('back','x',this.value)">
+                        <span class="offset-val" id="offset-back-x-val">0</span>
+                    </div>
+                    <div class="offset-row">
+                        <span class="offset-icon">&#8597;</span>
+                        <span class="offset-lbl">V</span>
+                        <input type="range" min="-30" max="30" value="0" id="offset-back-y"
+                               oninput="onOffsetChange('back','y',this.value)">
+                        <span class="offset-val" id="offset-back-y-val">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sock text only shown when socks is the active product -->
+        <div id="sock-text-wrap" style="display:none;">
+            <div class="divider"></div>
+            <div class="opt-sec">
+                <div class="opt-lbl">Sock Text</div>
+                <input type="text" id="sock-text-input"
+                       style="width:100%; background:#1e1e1e; border:1px solid rgba(255,255,255,0.08); border-radius:5px; color:#bbb; padding:8px 10px; font-size:12px; font-family:inherit; outline:none;"
+                       placeholder="e.g. Team name, player number..."
+                       oninput="onSockTextInput()">
+                <div style="margin-top:9px;">
+                    <div class="opt-lbl" style="margin-bottom:6px;">Text Placement</div>
+                    <div class="place-list" id="sock-text-place-list"></div>
+                </div>
+                <div style="margin-top:9px;">
+                    <div class="opt-lbl" style="margin-bottom:6px;">Text Colour</div>
+                    <label style="display:flex; align-items:center; gap:10px; background:#1e1e1e; border:1px solid #475569; border-radius:8px; padding:8px 10px; cursor:pointer; width:fit-content;"
+                           title="Click to open colour picker">
+                        <input type="color" id="sock-text-colour-picker" value="#111111"
+                               style="width:28px; height:28px; padding:0; border:none; border-radius:4px; background:none; cursor:pointer; flex-shrink:0;"
+                               oninput="pickSockTextColour(this.value)">
+                        <input type="text" id="sock-text-colour-hex" value="#111111" maxlength="7"
+                               style="width:72px; background:transparent; border:none; color:#ddd; font-size:13px; font-family:inherit; outline:none; cursor:text;"
+                               oninput="onSockTextHexInput(this.value)"
+                               onclick="event.stopPropagation()">
+                        <span style="color:#888; font-size:11px; white-space:nowrap;">Pick colour</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decoration only shown for drinkware -->
+        <div id="decoration-wrap" style="display:none;">
+            <div class="divider"></div>
+            <div class="opt-sec">
+                <div class="opt-lbl">Logo Style</div>
+                <div class="style-list" id="decoration-list"></div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="opt-sec">
+            <div class="opt-lbl">Size</div>
+            <div class="size-grid" id="size-grid"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="opt-sec">
+            <div class="opt-lbl">Quantity</div>
+            <div class="qty-row">
+                <button class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
+                <input  class="qty-val" id="qty" type="number" value="1" min="1" max="9999" oninput="updateSummary()">
+                <button class="qty-btn" onclick="changeQty(1)">&#43;</button>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="opt-sec">
+            <div class="opt-lbl">Notes / Special Instructions</div>
+            <textarea class="notes-ta" id="notes"
+                placeholder="e.g. Pantone ref, logo filename, placement dimensions, thread colour..."
+                oninput="updateSummary()"></textarea>
+        </div>
+
+    </div>
+
+    <!-- Preview -->
+    <div class="preview">
+        <div class="stage">
+            <!-- Placeholder shown while no product is selected or image is loading -->
+            <div id="mockup-ph" class="mockup-ph">
+                <div class="ph-icon" id="ph-icon">&#128085;</div>
+                <div class="ph-msg" id="ph-msg">Select a product above to load its mockup.</div>
+            </div>
+
+            <!-- Single view -->
+            <div class="mockup-wrap" id="mockup-wrap" style="display:none;">
+                <canvas id="mockup-canvas" class="mockup-img"></canvas>
+            </div>
+
+            <!-- Dual view: front + back side by side -->
+            <div id="dual-wrap" class="dual-wrap" style="display:none;">
+                <div class="view-item">
+                    <canvas id="canvas-front" class="canvas-dual"></canvas>
+                    <div class="view-label">Front</div>
+                </div>
+                <div class="view-item">
+                    <canvas id="canvas-back" class="canvas-dual"></canvas>
+                    <div class="view-label">Back</div>
+                </div>
+            </div>
+
+            <!-- Colour badge -->
+            <div class="colour-note" id="colour-note">
+                <span class="colour-dot" id="colour-dot"></span>
+                <span id="colour-note-text">Selected colour</span>
+            </div>
+        </div>
+
+        <!-- Summary bar -->
+        <div class="sum-bar">
+            <div class="si"><div class="sk">Product</div><div class="sv dim" id="s-product">-</div></div>
+            <div class="si"><div class="sk">Style</div><div class="sv dim" id="s-style">-</div></div>
+            <div class="si"><div class="sk">Colour</div><div class="sv dim" id="s-colour">-</div></div>
+            <div class="si"><div class="sk">Placement</div><div class="sv dim" id="s-placement">-</div></div>
+            <div class="si"><div class="sk">Logo Style</div><div class="sv dim" id="s-decoration">-</div></div>
+            <div class="si"><div class="sk">Size</div><div class="sv dim" id="s-size">-</div></div>
+            <div class="si"><div class="sk">Qty</div><div class="sv" id="s-qty">1</div></div>
+            <div class="si"><div class="sk">Unit Price</div><div class="sv dim" id="s-unit-price">-</div></div>
+            <div class="si"><div class="sk">Line Total</div><div class="sv dim" id="s-line-total">-</div></div>
+            <div class="sum-actions">
+                <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
+                <button class="btn btn-ghost" id="copy-btn" onclick="copySpec()">Copy Spec</button>
+                <button class="btn btn-ghost" onclick="addToQuote()" id="add-quote-btn">+ Add to Basket</button>
+                <button class="btn btn-ghost" id="toggle-quote-btn" onclick="toggleQuotePanel()" style="display:none;">Basket &#9650;</button>
+                <button class="btn btn-primary" onclick="requestQuote()" id="print-btn">Request Quote</button>
+                <small style="display:block; width:100%; color:#94A3B8; font-size:10px; margin-top:6px;">Tip: in the browser print dialog, set Headers and Footers to "Off" to hide the URL in the corners.</small>
+            </div>
+        </div>
+
+        <!-- Quote panel -->
+        <div class="quote-panel" id="quote-panel" style="display:none;">
+            <div class="qp-header">
+                <span>Basket</span>
+                <span id="qp-count">0 items</span>
+                <span class="qp-total-badge" id="qp-grand-total"></span>
+                <button class="qp-clear" onclick="clearQuote()">Clear all</button>
+            </div>
+            <div class="qp-list" id="qp-list"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Print quote populated by JS, visible only when printing -->
+<div id="print-quote"></div>
+
+<!-- Print-only logo header and footer mark -->
+<div class="print-header"><img src="/logo.svg" alt="Nova Merch" /><span>NOVA MERCH</span></div>
+<div class="print-footer-mark"><img src="/logo.svg" alt="Nova Merch" /></div>
+
+<!-- Customer info modal for Request Quote -->
+<div class="rq-overlay" id="rq-overlay">
+    <div class="rq-modal">
+        <h2>Request a Quote</h2>
+        <p>Fill in your details and we'll send you a formal quote shortly.</p>
+        <div class="rq-field">
+            <label>Full Name <span style="color:#00CFFF">*</span></label>
+            <input type="text" id="rq-name" placeholder="e.g. Jane Smith" autocomplete="name">
+        </div>
+        <div class="rq-field">
+            <label>Email Address <span style="color:#00CFFF">*</span></label>
+            <input type="email" id="rq-email" placeholder="e.g. jane@example.com" autocomplete="email">
+        </div>
+        <div class="rq-field">
+            <label>Phone Number <span style="color:#475569">(optional)</span></label>
+            <input type="tel" id="rq-phone" placeholder="e.g. 0412 345 678" autocomplete="tel">
+        </div>
+        <div class="rq-actions">
+            <button class="btn btn-ghost" style="flex:1" onclick="closeRqModal()">Cancel</button>
+            <button class="btn btn-primary" style="flex:2" id="rq-send-btn" onclick="submitQuoteRequest()">Send Request</button>
+        </div>
+        <div class="rq-status" id="rq-status"></div>
+    </div>
+</div>
+
+</div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-11996adc700736b6.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1203,[\"538\",\"static/chunks/app/mockup-builder/page-6425832e43e40e85.js\"],\"MockupBuilderClient\"]\n5:I[4431,[],\"OutletBoundary\"]\n7:I[5278,[],\"AsyncMetadataOutlet\"]\n9:I[4431,[],\"ViewportBoundary\"]\nb:I[4431,[],\"MetadataBoundary\"]\nc:\"$Sreact.suspense\"\ne:I[7150,[],\"\"]\n:HL[\"/_next/static/media/636a5ac981f94f8b-s.p.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n:HL[\"/_next/static/media/e4af272ccee01ff0-s.p.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n:HL[\"/_next/static/css/2fd3fa406e5fe8da.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"4z1UsihydbnGHup7MZWcp\",\"p\":\"\",\"c\":[\"\",\"mockup-builder\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"mockup-builder\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/2fd3fa406e5fe8da.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[\"$\",\"body\",null,{\"className\":\"__variable_a11773 __variable_37ef13 antialiased\",\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]}]]}],{\"children\":[\"mockup-builder\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{}],null,[\"$\",\"$L5\",null,{\"children\":[\"$L6\",[\"$\",\"$L7\",null,{\"promise\":\"$@8\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$L9\",null,{\"children\":\"$La\"}],[\"$\",\"meta\",null,{\"name\":\"next-size-adjust\",\"content\":\"\"}]],[\"$\",\"$Lb\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$c\",null,{\"fallback\":null,\"children\":\"$Ld\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$e\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"a:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n6:null\n"])</script><script>self.__next_f.push([1,"f:I[622,[],\"IconMark\"]\n"])</script><script>self.__next_f.push([1,"8:{\"metadata\":[[\"$\",\"title\",\"0\",{\"children\":\"Nova Merch Mockup Builder\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.\"}],[\"$\",\"meta\",\"2\",{\"name\":\"keywords\",\"content\":\"branded merchandise Australia,custom merch Australia,promotional products Australia,branded merchandise Newcastle,branded water bottles,custom caps,corporate gifts Australia,sports club merchandise\"}],[\"$\",\"meta\",\"3\",{\"property\":\"og:title\",\"content\":\"NovaMerch | Branded Merchandise Australia\"}],[\"$\",\"meta\",\"4\",{\"property\":\"og:description\",\"content\":\"Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.\"}],[\"$\",\"meta\",\"5\",{\"property\":\"og:url\",\"content\":\"https://novamerchau.com/\"}],[\"$\",\"meta\",\"6\",{\"property\":\"og:site_name\",\"content\":\"NovaMerch\"}],[\"$\",\"meta\",\"7\",{\"property\":\"og:type\",\"content\":\"website\"}],[\"$\",\"meta\",\"8\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"9\",{\"name\":\"twitter:title\",\"content\":\"NovaMerch | Branded Merchandise Australia\"}],[\"$\",\"meta\",\"10\",{\"name\":\"twitter:description\",\"content\":\"Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.\"}],[\"$\",\"link\",\"11\",{\"rel\":\"icon\",\"href\":\"/icon.svg?0f026029fd3a8ff8\",\"type\":\"image/svg+xml\",\"sizes\":\"any\"}],[\"$\",\"$Lf\",\"12\",{}]],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"d:\"$8:metadata\"\n"])</script></body></html>
