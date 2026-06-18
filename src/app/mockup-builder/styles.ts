@@ -5,18 +5,49 @@
 export const STYLES_CSS = `
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        html, body { height: 100%; }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #060C18;
             color: #F1F5F9;
+            overflow: hidden;
+        }
+
+        /* Mockup builder viewport shell.
+           The page lives inside this wrapper instead of styling <body> directly,
+           so the same CSS works whether the page is mounted at the document root
+           (customer site) or nested inside an admin shell that already lays out
+           its own chrome (admin panel). The shell owns the viewport-locked
+           flex column: header → product-bar → main grid → (preview rows). */
+        .mockup-shell {
+            --sum-height: 88px; /* default natural summary bar height; JS overrides via --sum-height on :root */
+            position: relative;
+            width: 100%;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            background: #060C18;
+            color: #F1F5F9;
+            min-height: 0;
         }
 
+        /* Admin panel mounts this page inside <main class="main-with-sidebar">
+           which adds 32px of padding around the page chrome. The mockup builder
+           wants the full viewport for its own header / grid / summary, so
+           neutralise that padding and let the shell take the available height
+           next to the admin sidebar. (No-op on the customer site, which has
+           no .main-with-sidebar wrapper.) */
+        .main-with-sidebar:has(> .mockup-shell) {
+            padding: 0 !important;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .main-with-sidebar > .mockup-shell { height: 100%; }
+
         /* Header */
-        header {
+        .mockup-shell header {
             background: #0A1020;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             padding: 0 28px;
@@ -69,23 +100,128 @@ export const STYLES_CSS = `
         .prod-tab.active { background: #1e1e1e; color: #fff; border-color: #2e2e2e; }
         .prod-tab .ti { font-size: 14px; }
 
-        /* Main layout */
+        /* Main layout
+           Three-column grid: sidebar | splitter | preview. The sidebar width
+           is driven by --sidebar-width (set via JS / localStorage on drag),
+           clamped to [200px, 480px] in CSS as a defence-in-depth so a bad
+           inline value can't break the layout. The 6px middle track is the
+           draggable splitter handle (see .splitter). */
         .main {
             display: grid;
-            grid-template-columns: 272px 1fr;
-            flex: 1;
+            grid-template-columns: clamp(200px, var(--sidebar-width, 272px), 480px) 6px 1fr;
+            flex: 1 1 0;
             min-height: 0;
+            overflow: hidden;
         }
 
-        /* Options panel */
+        @media (max-width: 1100px) {
+            .main { --sidebar-width: 240px; }
+        }
+
+        /* Splitter — vertical drag handle between sidebar and preview.
+           Sits in the 6px middle grid track. Cyan tint on hover / active. */
+        .splitter {
+            background: transparent;
+            cursor: col-resize;
+            position: relative;
+            user-select: none;
+            touch-action: none;
+            transition: background 0.12s;
+            outline: none;
+        }
+        .splitter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
+            background: rgba(255,255,255,0.08);
+            transform: translateX(-0.5px);
+            transition: background 0.12s, width 0.12s;
+        }
+        .splitter:hover { background: rgba(0,207,255,0.10); }
+        .splitter:hover::before { background: rgba(0,207,255,0.6); width: 2px; }
+        .splitter:focus-visible { background: rgba(0,207,255,0.15); }
+        .splitter:focus-visible::before { background: #00CFFF; width: 2px; }
+        .splitter.dragging,
+        .splitter:active { background: rgba(0,207,255,0.18); }
+        .splitter.dragging::before,
+        .splitter:active::before { background: #00CFFF; width: 2px; }
+
+        body.splitter-dragging { cursor: col-resize !important; }
+        body.splitter-dragging * { user-select: none !important; }
+
+        @media print {
+            .splitter { display: none !important; }
+        }
+
+        /* Horizontal splitter — drag handle between the canvas stage and the
+           bottom summary bar. Same visual language as the vertical .splitter,
+           rotated 90deg: 6px tall, row-resize cursor, cyan glow on hover and
+           active, 1px center line that grows on interaction. */
+        .splitter-h {
+            background: transparent;
+            cursor: row-resize;
+            position: relative;
+            user-select: none;
+            touch-action: none;
+            transition: background 0.12s;
+            outline: none;
+            height: 6px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .splitter-h::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-0.5px);
+            transition: background 0.12s, height 0.12s;
+        }
+        .splitter-h:hover { background: rgba(0,207,255,0.10); }
+        .splitter-h:hover::before { background: rgba(0,207,255,0.6); height: 2px; }
+        .splitter-h:focus-visible { background: rgba(0,207,255,0.15); }
+        .splitter-h:focus-visible::before { background: #00CFFF; height: 2px; }
+        .splitter-h.dragging,
+        .splitter-h:active { background: rgba(0,207,255,0.18); }
+        .splitter-h.dragging::before,
+        .splitter-h:active::before { background: #00CFFF; height: 2px; }
+
+        body.splitter-h-dragging { cursor: row-resize !important; }
+        body.splitter-h-dragging * { user-select: none !important; }
+
+        @media print {
+            .splitter-h { display: none !important; }
+        }
+
+        /* Options panel — fills its grid track and scrolls internally so the
+           page never gets pushed past the viewport on short laptop screens. */
         .opts {
             background: #0D1526;
             border-right: 1px solid rgba(255,255,255,0.08);
             overflow-y: auto;
+            overflow-x: hidden;
+            min-height: 0;
+            height: 100%;
             padding: 18px 14px 24px;
+            padding-right: 8px;
             scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.08) transparent;
+            scrollbar-color: #00CFFF #0A1020;
         }
+
+        .opts::-webkit-scrollbar { width: 8px; }
+        .opts::-webkit-scrollbar-track { background: #0A1020; }
+        .opts::-webkit-scrollbar-thumb {
+            background: rgba(0,207,255,0.45);
+            border-radius: 4px;
+            border: 1px solid #0A1020;
+        }
+        .opts::-webkit-scrollbar-thumb:hover { background: rgba(0,207,255,0.7); }
 
         .opt-sec { margin-bottom: 20px; }
 
@@ -262,6 +398,8 @@ export const STYLES_CSS = `
             grid-template-rows: 1fr auto;
             background: #0e0e0e;
             min-height: 0;
+            min-width: 0;
+            overflow: hidden;
         }
 
         .stage {
@@ -272,26 +410,33 @@ export const STYLES_CSS = `
             padding: 16px;
             position: relative;
             overflow: hidden;
+            min-height: 0;
+            min-width: 0;
         }
 
         .mockup-wrap {
             position: relative;
             max-width: 430px;
             width: 100%;
+            max-height: 100%;
             background: #F1F5F9;
             border-radius: 10px;
             overflow: hidden;
             isolation: isolate; /* keeps multiply blend inside the wrap, away from dark stage */
             box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .mockup-img {
             width: auto;
             max-width: 100%;
             height: auto;
-            max-height: calc(100vh - 265px);
+            max-height: 100%;
             display: block;
             margin: 0 auto;
+            object-fit: contain;
         }
 
 
@@ -363,16 +508,43 @@ export const STYLES_CSS = `
 
         .pdot.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-        /* Summary bar */
+        /* Summary bar
+           Two-row layout: top row holds the fields cluster (left) and the
+           action buttons cluster (right, pushed by margin-left:auto). On
+           narrow viewports flex-wrap lets the actions drop to a new line
+           while staying grouped. The tip lives in a thin row below. */
         .sum-bar {
             background: #141414;
             border-top: 1px solid #222;
-            padding: 12px 22px;
+            padding: 10px 22px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-shrink: 0;
+            /* Resizable height driven by --sum-height (set by the horizontal
+               splitter). Clamped to a min that fits the current single row +
+               actions, and a max of 50vh so the canvas can't be squeezed out. */
+            height: clamp(72px, var(--sum-height, 88px), 50vh);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.08) transparent;
+        }
+
+        .sum-row {
             display: flex;
             align-items: center;
             gap: 18px;
             flex-wrap: wrap;
-            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .sum-fields {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            flex: 1 1 auto;
+            min-width: 0;
         }
 
         .si { display: flex; flex-direction: column; gap: 2px; }
@@ -388,7 +560,53 @@ export const STYLES_CSS = `
         .sv { font-size: 12px; font-weight: 600; color: #ccc; }
         .sv.dim { color: #333; font-style: italic; font-weight: 400; }
 
-        .sum-actions { margin-left: auto; display: flex; gap: 7px; }
+        /* Inline editable Qty in the summary bar. Mirrors the sidebar qty
+           input visually (#0A1020 navy fill, cyan focus ring) but compact
+           enough to sit between the other summary fields without wrapping
+           the row. Browser spinners stripped — users type a value directly
+           or use the sidebar +/- buttons. */
+        .s-input {
+            width: 64px;
+            height: 26px;
+            background: #0A1020;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 4px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            padding: 2px 8px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.12s, box-shadow 0.12s;
+            -moz-appearance: textfield;
+        }
+        .s-input:hover { border-color: rgba(0,207,255,0.45); }
+        .s-input:focus {
+            border-color: #00CFFF;
+            box-shadow: 0 0 0 2px rgba(0,207,255,0.18);
+        }
+        .s-input::-webkit-outer-spin-button,
+        .s-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .sum-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 7px;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+        }
+
+        .sum-tip {
+            color: #475569;
+            font-size: 10px;
+            line-height: 1.4;
+            width: 100%;
+            text-align: right;
+        }
 
         .btn {
             padding: 7px 14px;
@@ -410,20 +628,25 @@ export const STYLES_CSS = `
         .dual-wrap {
             display: flex;
             gap: 16px;
-            align-items: flex-start;
+            align-items: stretch;
             justify-content: center;
             width: 100%;
+            max-height: 100%;
             padding: 8px 16px;
+            min-height: 0;
         }
 
         .view-item {
-            flex: 1;
+            flex: 1 1 0;
             max-width: 390px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             min-width: 0;
+            min-height: 0;
+            max-height: 100%;
         }
 
         .view-label {
@@ -432,17 +655,20 @@ export const STYLES_CSS = `
             text-transform: uppercase;
             letter-spacing: 1.2px;
             color: #475569;
+            flex-shrink: 0;
         }
 
         .canvas-dual {
             width: auto;
             max-width: 100%;
             height: auto;
-            max-height: calc(100vh - 250px);
+            max-height: 100%;
+            min-height: 0;
             display: block;
             border-radius: 8px;
             background: #F1F5F9;
             box-shadow: 0 6px 28px rgba(0,0,0,0.45);
+            object-fit: contain;
         }
 
         /* Logo upload */
@@ -555,12 +781,16 @@ export const STYLES_CSS = `
 
         .offset-val { font-size: 10px; color: #94A3B8; min-width: 22px; text-align: right; }
 
-        /* Quote panel */
+        /* Quote panel — overrides .preview grid rows to include the quote drawer.
+           Rows: stage (1fr) | horizontal splitter (auto, 6px) | summary bar
+           (auto, clamp height) | quote panel (auto, drawer). */
         .preview {
             display: grid;
-            grid-template-rows: 1fr auto auto;
+            grid-template-rows: 1fr auto auto auto;
             background: #0e0e0e;
             min-height: 0;
+            min-width: 0;
+            overflow: hidden;
         }
 
         .quote-panel {
