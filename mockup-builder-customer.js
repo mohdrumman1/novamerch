@@ -1137,16 +1137,45 @@ function pick(field, val) {
     updateSummary();
 }
 
+// Quantity bounds shared by sidebar +/- buttons AND the summary-bar input.
+const QTY_MIN = 1;
+const QTY_MAX = 100000;
+
+function clampQty(n) {
+    n = Math.floor(n);
+    if (!Number.isFinite(n)) n = QTY_MIN;
+    if (n < QTY_MIN) n = QTY_MIN;
+    if (n > QTY_MAX) n = QTY_MAX;
+    return n;
+}
+
 function changeQty(d) {
     const el = document.getElementById('qty');
-    el.value = Math.max(1, (parseInt(el.value) || 1) + d);
+    el.value = clampQty((parseInt(el.value) || QTY_MIN) + d);
+    updateSummary();
+}
+
+// Summary-bar Qty input handlers. The summary now hosts an editable
+// <input id="s-qty">; both inputs (sidebar #qty and summary #s-qty) must
+// stay in sync. While typing we accept partial values and only clamp the
+// model state — committing (blur / Enter) writes the clamped value back
+// into the field so the user sees what was accepted.
+function onSummaryQtyInput(raw) {
+    const n = clampQty(parseInt(raw, 10));
+    document.getElementById('qty').value = n;
+    updateSummary();
+}
+function onSummaryQtyCommit(raw) {
+    const n = clampQty(parseInt(raw, 10));
+    document.getElementById('s-qty').value = n;
+    document.getElementById('qty').value   = n;
     updateSummary();
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 function updateSummary() {
-    S.qty = parseInt(document.getElementById('qty').value) || 1;
+    S.qty = clampQty(parseInt(document.getElementById('qty').value, 10));
 
     const colourLabel = S.colour ? (COLOURS.find(c => c.id === S.colour)?.label || S.colour) : null;
     const plLabel = (id) => id && S.product
@@ -1167,7 +1196,13 @@ function updateSummary() {
     sv('s-size',       S.size);
     sv('s-unit-price', price     ? `$${price.toFixed(2)}`     : null);
     sv('s-line-total', lineTotal ? `$${lineTotal.toFixed(2)}` : null);
-    document.getElementById('s-qty').textContent = S.qty;
+
+    // s-qty is now an <input>, not a <div>; mirror the clamped qty into
+    // its .value so the sidebar +/- buttons stay in lockstep with the
+    // summary field. Only write if the user isn't actively editing this
+    // exact input (so we don't yank the caret while they type).
+    const sQty = document.getElementById('s-qty');
+    if (sQty && document.activeElement !== sQty) sQty.value = S.qty;
 }
 
 function sv(id, val) {
@@ -1569,7 +1604,6 @@ function submitQuoteRequest() {
         return data;
     })
     .then(data => {
-        const num = (data && data.quoteNumber) ? ` (${data.quoteNumber})` : '';
         if (data && data.partial) {
             // Airtable saved, email pending (or vice-versa). Surface that
             // explicitly so the customer doesn't worry if the confirmation
@@ -1577,9 +1611,9 @@ function submitQuoteRequest() {
             const detail = data.email === false
                 ? "saved, email pending"
                 : "saved, email sent";
-            status.textContent = `✓ Quote request received${num} (${detail}). We'll be in touch soon.`;
+            status.textContent = `✓ Quote request received (${detail}). We'll be in touch soon.`;
         } else {
-            status.textContent = `✓ Quote request sent${num}! We'll be in touch soon.`;
+            status.textContent = `✓ Quote request sent! We'll be in touch soon.`;
         }
         status.className = 'rq-status ok';
         sendBtn.textContent = 'Sent ✓';
@@ -1596,10 +1630,209 @@ function submitQuoteRequest() {
     });
 }
 
+// ── Sidebar splitter ──────────────────────────────────────────────────────────
+// Draggable handle between .opts (sidebar) and .preview (canvas). Width is
+// persisted to localStorage so it survives page reloads. Idempotent: the
+// React component already prevents double-loading this script via
+// window.__novamerchMockupLoaded, but we additionally gate the splitter
+// init with a sentinel so a future second invocation can't stack listeners.
+const SPLITTER_STORAGE_KEY = 'novamerch.sidebarWidth';
+const SPLITTER_MIN = 200;
+const SPLITTER_MAX = 480;
+const SPLITTER_DEFAULT = 272;
+const SPLITTER_KEY_STEP = 16;
+
+function clampSidebar(w) {
+    if (!Number.isFinite(w)) return SPLITTER_DEFAULT;
+    return Math.max(SPLITTER_MIN, Math.min(SPLITTER_MAX, Math.round(w)));
+}
+
+function applySidebarWidth(w) {
+    document.documentElement.style.setProperty('--sidebar-width', clampSidebar(w) + 'px');
+}
+
+function initSplitter() {
+    if (window.__novamerchSplitterInit) return;
+    window.__novamerchSplitterInit = true;
+
+    const splitter = document.getElementById('splitter');
+    const sidebar  = document.querySelector('.opts');
+    if (!splitter || !sidebar) return;
+
+    // Restore persisted width (if any) before first paint of any drag.
+    try {
+        const stored = parseInt(localStorage.getItem(SPLITTER_STORAGE_KEY), 10);
+        if (Number.isFinite(stored)) applySidebarWidth(stored);
+    } catch (_) { /* ignore quota / disabled storage */ }
+
+    let dragging = false;
+    let startX = 0;
+    let startW = 0;
+
+    function pointerX(e) {
+        if (e.touches && e.touches[0]) return e.touches[0].clientX;
+        if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0].clientX;
+        return e.clientX;
+    }
+
+    function onDown(e) {
+        dragging = true;
+        startX = pointerX(e);
+        startW = sidebar.getBoundingClientRect().width;
+        splitter.classList.add('dragging');
+        document.body.classList.add('splitter-dragging');
+        e.preventDefault();
+    }
+
+    function onMove(e) {
+        if (!dragging) return;
+        const dx = pointerX(e) - startX;
+        const next = clampSidebar(startW + dx);
+        applySidebarWidth(next);
+        e.preventDefault();
+    }
+
+    function onUp() {
+        if (!dragging) return;
+        dragging = false;
+        splitter.classList.remove('dragging');
+        document.body.classList.remove('splitter-dragging');
+        // Persist final width.
+        const current = sidebar.getBoundingClientRect().width;
+        try { localStorage.setItem(SPLITTER_STORAGE_KEY, String(Math.round(current))); }
+        catch (_) { /* ignore */ }
+        // Let the existing resize handler redraw canvases at the new size.
+        window.dispatchEvent(new Event('resize'));
+    }
+
+    splitter.addEventListener('mousedown', onDown);
+    window.addEventListener('mousemove',   onMove);
+    window.addEventListener('mouseup',     onUp);
+
+    splitter.addEventListener('touchstart', onDown, { passive: false });
+    window.addEventListener('touchmove',    onMove, { passive: false });
+    window.addEventListener('touchend',     onUp);
+    window.addEventListener('touchcancel',  onUp);
+
+    // Keyboard accessibility — arrows nudge, Home resets, End maxes out.
+    splitter.addEventListener('keydown', (e) => {
+        const current = sidebar.getBoundingClientRect().width;
+        let next = null;
+        if (e.key === 'ArrowLeft')  next = current - SPLITTER_KEY_STEP;
+        else if (e.key === 'ArrowRight') next = current + SPLITTER_KEY_STEP;
+        else if (e.key === 'Home')  next = SPLITTER_DEFAULT;
+        else if (e.key === 'End')   next = SPLITTER_MAX;
+        if (next === null) return;
+        e.preventDefault();
+        const clamped = clampSidebar(next);
+        applySidebarWidth(clamped);
+        try { localStorage.setItem(SPLITTER_STORAGE_KEY, String(clamped)); } catch (_) {}
+        window.dispatchEvent(new Event('resize'));
+    });
+}
+
+// ── Summary splitter ──────────────────────────────────────────────────────────
+// Draggable handle between the product images and the specification / action
+// section. Drag upward to give the section more room, or downward to give the
+// images more room. The chosen height is persisted between visits.
+const SUMMARY_SPLITTER_STORAGE_KEY = 'novamerch.summaryHeight';
+const SUMMARY_MIN = 72;
+const SUMMARY_DEFAULT = 88;
+const SUMMARY_KEY_STEP = 16;
+
+function summaryMax() {
+    const shell = document.querySelector('.mockup-shell');
+    return Math.max(SUMMARY_MIN, Math.floor((shell?.getBoundingClientRect().height || window.innerHeight) * 0.5));
+}
+
+function clampSummaryHeight(h) {
+    if (!Number.isFinite(h)) return SUMMARY_DEFAULT;
+    return Math.max(SUMMARY_MIN, Math.min(summaryMax(), Math.round(h)));
+}
+
+function applySummaryHeight(h) {
+    const shell = document.querySelector('.mockup-shell');
+    if (shell) shell.style.setProperty('--sum-height', clampSummaryHeight(h) + 'px');
+}
+
+function initSummarySplitter() {
+    if (window.__novamerchSummarySplitterInit) return;
+    window.__novamerchSummarySplitterInit = true;
+
+    const splitter = document.getElementById('splitter-h');
+    const summary = document.querySelector('.sum-bar');
+    if (!splitter || !summary) return;
+
+    try {
+        const stored = parseInt(localStorage.getItem(SUMMARY_SPLITTER_STORAGE_KEY), 10);
+        if (Number.isFinite(stored)) applySummaryHeight(stored);
+    } catch (_) { /* ignore quota / disabled storage */ }
+
+    let dragging = false;
+    let startY = 0;
+    let startH = 0;
+
+    function pointerY(e) {
+        if (e.touches && e.touches[0]) return e.touches[0].clientY;
+        if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0].clientY;
+        return e.clientY;
+    }
+
+    function onDown(e) {
+        dragging = true;
+        startY = pointerY(e);
+        startH = summary.getBoundingClientRect().height;
+        splitter.classList.add('dragging');
+        document.body.classList.add('splitter-h-dragging');
+        e.preventDefault();
+    }
+
+    function onMove(e) {
+        if (!dragging) return;
+        applySummaryHeight(startH + (startY - pointerY(e)));
+        e.preventDefault();
+    }
+
+    function onUp() {
+        if (!dragging) return;
+        dragging = false;
+        splitter.classList.remove('dragging');
+        document.body.classList.remove('splitter-h-dragging');
+        const current = clampSummaryHeight(summary.getBoundingClientRect().height);
+        try { localStorage.setItem(SUMMARY_SPLITTER_STORAGE_KEY, String(current)); } catch (_) {}
+        window.dispatchEvent(new Event('resize'));
+    }
+
+    splitter.addEventListener('mousedown', onDown);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    splitter.addEventListener('touchstart', onDown, { passive: false });
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onUp);
+    window.addEventListener('touchcancel', onUp);
+
+    splitter.addEventListener('keydown', (e) => {
+        const current = summary.getBoundingClientRect().height;
+        let next = null;
+        if (e.key === 'ArrowUp') next = current + SUMMARY_KEY_STEP;
+        else if (e.key === 'ArrowDown') next = current - SUMMARY_KEY_STEP;
+        else if (e.key === 'Home') next = SUMMARY_DEFAULT;
+        else if (e.key === 'End') next = summaryMax();
+        if (next === null) return;
+        e.preventDefault();
+        const clamped = clampSummaryHeight(next);
+        applySummaryHeight(clamped);
+        try { localStorage.setItem(SUMMARY_SPLITTER_STORAGE_KEY, String(clamped)); } catch (_) {}
+        window.dispatchEvent(new Event('resize'));
+    });
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────────
 buildTabs();
 switchProduct('tshirt');
 updateSummary();
+initSplitter();
+initSummarySplitter();
 
 window.addEventListener('resize', () => {
     if (loadedImg) drawCanvas();

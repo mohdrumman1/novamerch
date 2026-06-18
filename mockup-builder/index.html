@@ -1,18 +1,49 @@
-<!DOCTYPE html><!--4z1UsihydbnGHup7MZWcp--><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" href="/_next/static/media/636a5ac981f94f8b-s.p.woff2" as="font" crossorigin="" type="font/woff2"/><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" crossorigin="" type="font/woff2"/><link rel="stylesheet" href="/_next/static/css/2fd3fa406e5fe8da.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-11996adc700736b6.js"/><script src="/_next/static/chunks/4bd1b696-c023c6e3521b1417.js" async=""></script><script src="/_next/static/chunks/255-dda36e826969d334.js" async=""></script><script src="/_next/static/chunks/main-app-f873a9d8518c57da.js" async=""></script><script src="/_next/static/chunks/app/mockup-builder/page-6425832e43e40e85.js" async=""></script><meta name="next-size-adjust" content=""/><title>Nova Merch Mockup Builder</title><meta name="description" content="Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs."/><meta name="keywords" content="branded merchandise Australia,custom merch Australia,promotional products Australia,branded merchandise Newcastle,branded water bottles,custom caps,corporate gifts Australia,sports club merchandise"/><meta property="og:title" content="NovaMerch | Branded Merchandise Australia"/><meta property="og:description" content="Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs."/><meta property="og:url" content="https://novamerchau.com/"/><meta property="og:site_name" content="NovaMerch"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="NovaMerch | Branded Merchandise Australia"/><meta name="twitter:description" content="Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs."/><link rel="icon" href="/icon.svg?0f026029fd3a8ff8" type="image/svg+xml" sizes="any"/><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body class="__variable_a11773 __variable_37ef13 antialiased"><div hidden=""><!--$--><!--/$--></div><style>
+<!DOCTYPE html><!--nG0toN40vGv6zzs6_11_O--><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" href="/_next/static/media/636a5ac981f94f8b-s.p.woff2" as="font" crossorigin="" type="font/woff2"/><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" crossorigin="" type="font/woff2"/><link rel="stylesheet" href="/_next/static/css/2fd3fa406e5fe8da.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-11996adc700736b6.js"/><script src="/_next/static/chunks/4bd1b696-c023c6e3521b1417.js" async=""></script><script src="/_next/static/chunks/255-dda36e826969d334.js" async=""></script><script src="/_next/static/chunks/main-app-f873a9d8518c57da.js" async=""></script><script src="/_next/static/chunks/app/mockup-builder/page-a9aa7eb8f3c52734.js" async=""></script><meta name="next-size-adjust" content=""/><title>Nova Merch Mockup Builder</title><meta name="description" content="Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs."/><meta name="keywords" content="branded merchandise Australia,custom merch Australia,promotional products Australia,branded merchandise Newcastle,branded water bottles,custom caps,corporate gifts Australia,sports club merchandise"/><meta property="og:title" content="NovaMerch | Branded Merchandise Australia"/><meta property="og:description" content="Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs."/><meta property="og:url" content="https://novamerchau.com/"/><meta property="og:site_name" content="NovaMerch"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="NovaMerch | Branded Merchandise Australia"/><meta name="twitter:description" content="Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs."/><link rel="icon" href="/icon.svg?0f026029fd3a8ff8" type="image/svg+xml" sizes="any"/><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body class="__variable_a11773 __variable_37ef13 antialiased"><div hidden=""><!--$--><!--/$--></div><style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body { height: 100%; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #060C18;
             color: #F1F5F9;
+            overflow: hidden;
+        }
+
+        /* Mockup builder viewport shell.
+           The page lives inside this wrapper instead of styling <body> directly,
+           so the same CSS works whether the page is mounted at the document root
+           (customer site) or nested inside an admin shell that already lays out
+           its own chrome (admin panel). The shell owns the viewport-locked
+           flex column: header → product-bar → main grid → (preview rows). */
+        .mockup-shell {
+            --sum-height: 88px; /* default natural summary bar height; JS overrides via --sum-height on :root */
+            position: relative;
+            width: 100%;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            background: #060C18;
+            color: #F1F5F9;
+            min-height: 0;
         }
 
+        /* Admin panel mounts this page inside <main class="main-with-sidebar">
+           which adds 32px of padding around the page chrome. The mockup builder
+           wants the full viewport for its own header / grid / summary, so
+           neutralise that padding and let the shell take the available height
+           next to the admin sidebar. (No-op on the customer site, which has
+           no .main-with-sidebar wrapper.) */
+        .main-with-sidebar:has(> .mockup-shell) {
+            padding: 0 !important;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .main-with-sidebar > .mockup-shell { height: 100%; }
+
         /* Header */
-        header {
+        .mockup-shell header {
             background: #0A1020;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             padding: 0 28px;
@@ -65,23 +96,128 @@
         .prod-tab.active { background: #1e1e1e; color: #fff; border-color: #2e2e2e; }
         .prod-tab .ti { font-size: 14px; }
 
-        /* Main layout */
+        /* Main layout
+           Three-column grid: sidebar | splitter | preview. The sidebar width
+           is driven by --sidebar-width (set via JS / localStorage on drag),
+           clamped to [200px, 480px] in CSS as a defence-in-depth so a bad
+           inline value can't break the layout. The 6px middle track is the
+           draggable splitter handle (see .splitter). */
         .main {
             display: grid;
-            grid-template-columns: 272px 1fr;
-            flex: 1;
+            grid-template-columns: clamp(200px, var(--sidebar-width, 272px), 480px) 6px 1fr;
+            flex: 1 1 0;
             min-height: 0;
+            overflow: hidden;
         }
 
-        /* Options panel */
+        @media (max-width: 1100px) {
+            .main { --sidebar-width: 240px; }
+        }
+
+        /* Splitter — vertical drag handle between sidebar and preview.
+           Sits in the 6px middle grid track. Cyan tint on hover / active. */
+        .splitter {
+            background: transparent;
+            cursor: col-resize;
+            position: relative;
+            user-select: none;
+            touch-action: none;
+            transition: background 0.12s;
+            outline: none;
+        }
+        .splitter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
+            background: rgba(255,255,255,0.08);
+            transform: translateX(-0.5px);
+            transition: background 0.12s, width 0.12s;
+        }
+        .splitter:hover { background: rgba(0,207,255,0.10); }
+        .splitter:hover::before { background: rgba(0,207,255,0.6); width: 2px; }
+        .splitter:focus-visible { background: rgba(0,207,255,0.15); }
+        .splitter:focus-visible::before { background: #00CFFF; width: 2px; }
+        .splitter.dragging,
+        .splitter:active { background: rgba(0,207,255,0.18); }
+        .splitter.dragging::before,
+        .splitter:active::before { background: #00CFFF; width: 2px; }
+
+        body.splitter-dragging { cursor: col-resize !important; }
+        body.splitter-dragging * { user-select: none !important; }
+
+        @media print {
+            .splitter { display: none !important; }
+        }
+
+        /* Horizontal splitter — drag handle between the canvas stage and the
+           bottom summary bar. Same visual language as the vertical .splitter,
+           rotated 90deg: 6px tall, row-resize cursor, cyan glow on hover and
+           active, 1px center line that grows on interaction. */
+        .splitter-h {
+            background: transparent;
+            cursor: row-resize;
+            position: relative;
+            user-select: none;
+            touch-action: none;
+            transition: background 0.12s;
+            outline: none;
+            height: 6px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .splitter-h::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-0.5px);
+            transition: background 0.12s, height 0.12s;
+        }
+        .splitter-h:hover { background: rgba(0,207,255,0.10); }
+        .splitter-h:hover::before { background: rgba(0,207,255,0.6); height: 2px; }
+        .splitter-h:focus-visible { background: rgba(0,207,255,0.15); }
+        .splitter-h:focus-visible::before { background: #00CFFF; height: 2px; }
+        .splitter-h.dragging,
+        .splitter-h:active { background: rgba(0,207,255,0.18); }
+        .splitter-h.dragging::before,
+        .splitter-h:active::before { background: #00CFFF; height: 2px; }
+
+        body.splitter-h-dragging { cursor: row-resize !important; }
+        body.splitter-h-dragging * { user-select: none !important; }
+
+        @media print {
+            .splitter-h { display: none !important; }
+        }
+
+        /* Options panel — fills its grid track and scrolls internally so the
+           page never gets pushed past the viewport on short laptop screens. */
         .opts {
             background: #0D1526;
             border-right: 1px solid rgba(255,255,255,0.08);
             overflow-y: auto;
+            overflow-x: hidden;
+            min-height: 0;
+            height: 100%;
             padding: 18px 14px 24px;
+            padding-right: 8px;
             scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.08) transparent;
+            scrollbar-color: #00CFFF #0A1020;
         }
+
+        .opts::-webkit-scrollbar { width: 8px; }
+        .opts::-webkit-scrollbar-track { background: #0A1020; }
+        .opts::-webkit-scrollbar-thumb {
+            background: rgba(0,207,255,0.45);
+            border-radius: 4px;
+            border: 1px solid #0A1020;
+        }
+        .opts::-webkit-scrollbar-thumb:hover { background: rgba(0,207,255,0.7); }
 
         .opt-sec { margin-bottom: 20px; }
 
@@ -258,6 +394,8 @@
             grid-template-rows: 1fr auto;
             background: #0e0e0e;
             min-height: 0;
+            min-width: 0;
+            overflow: hidden;
         }
 
         .stage {
@@ -268,26 +406,33 @@
             padding: 16px;
             position: relative;
             overflow: hidden;
+            min-height: 0;
+            min-width: 0;
         }
 
         .mockup-wrap {
             position: relative;
             max-width: 430px;
             width: 100%;
+            max-height: 100%;
             background: #F1F5F9;
             border-radius: 10px;
             overflow: hidden;
             isolation: isolate; /* keeps multiply blend inside the wrap, away from dark stage */
             box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .mockup-img {
             width: auto;
             max-width: 100%;
             height: auto;
-            max-height: calc(100vh - 265px);
+            max-height: 100%;
             display: block;
             margin: 0 auto;
+            object-fit: contain;
         }
 
 
@@ -359,16 +504,43 @@
 
         .pdot.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-        /* Summary bar */
+        /* Summary bar
+           Two-row layout: top row holds the fields cluster (left) and the
+           action buttons cluster (right, pushed by margin-left:auto). On
+           narrow viewports flex-wrap lets the actions drop to a new line
+           while staying grouped. The tip lives in a thin row below. */
         .sum-bar {
             background: #141414;
             border-top: 1px solid #222;
-            padding: 12px 22px;
+            padding: 10px 22px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-shrink: 0;
+            /* Resizable height driven by --sum-height (set by the horizontal
+               splitter). Clamped to a min that fits the current single row +
+               actions, and a max of 50vh so the canvas can't be squeezed out. */
+            height: clamp(72px, var(--sum-height, 88px), 50vh);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.08) transparent;
+        }
+
+        .sum-row {
             display: flex;
             align-items: center;
             gap: 18px;
             flex-wrap: wrap;
-            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .sum-fields {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            flex: 1 1 auto;
+            min-width: 0;
         }
 
         .si { display: flex; flex-direction: column; gap: 2px; }
@@ -384,7 +556,53 @@
         .sv { font-size: 12px; font-weight: 600; color: #ccc; }
         .sv.dim { color: #333; font-style: italic; font-weight: 400; }
 
-        .sum-actions { margin-left: auto; display: flex; gap: 7px; }
+        /* Inline editable Qty in the summary bar. Mirrors the sidebar qty
+           input visually (#0A1020 navy fill, cyan focus ring) but compact
+           enough to sit between the other summary fields without wrapping
+           the row. Browser spinners stripped — users type a value directly
+           or use the sidebar +/- buttons. */
+        .s-input {
+            width: 64px;
+            height: 26px;
+            background: #0A1020;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 4px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            padding: 2px 8px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.12s, box-shadow 0.12s;
+            -moz-appearance: textfield;
+        }
+        .s-input:hover { border-color: rgba(0,207,255,0.45); }
+        .s-input:focus {
+            border-color: #00CFFF;
+            box-shadow: 0 0 0 2px rgba(0,207,255,0.18);
+        }
+        .s-input::-webkit-outer-spin-button,
+        .s-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .sum-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 7px;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+        }
+
+        .sum-tip {
+            color: #475569;
+            font-size: 10px;
+            line-height: 1.4;
+            width: 100%;
+            text-align: right;
+        }
 
         .btn {
             padding: 7px 14px;
@@ -406,20 +624,25 @@
         .dual-wrap {
             display: flex;
             gap: 16px;
-            align-items: flex-start;
+            align-items: stretch;
             justify-content: center;
             width: 100%;
+            max-height: 100%;
             padding: 8px 16px;
+            min-height: 0;
         }
 
         .view-item {
-            flex: 1;
+            flex: 1 1 0;
             max-width: 390px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             min-width: 0;
+            min-height: 0;
+            max-height: 100%;
         }
 
         .view-label {
@@ -428,17 +651,20 @@
             text-transform: uppercase;
             letter-spacing: 1.2px;
             color: #475569;
+            flex-shrink: 0;
         }
 
         .canvas-dual {
             width: auto;
             max-width: 100%;
             height: auto;
-            max-height: calc(100vh - 250px);
+            max-height: 100%;
+            min-height: 0;
             display: block;
             border-radius: 8px;
             background: #F1F5F9;
             box-shadow: 0 6px 28px rgba(0,0,0,0.45);
+            object-fit: contain;
         }
 
         /* Logo upload */
@@ -551,12 +777,16 @@
 
         .offset-val { font-size: 10px; color: #94A3B8; min-width: 22px; text-align: right; }
 
-        /* Quote panel */
+        /* Quote panel — overrides .preview grid rows to include the quote drawer.
+           Rows: stage (1fr) | horizontal splitter (auto, 6px) | summary bar
+           (auto, clamp height) | quote panel (auto, drawer). */
         .preview {
             display: grid;
-            grid-template-rows: 1fr auto auto;
+            grid-template-rows: 1fr auto auto auto;
             background: #0e0e0e;
             min-height: 0;
+            min-width: 0;
+            overflow: hidden;
         }
 
         .quote-panel {
@@ -859,6 +1089,7 @@
         .rq-status.ok  { color: #7dd87d; }
         .rq-status.err { color: #e05050; }
 </style><div>
+<div class="mockup-shell">
 
 <header>
     <h1>Nova<span>merch</span> Mockup Builder</h1>
@@ -1038,7 +1269,7 @@
             <div class="opt-lbl">Quantity</div>
             <div class="qty-row">
                 <button class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
-                <input  class="qty-val" id="qty" type="number" value="1" min="1" max="9999" oninput="updateSummary()">
+                <input  class="qty-val" id="qty" type="number" value="1" min="1" max="100000" oninput="updateSummary()">
                 <button class="qty-btn" onclick="changeQty(1)">&#43;</button>
             </div>
         </div>
@@ -1053,6 +1284,13 @@
         </div>
 
     </div>
+
+    <!-- Splitter (draggable handle between sidebar and preview) -->
+    <div class="splitter" id="splitter"
+         role="separator"
+         aria-label="Resize sidebar"
+         aria-orientation="vertical"
+         tabindex="0"></div>
 
     <!-- Preview -->
     <div class="preview">
@@ -1087,25 +1325,36 @@
             </div>
         </div>
 
+        <!-- Horizontal splitter — drag handle between canvas stage and summary bar -->
+        <div class="splitter-h" id="splitter-h"
+             role="separator"
+             aria-label="Resize summary bar"
+             aria-orientation="horizontal"
+             tabindex="0"></div>
+
         <!-- Summary bar -->
         <div class="sum-bar">
-            <div class="si"><div class="sk">Product</div><div class="sv dim" id="s-product">-</div></div>
-            <div class="si"><div class="sk">Style</div><div class="sv dim" id="s-style">-</div></div>
-            <div class="si"><div class="sk">Colour</div><div class="sv dim" id="s-colour">-</div></div>
-            <div class="si"><div class="sk">Placement</div><div class="sv dim" id="s-placement">-</div></div>
-            <div class="si"><div class="sk">Logo Style</div><div class="sv dim" id="s-decoration">-</div></div>
-            <div class="si"><div class="sk">Size</div><div class="sv dim" id="s-size">-</div></div>
-            <div class="si"><div class="sk">Qty</div><div class="sv" id="s-qty">1</div></div>
-            <div class="si"><div class="sk">Unit Price</div><div class="sv dim" id="s-unit-price">-</div></div>
-            <div class="si"><div class="sk">Line Total</div><div class="sv dim" id="s-line-total">-</div></div>
-            <div class="sum-actions">
-                <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
-                <button class="btn btn-ghost" id="copy-btn" onclick="copySpec()">Copy Spec</button>
-                <button class="btn btn-ghost" onclick="addToQuote()" id="add-quote-btn">+ Add to Basket</button>
-                <button class="btn btn-ghost" id="toggle-quote-btn" onclick="toggleQuotePanel()" style="display:none;">Basket &#9650;</button>
-                <button class="btn btn-primary" onclick="requestQuote()" id="print-btn">Request Quote</button>
-                <small style="display:block; width:100%; color:#94A3B8; font-size:10px; margin-top:6px;">Tip: in the browser print dialog, set Headers and Footers to "Off" to hide the URL in the corners.</small>
+            <div class="sum-row">
+                <div class="sum-fields">
+                    <div class="si"><div class="sk">Product</div><div class="sv dim" id="s-product">-</div></div>
+                    <div class="si"><div class="sk">Style</div><div class="sv dim" id="s-style">-</div></div>
+                    <div class="si"><div class="sk">Colour</div><div class="sv dim" id="s-colour">-</div></div>
+                    <div class="si"><div class="sk">Placement</div><div class="sv dim" id="s-placement">-</div></div>
+                    <div class="si"><div class="sk">Logo Style</div><div class="sv dim" id="s-decoration">-</div></div>
+                    <div class="si"><div class="sk">Size</div><div class="sv dim" id="s-size">-</div></div>
+                    <div class="si"><div class="sk">Qty</div><input class="s-input" id="s-qty" type="number" min="1" max="100000" step="1" value="1" oninput="onSummaryQtyInput(this.value)" onchange="onSummaryQtyCommit(this.value)"></div>
+                    <div class="si"><div class="sk">Unit Price</div><div class="sv dim" id="s-unit-price">-</div></div>
+                    <div class="si"><div class="sk">Line Total</div><div class="sv dim" id="s-line-total">-</div></div>
+                </div>
+                <div class="sum-actions">
+                    <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
+                    <button class="btn btn-ghost" id="copy-btn" onclick="copySpec()">Copy Spec</button>
+                    <button class="btn btn-ghost" onclick="addToQuote()" id="add-quote-btn">+ Add to Basket</button>
+                    <button class="btn btn-ghost" id="toggle-quote-btn" onclick="toggleQuotePanel()" style="display:none;">Basket &#9650;</button>
+                    <button class="btn btn-primary" onclick="requestQuote()" id="print-btn">Request Quote</button>
+                </div>
             </div>
+            <div class="sum-tip">Tip: in the browser print dialog, set Headers and Footers to "Off" to hide the URL in the corners.</div>
         </div>
 
         <!-- Quote panel -->
@@ -1121,6 +1370,7 @@
     </div>
 
 </div>
+</div><!-- /.mockup-shell -->
 
 <!-- Print quote populated by JS, visible only when printing -->
 <div id="print-quote"></div>
@@ -1154,4 +1404,4 @@
     </div>
 </div>
 
-</div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-11996adc700736b6.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1203,[\"538\",\"static/chunks/app/mockup-builder/page-6425832e43e40e85.js\"],\"MockupBuilderClient\"]\n5:I[4431,[],\"OutletBoundary\"]\n7:I[5278,[],\"AsyncMetadataOutlet\"]\n9:I[4431,[],\"ViewportBoundary\"]\nb:I[4431,[],\"MetadataBoundary\"]\nc:\"$Sreact.suspense\"\ne:I[7150,[],\"\"]\n:HL[\"/_next/static/media/636a5ac981f94f8b-s.p.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n:HL[\"/_next/static/media/e4af272ccee01ff0-s.p.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n:HL[\"/_next/static/css/2fd3fa406e5fe8da.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"4z1UsihydbnGHup7MZWcp\",\"p\":\"\",\"c\":[\"\",\"mockup-builder\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"mockup-builder\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/2fd3fa406e5fe8da.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[\"$\",\"body\",null,{\"className\":\"__variable_a11773 __variable_37ef13 antialiased\",\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]}]]}],{\"children\":[\"mockup-builder\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{}],null,[\"$\",\"$L5\",null,{\"children\":[\"$L6\",[\"$\",\"$L7\",null,{\"promise\":\"$@8\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$L9\",null,{\"children\":\"$La\"}],[\"$\",\"meta\",null,{\"name\":\"next-size-adjust\",\"content\":\"\"}]],[\"$\",\"$Lb\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$c\",null,{\"fallback\":null,\"children\":\"$Ld\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$e\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"a:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n6:null\n"])</script><script>self.__next_f.push([1,"f:I[622,[],\"IconMark\"]\n"])</script><script>self.__next_f.push([1,"8:{\"metadata\":[[\"$\",\"title\",\"0\",{\"children\":\"Nova Merch Mockup Builder\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.\"}],[\"$\",\"meta\",\"2\",{\"name\":\"keywords\",\"content\":\"branded merchandise Australia,custom merch Australia,promotional products Australia,branded merchandise Newcastle,branded water bottles,custom caps,corporate gifts Australia,sports club merchandise\"}],[\"$\",\"meta\",\"3\",{\"property\":\"og:title\",\"content\":\"NovaMerch | Branded Merchandise Australia\"}],[\"$\",\"meta\",\"4\",{\"property\":\"og:description\",\"content\":\"Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.\"}],[\"$\",\"meta\",\"5\",{\"property\":\"og:url\",\"content\":\"https://novamerchau.com/\"}],[\"$\",\"meta\",\"6\",{\"property\":\"og:site_name\",\"content\":\"NovaMerch\"}],[\"$\",\"meta\",\"7\",{\"property\":\"og:type\",\"content\":\"website\"}],[\"$\",\"meta\",\"8\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"9\",{\"name\":\"twitter:title\",\"content\":\"NovaMerch | Branded Merchandise Australia\"}],[\"$\",\"meta\",\"10\",{\"name\":\"twitter:description\",\"content\":\"Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.\"}],[\"$\",\"link\",\"11\",{\"rel\":\"icon\",\"href\":\"/icon.svg?0f026029fd3a8ff8\",\"type\":\"image/svg+xml\",\"sizes\":\"any\"}],[\"$\",\"$Lf\",\"12\",{}]],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"d:\"$8:metadata\"\n"])</script></body></html>
+</div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-11996adc700736b6.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1203,[\"538\",\"static/chunks/app/mockup-builder/page-a9aa7eb8f3c52734.js\"],\"MockupBuilderClient\"]\n5:I[4431,[],\"OutletBoundary\"]\n7:I[5278,[],\"AsyncMetadataOutlet\"]\n9:I[4431,[],\"ViewportBoundary\"]\nb:I[4431,[],\"MetadataBoundary\"]\nc:\"$Sreact.suspense\"\ne:I[7150,[],\"\"]\n:HL[\"/_next/static/media/636a5ac981f94f8b-s.p.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n:HL[\"/_next/static/media/e4af272ccee01ff0-s.p.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n:HL[\"/_next/static/css/2fd3fa406e5fe8da.css\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"nG0toN40vGv6zzs6-11-O\",\"p\":\"\",\"c\":[\"\",\"mockup-builder\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"mockup-builder\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/2fd3fa406e5fe8da.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[\"$\",\"body\",null,{\"className\":\"__variable_a11773 __variable_37ef13 antialiased\",\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]}]]}],{\"children\":[\"mockup-builder\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{}],null,[\"$\",\"$L5\",null,{\"children\":[\"$L6\",[\"$\",\"$L7\",null,{\"promise\":\"$@8\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$L9\",null,{\"children\":\"$La\"}],[\"$\",\"meta\",null,{\"name\":\"next-size-adjust\",\"content\":\"\"}]],[\"$\",\"$Lb\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$c\",null,{\"fallback\":null,\"children\":\"$Ld\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$e\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"a:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n6:null\n"])</script><script>self.__next_f.push([1,"f:I[622,[],\"IconMark\"]\n"])</script><script>self.__next_f.push([1,"8:{\"metadata\":[[\"$\",\"title\",\"0\",{\"children\":\"Nova Merch Mockup Builder\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.\"}],[\"$\",\"meta\",\"2\",{\"name\":\"keywords\",\"content\":\"branded merchandise Australia,custom merch Australia,promotional products Australia,branded merchandise Newcastle,branded water bottles,custom caps,corporate gifts Australia,sports club merchandise\"}],[\"$\",\"meta\",\"3\",{\"property\":\"og:title\",\"content\":\"NovaMerch | Branded Merchandise Australia\"}],[\"$\",\"meta\",\"4\",{\"property\":\"og:description\",\"content\":\"Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.\"}],[\"$\",\"meta\",\"5\",{\"property\":\"og:url\",\"content\":\"https://novamerchau.com/\"}],[\"$\",\"meta\",\"6\",{\"property\":\"og:site_name\",\"content\":\"NovaMerch\"}],[\"$\",\"meta\",\"7\",{\"property\":\"og:type\",\"content\":\"website\"}],[\"$\",\"meta\",\"8\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"9\",{\"name\":\"twitter:title\",\"content\":\"NovaMerch | Branded Merchandise Australia\"}],[\"$\",\"meta\",\"10\",{\"name\":\"twitter:description\",\"content\":\"Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.\"}],[\"$\",\"link\",\"11\",{\"rel\":\"icon\",\"href\":\"/icon.svg?0f026029fd3a8ff8\",\"type\":\"image/svg+xml\",\"sizes\":\"any\"}],[\"$\",\"$Lf\",\"12\",{}]],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"d:\"$8:metadata\"\n"])</script></body></html>
