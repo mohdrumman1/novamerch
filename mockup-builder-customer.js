@@ -1518,7 +1518,7 @@ function quoteEndpoint() {
     if (host === 'localhost' || host === '127.0.0.1') {
         return 'http://localhost:3001/admin/api/public/quote-requests';
     }
-    return 'https://novamerchau.com/admin/api/public/quote-requests';
+    return 'https://novamerch-admin.rumman-formaai.workers.dev/admin/api/public/quote-requests';
 }
 
 // requestId is generated when the modal opens and reused for all retry POSTs
