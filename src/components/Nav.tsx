@@ -9,6 +9,7 @@ const links = [
   { label: "Catalogue", href: "/#catalogue" },
   { label: "Industries", href: "/#industries" },
   { label: "Sports Clubs", href: "/sports-clubs/" },
+  { label: "Mockup Builder", href: "/mockup-builder" },
   { label: "How It Works", href: "/#process" },
   { label: "FAQ", href: "/#faq" },
 ];
