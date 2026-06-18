@@ -15,9 +15,38 @@ import type { Quote } from "@/lib/types";
 import { QuoteModal } from "@/components/modals/QuoteModal";
 import { PlusIcon, EditIcon, TrashIcon } from "@/components/icons";
 
+const QUOTE_SOURCES = ["Mockup Builder", "Manual", "Email Inquiry"] as const;
+
+const SOURCE_BADGE_STYLE: Record<string, React.CSSProperties> = {
+  "Mockup Builder": { background: "rgba(6, 182, 212, 0.12)", color: "#0e7490", border: "1px solid rgba(6, 182, 212, 0.3)" },
+  "Manual":         { background: "rgba(100, 116, 139, 0.12)", color: "#475569", border: "1px solid rgba(100, 116, 139, 0.3)" },
+  "Email Inquiry":  { background: "rgba(168, 85, 247, 0.12)", color: "#7e22ce", border: "1px solid rgba(168, 85, 247, 0.3)" },
+};
+
+function SourceBadge({ source }: { source?: string }) {
+  if (!source) return null;
+  const style = SOURCE_BADGE_STYLE[source] ?? SOURCE_BADGE_STYLE["Manual"];
+  return (
+    <span
+      style={{
+        ...style,
+        display: "inline-block",
+        padding: "2px 8px",
+        borderRadius: 999,
+        fontSize: 11,
+        fontWeight: 600,
+        whiteSpace: "nowrap",
+      }}
+    >
+      {source}
+    </span>
+  );
+}
+
 export default function QuotesPage() {
   const { quotes, getCustomer, deleteQuote, addOrder } = useData();
   const [statusFilter, setStatusFilter] = useState("All");
+  const [sourceFilter, setSourceFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [editingQuote, setEditingQuote] = useState<Quote | null>(null);
   const [creating, setCreating] = useState(false);
@@ -25,12 +54,13 @@ export default function QuotesPage() {
 
   const filtered = quotes.filter((q) => {
     const matchStatus = statusFilter === "All" || q.status === statusFilter;
+    const matchSource = sourceFilter === "All" || (q.source ?? "Manual") === sourceFilter;
     const customer = getCustomer(q.customerId);
     const matchSearch =
       !search ||
       q.ref.toLowerCase().includes(search.toLowerCase()) ||
       (customer?.company ?? "").toLowerCase().includes(search.toLowerCase());
-    return matchStatus && matchSearch;
+    return matchStatus && matchSource && matchSearch;
   });
 
   const columns = [
@@ -64,6 +94,11 @@ export default function QuotesPage() {
       key: "status",
       header: "Status",
       render: (row: Quote) => <Badge label={row.status} tone={QUOTE_STATUS_TONE[row.status]} />,
+    },
+    {
+      key: "source",
+      header: "Source",
+      render: (row: Quote) => <SourceBadge source={row.source ?? "Manual"} />,
     },
     {
       key: "actions",
@@ -135,6 +170,15 @@ export default function QuotesPage() {
               options: [
                 { value: "All", label: "All Quotes" },
                 ...QUOTE_STATUSES.map((s) => ({ value: s, label: s })),
+              ],
+            },
+            {
+              label: "Source",
+              value: sourceFilter,
+              onChange: setSourceFilter,
+              options: [
+                { value: "All", label: "All Sources" },
+                ...QUOTE_SOURCES.map((s) => ({ value: s, label: s })),
               ],
             },
           ]}

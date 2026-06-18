@@ -31,7 +31,7 @@ export const customers: Customer[] = [
     abn: "71 234 567 890",
     billingAddress: "Suite 5, 220 Collins St, Melbourne VIC 3000",
     createdAt: "2024-08-03T00:00:00.000Z",
-    notes: "Charity — confirm GST exemption each order.",
+    notes: "Charity. Confirm GST exemption each order.",
   },
   {
     id: "cust-004",
@@ -75,7 +75,7 @@ export const customers: Customer[] = [
     abn: "50 169 561 394",
     billingAddress: "159 Clarence St, Sydney NSW 2000",
     createdAt: "2024-10-07T00:00:00.000Z",
-    notes: "Large event giveaways — needs 6 week lead time minimum.",
+    notes: "Large event giveaways. Needs 6 week lead time minimum.",
   },
   {
     id: "cust-008",
@@ -96,7 +96,7 @@ export const customers: Customer[] = [
     abn: "91 432 109 876",
     billingAddress: "Level 1, 50 Cavill Ave, Surfers Paradise QLD 4217",
     createdAt: "2024-11-05T00:00:00.000Z",
-    notes: "Real estate promo items — pens, notepads, USB drives.",
+    notes: "Real estate promo items: pens, notepads, USB drives.",
   },
   {
     id: "cust-010",

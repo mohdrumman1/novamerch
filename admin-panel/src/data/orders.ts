@@ -132,7 +132,7 @@ export const orders: Order[] = [
     trackingAgentToK2: "SZXB100345678CN",
     trackingK2ToCustomer: "AU-AP-20241220-00667",
     amountReceived: 13150.00,
-    comments: "Volunteer event — all 3 colour variants delivered.",
+    comments: "Volunteer event. All 3 colour variants delivered.",
   },
   {
     id: "order-007",
@@ -199,7 +199,7 @@ export const orders: Order[] = [
     freightPaidDate: "2025-03-28T00:00:00.000Z",
     trackingK2ToCustomer: "AU-DHL-20250412-00990",
     amountReceived: 3740.00,
-    comments: "Display suite launch event — everything on time.",
+    comments: "Display suite launch event. Everything on time.",
   },
   {
     id: "order-010",

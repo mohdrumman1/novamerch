@@ -53,7 +53,7 @@ export const shipments: Shipment[] = [
       { description: "Pen – Recycled ballpoint", qty: 500, orderId: "order-003" },
       { description: "Tote Bag – Jute, debossed logo", qty: 300, orderId: "order-003" },
     ],
-    notes: "Minor delay at port — 5 days late.",
+    notes: "Minor delay at port, 5 days late.",
   },
   {
     id: "shp-004",
@@ -161,7 +161,7 @@ export const shipments: Shipment[] = [
       { description: "Coffee Cup 350ml – Ceramic, full wrap print", qty: 100, orderId: "order-009" },
       { description: "USB Drive – 32GB, credit card style", qty: 100, orderId: "order-009" },
     ],
-    notes: "Express air freight — display suite launch deadline met.",
+    notes: "Express air freight. Display suite launch deadline met.",
   },
   {
     id: "shp-010",
@@ -210,6 +210,6 @@ export const shipments: Shipment[] = [
       { description: "Pen – Executive metal, laser engraved", qty: 300, orderId: "order-013" },
       { description: "Keychain – Metal bottle opener, laser engraved", qty: 300, orderId: "order-013" },
     ],
-    notes: "Delayed at Sydney customs for additional inspection — resolved.",
+    notes: "Delayed at Sydney customs for additional inspection, resolved.",
   },
 ];

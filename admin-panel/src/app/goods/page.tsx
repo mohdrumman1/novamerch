@@ -336,7 +336,7 @@ export default function GoodsPage() {
                 className="text-2xl font-semibold"
                 style={{ fontFamily: "var(--font-dm-mono, monospace)" }}
               >
-                ${settings.seaRates[0]?.rateUsdPerKg ?? "—"}/kg USD
+                ${settings.seaRates[0]?.rateUsdPerKg ?? "N/A"}/kg USD
               </p>
             </div>
             <div className="bg-[var(--surface)] rounded-[var(--radius)] border border-[var(--border)] p-4">
@@ -347,7 +347,7 @@ export default function GoodsPage() {
                 className="text-2xl font-semibold"
                 style={{ fontFamily: "var(--font-dm-mono, monospace)" }}
               >
-                ${settings.airRates[0]?.rateUsdPerKg ?? "—"}/kg USD
+                ${settings.airRates[0]?.rateUsdPerKg ?? "N/A"}/kg USD
               </p>
             </div>
           </div>
@@ -836,36 +836,36 @@ function QuoteCalculator() {
                     />
                   </td>
                   <td className="px-2.5 py-2" style={{ fontFamily: "var(--font-dm-mono, monospace)" }}>
-                    {c ? formatAUD(c.costOfGoods) : "—"}
+                    {c ? formatAUD(c.costOfGoods) : "N/A"}
                   </td>
                   <td className="px-2.5 py-2" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--text-muted)" }}>
-                    {c ? formatAUD(c.costOfGoodsBuffered) : "—"}
+                    {c ? formatAUD(c.costOfGoodsBuffered) : "N/A"}
                   </td>
-                  <td className="px-2.5 py-2 text-center">{c ? c.ctns.toFixed(1) : "—"}</td>
-                  <td className="px-2.5 py-2 text-right">{c ? `${c.totalWeight.toFixed(2)}kg` : "—"}</td>
+                  <td className="px-2.5 py-2 text-center">{c ? c.ctns.toFixed(1) : "N/A"}</td>
+                  <td className="px-2.5 py-2 text-right">{c ? `${c.totalWeight.toFixed(2)}kg` : "N/A"}</td>
                   <td className="px-2.5 py-2 text-right" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--blue)" }}>
-                    {c ? `$${c.seaRateAud.toFixed(2)}/kg` : "—"}
+                    {c ? `$${c.seaRateAud.toFixed(2)}/kg` : "N/A"}
                   </td>
                   <td className="px-2.5 py-2 text-right" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--orange)" }}>
-                    {c ? `$${c.airRateAud.toFixed(2)}/kg` : "—"}
+                    {c ? `$${c.airRateAud.toFixed(2)}/kg` : "N/A"}
                   </td>
                   <td className="px-2.5 py-2" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--blue)" }}>
-                    {c ? formatAUD(c.totalShipSea) : "—"}
+                    {c ? formatAUD(c.totalShipSea) : "N/A"}
                   </td>
                   <td className="px-2.5 py-2" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--orange)" }}>
-                    {c ? formatAUD(c.totalShipAir) : "—"}
+                    {c ? formatAUD(c.totalShipAir) : "N/A"}
                   </td>
                   <td className="px-2.5 py-2 font-semibold" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--green)" }}>
-                    {c ? formatAUD(c.totalSea) : "—"}
+                    {c ? formatAUD(c.totalSea) : "N/A"}
                   </td>
                   <td className="px-2.5 py-2 font-semibold" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--orange)" }}>
-                    {c ? formatAUD(c.totalAir) : "—"}
+                    {c ? formatAUD(c.totalAir) : "N/A"}
                   </td>
                   <td className="px-2.5 py-2" style={{ fontFamily: "var(--font-dm-mono, monospace)" }}>
-                    {c ? formatAUD(c.perUnitSea) : "—"}
+                    {c ? formatAUD(c.perUnitSea) : "N/A"}
                   </td>
                   <td className="px-2.5 py-2" style={{ fontFamily: "var(--font-dm-mono, monospace)" }}>
-                    {c ? formatAUD(c.perUnitAir) : "—"}
+                    {c ? formatAUD(c.perUnitAir) : "N/A"}
                   </td>
                   {/* SEA SELL PRICE - editable */}
                   <td className="px-2.5 py-2">
@@ -876,14 +876,14 @@ function QuoteCalculator() {
                         className="w-24 px-1.5 py-1 rounded border text-right text-xs focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                         style={{ background: "#EDFAF3", borderColor: "var(--green)", fontFamily: "var(--font-dm-mono, monospace)", fontWeight: 600 }}
                       />
-                    ) : "—"}
+                    ) : "N/A"}
                   </td>
                   <td className="px-2.5 py-2 text-center">
                     {c ? (
                       <span className="text-xs font-semibold" style={{ color: c.seaProfitPct >= 0 ? "var(--green)" : "var(--red)" }}>
                         {c.seaProfitPct.toFixed(1)}%
                       </span>
-                    ) : "—"}
+                    ) : "N/A"}
                   </td>
                   {/* AIR SELL PRICE - editable */}
                   <td className="px-2.5 py-2">
@@ -894,14 +894,14 @@ function QuoteCalculator() {
                         className="w-24 px-1.5 py-1 rounded border text-right text-xs focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                         style={{ background: "var(--orange-soft)", borderColor: "var(--orange)", fontFamily: "var(--font-dm-mono, monospace)", fontWeight: 600 }}
                       />
-                    ) : "—"}
+                    ) : "N/A"}
                   </td>
                   <td className="px-2.5 py-2 text-center">
                     {c ? (
                       <span className="text-xs font-semibold" style={{ color: c.airProfitPct >= 0 ? "var(--green)" : "var(--red)" }}>
                         {c.airProfitPct.toFixed(1)}%
                       </span>
-                    ) : "—"}
+                    ) : "N/A"}
                   </td>
                 </tr>
               );

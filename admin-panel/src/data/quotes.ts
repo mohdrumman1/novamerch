@@ -101,7 +101,7 @@ export const quotes: Quote[] = [
       { id: "li-q007-3", description: "Pen – Eco barrel, 1-colour print", qty: 500, unitPrice: 4.00, costPerUnit: 1.10 },
     ],
     freightCost: 550,
-    comments: "Volunteer event merchandise — 3 colour options needed.",
+    comments: "Volunteer event merchandise. 3 colour options needed.",
   },
   {
     id: "quote-008",
@@ -129,7 +129,7 @@ export const quotes: Quote[] = [
       { id: "li-q009-2", description: "Keychain – Metal bottle opener, laser engraved", qty: 200, unitPrice: 7.00, costPerUnit: 2.50 },
     ],
     freightCost: 180,
-    comments: "Open home giveaways. Quote expired — follow up Q1.",
+    comments: "Open home giveaways. Quote expired, follow up Q1.",
   },
   {
     id: "quote-010",
@@ -187,7 +187,7 @@ export const quotes: Quote[] = [
       { id: "li-q013-2", description: "Foam Roller – EVA, custom branded sleeve", qty: 50, unitPrice: 24.00, costPerUnit: 8.50 },
     ],
     freightCost: 310,
-    comments: "Health & wellness program. Draft — pending internal approvals.",
+    comments: "Health & wellness program. Draft, pending internal approvals.",
   },
   {
     id: "quote-014",

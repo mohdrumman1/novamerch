@@ -483,7 +483,7 @@ function ClubPacks() {
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3l3.5 3.5L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </Link>
                 </div>
-                {/* Pack image — desktop only */}
+                {/* Pack image, desktop only */}
                 {packImages[pack.name] && (
                   <div
                     className="hidden lg:block shrink-0"

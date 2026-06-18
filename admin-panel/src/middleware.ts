@@ -9,6 +9,10 @@ function isPublicPath(pathname: string) {
     pathname === `${BASE_PATH}/login` ||
     pathname === "/api/auth/login" ||
     pathname === `${BASE_PATH}/api/auth/login` ||
+    // Public intake endpoint — self-authorizes via Origin allowlist + per-IP
+    // rate limiting (see admin-panel/src/app/api/public/quote-requests).
+    pathname === "/api/public/quote-requests" ||
+    pathname === `${BASE_PATH}/api/public/quote-requests` ||
     pathname.startsWith("/_next/") ||
     pathname.startsWith(`${BASE_PATH}/_next/`)
   );

@@ -18,7 +18,7 @@ export function formatAUD(amount: number, options?: { compact?: boolean }): stri
 
 /** Format a date string (ISO) as "DD MMM YYYY" */
 export function formatDate(isoDate: string | undefined): string {
-  if (!isoDate) return "—";
+  if (!isoDate) return "N/A";
   return new Intl.DateTimeFormat("en-AU", {
     day: "2-digit",
     month: "short",

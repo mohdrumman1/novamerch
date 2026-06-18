@@ -39,15 +39,15 @@ export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailM
           </div>
           <div>
             <p className="text-[var(--text-muted)] text-xs uppercase tracking-wide mb-1">Email</p>
-            <p className="font-medium">{customer.email || "—"}</p>
+            <p className="font-medium">{customer.email || "N/A"}</p>
           </div>
           <div>
             <p className="text-[var(--text-muted)] text-xs uppercase tracking-wide mb-1">Phone</p>
-            <p className="font-medium">{customer.phone || "—"}</p>
+            <p className="font-medium">{customer.phone || "N/A"}</p>
           </div>
           <div>
             <p className="text-[var(--text-muted)] text-xs uppercase tracking-wide mb-1">ABN</p>
-            <p className="font-medium">{customer.abn || "—"}</p>
+            <p className="font-medium">{customer.abn || "N/A"}</p>
           </div>
           {customer.billingAddress && (
             <div className="col-span-2">

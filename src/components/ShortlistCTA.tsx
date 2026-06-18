@@ -98,7 +98,7 @@ export default function ShortlistCTA() {
             </div>
           </div>
 
-          {/* Image column — desktop only */}
+          {/* Image column, desktop only */}
           <div
             className="hidden lg:block anim-fade-up shrink-0"
             style={{ animationDelay: "0.32s" }}

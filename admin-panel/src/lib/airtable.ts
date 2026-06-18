@@ -3,27 +3,38 @@ type AirtableRecord = { id: string; fields: Record<string, unknown> };
 const BASE = () => `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}`;
 const AUTH = () => ({ Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`, "Content-Type": "application/json" });
 
-export async function listRecords(table: string): Promise<AirtableRecord[]> {
+export async function listRecords(
+  table: string,
+  opts?: { filterByFormula?: string; maxRecords?: number; signal?: AbortSignal },
+): Promise<AirtableRecord[]> {
   const records: AirtableRecord[] = [];
   let offset: string | undefined;
   do {
     const url = new URL(`${BASE()}/${encodeURIComponent(table)}`);
     url.searchParams.set("pageSize", "100");
     if (offset) url.searchParams.set("offset", offset);
-    const res = await fetch(url.toString(), { headers: AUTH(), cache: "no-store" });
+    if (opts?.filterByFormula) url.searchParams.set("filterByFormula", opts.filterByFormula);
+    if (opts?.maxRecords) url.searchParams.set("maxRecords", String(opts.maxRecords));
+    const res = await fetch(url.toString(), { headers: AUTH(), cache: "no-store", signal: opts?.signal });
     if (!res.ok) throw new Error(`Airtable listRecords error: ${await res.text()}`);
     const data = await res.json();
     records.push(...data.records);
     offset = data.offset;
+    if (opts?.maxRecords && records.length >= opts.maxRecords) break;
   } while (offset);
   return records;
 }
 
-export async function createRecord(table: string, fields: Record<string, unknown>): Promise<AirtableRecord> {
+export async function createRecord(
+  table: string,
+  fields: Record<string, unknown>,
+  opts?: { signal?: AbortSignal },
+): Promise<AirtableRecord> {
   const res = await fetch(`${BASE()}/${encodeURIComponent(table)}`, {
     method: "POST",
     headers: AUTH(),
     body: JSON.stringify({ fields }),
+    signal: opts?.signal,
   });
   if (!res.ok) throw new Error(`Airtable createRecord error: ${await res.text()}`);
   return res.json();

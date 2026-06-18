@@ -30,6 +30,8 @@ export interface Customer {
   notes?: string;
 }
 
+export type QuoteSource = "Mockup Builder" | "Manual" | "Email Inquiry";
+
 export interface Quote {
   id: ID;
   ref: string; // e.g. "#Q1049"
@@ -41,6 +43,7 @@ export interface Quote {
   freightCost?: number;
   imageUrl?: string; // mockup image data URL
   comments?: string;
+  source?: QuoteSource;
 }
 
 export interface Order {

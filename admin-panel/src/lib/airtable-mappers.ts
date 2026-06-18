@@ -1,6 +1,6 @@
 import type {
   Customer, Quote, Order, Invoice, Shipment,
-  QuoteStatus, OrderGoodsStatus, OrderInvoiceStatus,
+  QuoteStatus, QuoteSource, OrderGoodsStatus, OrderInvoiceStatus,
   TransportType, InvoiceStatus, InvoiceKind, ShipmentStatus, ShippingMethod,
   LineItem, ShipmentItem,
 } from "./types";
@@ -52,19 +52,36 @@ export function customerToFields(c: Customer): Record<string, unknown> {
 
 // ─── Quotes ──────────────────────────────────────────────────────────────────
 
+// Airtable Quote Status uses "Approved" but our TS QuoteStatus uses "Accepted".
+// Translate both directions.
+function toQuoteStatus(s: string): QuoteStatus {
+  if (s === "Approved") return "Accepted";
+  if (s === "Draft" || s === "Sent" || s === "Accepted" || s === "Declined" || s === "Expired") {
+    return s;
+  }
+  return "Draft";
+}
+
+function fromQuoteStatus(s: QuoteStatus): string {
+  if (s === "Accepted") return "Approved";
+  return s;
+}
+
 export function recordToQuote(rec: AirtableRecord): Quote {
   const f = rec.fields;
+  const source = str(f["Source"]);
   return {
     id: rec.id,
     ref: str(f["Quote Number"]),
     customerId: link(f["Customer"]),
-    status: (str(f["Status"]) || "Draft") as QuoteStatus,
+    status: toQuoteStatus(str(f["Status"])),
     issuedAt: str(f["Date Created"]),
     validUntil: str(f["Expiry Date"]),
     lineItems: parseJSON<LineItem[]>(f["Line Items JSON"], []),
     freightCost: num(f["Freight Cost AUD"]) || undefined,
     imageUrl: str(f["Image URL"]) || undefined,
     comments: str(f["Comments"]) || undefined,
+    source: (source as QuoteSource) || undefined,
   };
 }
 
@@ -74,7 +91,7 @@ export function quoteToFields(q: Quote): Record<string, unknown> {
   return {
     "Quote Number": q.ref,
     "Customer": q.customerId ? [q.customerId] : [],
-    "Status": q.status,
+    "Status": fromQuoteStatus(q.status),
     "Date Created": q.issuedAt ? q.issuedAt.split("T")[0] : null,
     "Expiry Date": q.validUntil ? q.validUntil.split("T")[0] : null,
     "Line Items JSON": JSON.stringify(q.lineItems),
@@ -84,6 +101,7 @@ export function quoteToFields(q: Quote): Record<string, unknown> {
     "Total Revenue AUD": revenue,
     "Total Cost AUD": cost,
     "Margin Percent": revenue > 0 ? (revenue - cost) / revenue : 0,
+    "Source": q.source || "Manual",
   };
 }
 

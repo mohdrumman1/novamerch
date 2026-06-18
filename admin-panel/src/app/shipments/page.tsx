@@ -59,7 +59,7 @@ export default function ShipmentsPage() {
           className="text-sm font-semibold"
           style={{ fontFamily: "var(--font-dm-mono, monospace)" }}
         >
-          {row.trackingAgentToK2 ?? "—"}
+          {row.trackingAgentToK2 ?? "N/A"}
         </span>
       ),
     },

@@ -125,7 +125,7 @@ export default function FinancialsPage() {
   const outstanding = totalRevenue - cashReceived;
   const actualProfitToday = cashReceived - totalExpenses;
 
-  // GST Threshold — all-time revenue (no date filter)
+  // GST Threshold: all-time revenue (no date filter)
   const allTimeRevenue = orders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
   const gstThresholdPct = Math.min(100, (allTimeRevenue / GST_THRESHOLD) * 100);
   const gstThresholdColor =
@@ -300,7 +300,7 @@ export default function FinancialsPage() {
               {gstThresholdPct >= 100
                 ? "You have exceeded the GST threshold. Register for GST now."
                 : gstThresholdPct >= 80
-                ? `Approaching threshold — ${formatPercent(gstThresholdPct)} of $75,000`
+                ? `Approaching threshold: ${formatPercent(gstThresholdPct)} of $75,000`
                 : `${formatPercent(gstThresholdPct)} of $75,000 threshold reached`}
             </p>
           </div>

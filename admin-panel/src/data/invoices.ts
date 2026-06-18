@@ -268,7 +268,7 @@ export const invoices: Invoice[] = [
     ],
   },
 
-  // order-010: Invoiced (Adelaide Crows) — Overdue balance
+  // order-010: Invoiced (Adelaide Crows) - Overdue balance
   {
     id: "inv-014",
     ref: "#1010-Deposit",
@@ -305,7 +305,7 @@ export const invoices: Invoice[] = [
     lineItems: [
       { id: "li-inv015-1", description: "Balance – Order #O1010 (Hoodies, Beanies)", qty: 1, unitPrice: 2306.25 },
     ],
-    comments: "Overdue — follow up required.",
+    comments: "Overdue. Follow up required.",
   },
 
   // order-011: Deposit invoice (Ironstone Mining FY25/26)
