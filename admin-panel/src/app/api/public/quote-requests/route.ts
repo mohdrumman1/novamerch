@@ -75,9 +75,6 @@ interface IntakePayload {
 
 interface SuccessResponse {
   success: true;
-  quoteNumber: string;
-  quoteId?: string;
-  customerId?: string;
   email: boolean;
   airtable: boolean;
   partial?: boolean;
@@ -598,7 +595,7 @@ export async function POST(req: Request) {
       airtable: airtableResult.status === "fulfilled" ? airtableResult.value : airtableResult.reason,
     });
     const res = NextResponse.json(
-      { success: false, quoteNumber, email: false, airtable: false, error: "both_failed" },
+      { success: false, email: false, airtable: false, error: "both_failed" },
       { status: 502 },
     );
     return withCors(res, origin);
@@ -615,9 +612,6 @@ export async function POST(req: Request) {
 
   const response: SuccessResponse = {
     success: true,
-    quoteNumber,
-    quoteId: airtableValue?.quoteId,
-    customerId: airtableValue?.customerId,
     email: emailOk,
     airtable: airtableOk,
     ...(partial ? { partial: true } : {}),

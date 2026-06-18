@@ -10,6 +10,7 @@ declare global {
 }
 
 const BODY_HTML = `
+<div class="mockup-shell">
 
 <header>
     <h1>Nova<span>merch</span> Mockup Builder</h1>
@@ -189,7 +190,7 @@ const BODY_HTML = `
             <div class="opt-lbl">Quantity</div>
             <div class="qty-row">
                 <button class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
-                <input  class="qty-val" id="qty" type="number" value="1" min="1" max="9999" oninput="updateSummary()">
+                <input  class="qty-val" id="qty" type="number" value="1" min="1" max="100000" oninput="updateSummary()">
                 <button class="qty-btn" onclick="changeQty(1)">&#43;</button>
             </div>
         </div>
@@ -204,6 +205,13 @@ const BODY_HTML = `
         </div>
 
     </div>
+
+    <!-- Splitter (draggable handle between sidebar and preview) -->
+    <div class="splitter" id="splitter"
+         role="separator"
+         aria-label="Resize sidebar"
+         aria-orientation="vertical"
+         tabindex="0"></div>
 
     <!-- Preview -->
     <div class="preview">
@@ -238,25 +246,36 @@ const BODY_HTML = `
             </div>
         </div>
 
+        <!-- Horizontal splitter — drag handle between canvas stage and summary bar -->
+        <div class="splitter-h" id="splitter-h"
+             role="separator"
+             aria-label="Resize summary bar"
+             aria-orientation="horizontal"
+             tabindex="0"></div>
+
         <!-- Summary bar -->
         <div class="sum-bar">
-            <div class="si"><div class="sk">Product</div><div class="sv dim" id="s-product">-</div></div>
-            <div class="si"><div class="sk">Style</div><div class="sv dim" id="s-style">-</div></div>
-            <div class="si"><div class="sk">Colour</div><div class="sv dim" id="s-colour">-</div></div>
-            <div class="si"><div class="sk">Placement</div><div class="sv dim" id="s-placement">-</div></div>
-            <div class="si"><div class="sk">Logo Style</div><div class="sv dim" id="s-decoration">-</div></div>
-            <div class="si"><div class="sk">Size</div><div class="sv dim" id="s-size">-</div></div>
-            <div class="si"><div class="sk">Qty</div><div class="sv" id="s-qty">1</div></div>
-            <div class="si"><div class="sk">Unit Price</div><div class="sv dim" id="s-unit-price">-</div></div>
-            <div class="si"><div class="sk">Line Total</div><div class="sv dim" id="s-line-total">-</div></div>
-            <div class="sum-actions">
-                <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
-                <button class="btn btn-ghost" id="copy-btn" onclick="copySpec()">Copy Spec</button>
-                <button class="btn btn-ghost" onclick="addToQuote()" id="add-quote-btn">+ Add to Basket</button>
-                <button class="btn btn-ghost" id="toggle-quote-btn" onclick="toggleQuotePanel()" style="display:none;">Basket &#9650;</button>
-                <button class="btn btn-primary" onclick="requestQuote()" id="print-btn">Request Quote</button>
-                <small style="display:block; width:100%; color:#94A3B8; font-size:10px; margin-top:6px;">Tip: in the browser print dialog, set Headers and Footers to "Off" to hide the URL in the corners.</small>
+            <div class="sum-row">
+                <div class="sum-fields">
+                    <div class="si"><div class="sk">Product</div><div class="sv dim" id="s-product">-</div></div>
+                    <div class="si"><div class="sk">Style</div><div class="sv dim" id="s-style">-</div></div>
+                    <div class="si"><div class="sk">Colour</div><div class="sv dim" id="s-colour">-</div></div>
+                    <div class="si"><div class="sk">Placement</div><div class="sv dim" id="s-placement">-</div></div>
+                    <div class="si"><div class="sk">Logo Style</div><div class="sv dim" id="s-decoration">-</div></div>
+                    <div class="si"><div class="sk">Size</div><div class="sv dim" id="s-size">-</div></div>
+                    <div class="si"><div class="sk">Qty</div><input class="s-input" id="s-qty" type="number" min="1" max="100000" step="1" value="1" oninput="onSummaryQtyInput(this.value)" onchange="onSummaryQtyCommit(this.value)"></div>
+                    <div class="si"><div class="sk">Unit Price</div><div class="sv dim" id="s-unit-price">-</div></div>
+                    <div class="si"><div class="sk">Line Total</div><div class="sv dim" id="s-line-total">-</div></div>
+                </div>
+                <div class="sum-actions">
+                    <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
+                    <button class="btn btn-ghost" id="copy-btn" onclick="copySpec()">Copy Spec</button>
+                    <button class="btn btn-ghost" onclick="addToQuote()" id="add-quote-btn">+ Add to Basket</button>
+                    <button class="btn btn-ghost" id="toggle-quote-btn" onclick="toggleQuotePanel()" style="display:none;">Basket &#9650;</button>
+                    <button class="btn btn-primary" onclick="requestQuote()" id="print-btn">Request Quote</button>
+                </div>
             </div>
+            <div class="sum-tip">Tip: in the browser print dialog, set Headers and Footers to "Off" to hide the URL in the corners.</div>
         </div>
 
         <!-- Quote panel -->
@@ -272,6 +291,7 @@ const BODY_HTML = `
     </div>
 
 </div>
+</div><!-- /.mockup-shell -->
 
 <!-- Print quote populated by JS, visible only when printing -->
 <div id="print-quote"></div>
