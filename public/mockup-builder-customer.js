@@ -714,7 +714,7 @@ const COLOURS = [
     { id: 'red',        label: 'Red',          hex: '#c0392b' },
     { id: 'mustard',    label: 'Mustard',      hex: '#c8930a' },
     { id: 'pink',       label: 'Pink',         hex: '#d4748a' },
-    { id: 'orange',     label: 'Orange',       hex: '#00CFFF' },
+    { id: 'orange',     label: 'Orange',       hex: '#F97316' },
     { id: 'sky-blue',   label: 'Sky Blue',     hex: '#5ba3d0' },
     { id: 'sand',       label: 'Sand',         hex: '#c8b89a' },
     { id: 'olive',      label: 'Olive',        hex: '#6b6b3a' },

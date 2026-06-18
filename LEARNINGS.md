@@ -1,3 +1,22 @@
+## 2026-06-19 — Orange swatch hexes overwritten by blue during brand recolour
+
+**Tags:** swatches, colors, mockup-builder, brand-refresh, data-vs-theme
+**Status:** Fixed
+
+**Issue:** On the mockup builder, the "Orange" colour swatch dot was rendered blue on every product that had an Orange option, while the tooltip and the actual product mockup image were still orange. Bug was purely in the swatch circle's hex value.
+
+**Investigation:** Grepped `public/mockup-builder-customer.js` for `orange` and found multiple product colour arrays where `{ name: 'orange', hex: '<blue>' }` had the hex pointing to a blue value. The pattern showed a previous global search-replace had treated DATA hexes as if they were THEME tokens.
+
+**Root cause:** A bulk orange-to-blue brand refresh swept hex literals indiscriminately. Theme tokens, CSS variables, and UI accent classes were the intended targets, but the swatch DATA (which catalogues physical product colours customers can order) was caught in the same sweep. The swatch label stayed "Orange" but the hex became blue.
+
+**Fix:** Restored each affected orange swatch hex to `#F97316`. See diff: `public/mockup-builder-customer.js`.
+
+**Verify:** Open `http://localhost:3000/mockup-builder`, switch through T-shirt, Cap, Beanie, Shorts, Insulated Bottle, Travel Cup, and confirm the swatch dot labelled "Orange" is visibly orange and matches the product render.
+
+**If it recurs:** Any future brand recolour MUST distinguish theme tokens from data. Never run a bulk find-replace on hex literals across `public/mockup-builder-customer.js` or any product/swatch data file. Touch only `tailwind.config.*`, `globals.css`, theme token files, and component className lists. Data hexes are immutable catalogue values.
+
+---
+
 ## 2026-06-18 — Dark swatches invisible on dark sidebar + customer logos dropped from quote email
 
 **Tags:** mockup-builder, swatch, color, visibility, quote, logo, email, airtable
