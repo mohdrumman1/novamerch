@@ -930,11 +930,13 @@ function renderMockup() {
         const front = new Image();
         front.onload  = () => { loadedImg = front; frontDone = true; tryShow(); };
         front.onerror = () => { document.getElementById('ph-msg').textContent = 'Front image not found: ' + src; };
+        front.crossOrigin = 'anonymous';
         front.src = src;
 
         const back = new Image();
         back.onload  = () => { loadedBackImg = back; backDone = true; tryShow(); };
         back.onerror = () => { document.getElementById('ph-msg').textContent = 'Back image not found: ' + backSrc; };
+        back.crossOrigin = 'anonymous';
         back.src = backSrc;
 
     } else {
@@ -949,6 +951,7 @@ function renderMockup() {
             ph.style.display           = 'none';
         };
         img.onerror = () => { document.getElementById('ph-msg').textContent = 'Image not found: ' + src; };
+        img.crossOrigin = 'anonymous';
         img.src = src;
     }
 }
@@ -1282,6 +1285,22 @@ function copySpec() {
 
 // ── Quote ─────────────────────────────────────────────────────────────────────
 
+function captureCanvas(canvas) {
+  if (!canvas) return null;
+  try {
+    const maxW = 800;
+    const scale = Math.min(1, maxW / canvas.width);
+    const off = document.createElement('canvas');
+    off.width = Math.round(canvas.width * scale);
+    off.height = Math.round(canvas.height * scale);
+    off.getContext('2d').drawImage(canvas, 0, 0, off.width, off.height);
+    return off.toDataURL('image/jpeg', 0.78);
+  } catch (e) {
+    console.warn('Canvas capture failed for', canvas.id, e);
+    return null;
+  }
+}
+
 let quoteItems = [];
 
 // Builds an HTML snippet: mockup image with logo overlaid via CSS absolute positioning
@@ -1329,6 +1348,12 @@ function addToQuote() {
     const logoFront = (logoFrontProduct === S.product && loadedLogoFront) ? loadedLogoFront.src : null;
     const logoBack  = (logoBackProduct  === S.product && loadedLogoBack)  ? loadedLogoBack.src  : null;
 
+    const dual = document.getElementById('canvas-front') && document.getElementById('canvas-front').offsetParent !== null;
+    drawCanvas();
+    if (dual) drawCanvasBack();
+    const mockupFrontSrc = captureCanvas(document.getElementById(dual ? 'canvas-front' : 'mockup-canvas'));
+    const mockupBackSrc  = dual ? captureCanvas(document.getElementById('canvas-back')) : null;
+
     quoteItems.push({
         id: Date.now(),
         product: S.product,
@@ -1355,6 +1380,8 @@ function addToQuote() {
         logoBackSize:  logoSizeBack,
         logoBackOffsetX: logoOffsetBackX,
         logoBackOffsetY: logoOffsetBackY,
+        mockupFrontSrc,
+        mockupBackSrc,
     });
 
     renderQuotePanel();
@@ -1606,6 +1633,85 @@ function submitQuoteRequest() {
         logoBackSize:  item.logoBackSize  || 20,
     }));
 
+    let quotePdfBase64 = null;
+    if (typeof jspdf !== 'undefined') {
+      try {
+        const { jsPDF } = jspdf;
+        const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+        const pageW = doc.internal.pageSize.getWidth();
+        const pageH = doc.internal.pageSize.getHeight();
+        const margin = 40;
+        const contentW = pageW - margin * 2;
+
+        doc.setFontSize(22);
+        doc.text('NovaMerch Quote Request', margin, 60);
+        doc.setFontSize(12);
+        let y = 100;
+        doc.text('Name: ' + (name || ''), margin, y); y += 20;
+        doc.text('Email: ' + (email || ''), margin, y); y += 20;
+        doc.text('Phone: ' + (phone || ''), margin, y); y += 20;
+        doc.text('Items: ' + quoteItems.length, margin, y); y += 20;
+        const grandTotal = quoteItems.reduce((sum, item) => sum + (parseFloat(item.unitPrice * item.qty || 0)), 0);
+        doc.text('Est. Total: $' + grandTotal.toFixed(2), margin, y); y += 20;
+        doc.text('Submitted: ' + new Date().toLocaleString(), margin, y);
+
+        quoteItems.forEach((item, idx) => {
+          doc.addPage();
+          let iy = margin;
+          doc.setFontSize(14);
+          doc.text('Item ' + (idx + 1) + ': ' + (item.label || item.product || ''), margin, iy); iy += 24;
+          doc.setFontSize(11);
+          const fields = [
+            ['Style', item.style || ''],
+            ['Colour', item.colour || ''],
+            ['Size', item.size || ''],
+            ['Qty', String(item.qty || '')],
+            ['Unit Price', item.unitPrice ? '$' + item.unitPrice : ''],
+            ['Line Total', item.unitPrice && item.qty ? '$' + (item.unitPrice * item.qty).toFixed(2) : ''],
+            ['Placement', item.plFront || ''],
+            ['Decoration', item.decoration || ''],
+            ['Sock Text', item.sockText || ''],
+            ['Notes', item.notes || ''],
+          ];
+          fields.forEach(([label, value]) => {
+            if (value) { doc.text(label + ': ' + value, margin, iy); iy += 16; }
+          });
+
+          if (item.logoFrontSrc) {
+            try {
+              const logoH = 80;
+              const logoW = Math.min(contentW * 0.4, logoH);
+              doc.addImage(item.logoFrontSrc, 'PNG', margin, iy, logoW, logoH);
+              iy += logoH + 10;
+            } catch (e) {}
+          }
+
+          const mockups = [item.mockupFrontSrc, item.mockupBackSrc].filter(Boolean);
+          mockups.forEach((src) => {
+            if (iy + 220 > pageH - 40) { doc.addPage(); iy = margin; }
+            try {
+              doc.addImage(src, 'JPEG', margin, iy, contentW * 0.6, 200);
+              iy += 210;
+            } catch (e) {}
+          });
+
+          doc.setFontSize(9);
+          doc.text('NovaMerch | quote-' + (currentRequestId || ''), margin, pageH - 20);
+        });
+
+        const raw = doc.output('datauristring');
+        quotePdfBase64 = raw.split(',')[1] || null;
+
+        if (quotePdfBase64 && quotePdfBase64.length > 4 * 1024 * 1024 * 1.34) {
+          console.warn('Quote PDF exceeded 4 MB after base64; dropping attachment');
+          quotePdfBase64 = null;
+        }
+      } catch (pdfErr) {
+        console.warn('PDF generation failed; submitting without attachment', pdfErr);
+        quotePdfBase64 = null;
+      }
+    }
+
     fetch(quoteEndpoint(), {
         method: 'POST',
         // Browser will attach the Origin header automatically; the server's
@@ -1616,6 +1722,7 @@ function submitQuoteRequest() {
             items,
             notes: '',
             requestId: currentRequestId,
+            quotePdfBase64,
         }),
     })
     .then(async res => {
