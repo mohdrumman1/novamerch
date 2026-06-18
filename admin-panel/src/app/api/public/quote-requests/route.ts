@@ -1,3 +1,4 @@
+// Resend: set RESEND_API_KEY secret and verify sending domain novamerchau.com
 import { NextResponse } from "next/server";
 import { createRecord, listRecords } from "@/lib/airtable";
 import { quoteToFields, customerToFields } from "@/lib/airtable-mappers";
@@ -39,6 +40,7 @@ const EMAILJS_TEMPLATE_ID = "template_9whbuxm";
 const EMAILJS_PUBLIC_KEY = "vW_7lZvAVXxPXaAcV";
 const EMAILJS_ENDPOINT = "https://api.emailjs.com/api/v1.0/email/send";
 const EMAILJS_PRIVATE_KEY = process.env.EMAILJS_PRIVATE_KEY;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
 const RECIPIENT_EMAIL = "novamerch.au@gmail.com";
 
@@ -78,6 +80,9 @@ interface IntakePayload {
   // info modal opens; regenerated on successful submission. The server uses
   // it to short-circuit duplicate POSTs from a retried button click.
   requestId?: string;
+  // Optional base64-encoded PDF of the quote mockup. Used by the Resend path
+  // to attach the PDF to the admin notification email.
+  quotePdfBase64?: string | null;
 }
 
 interface SuccessResponse {
@@ -101,7 +106,7 @@ function isFiniteNumber(v: unknown): v is number {
 
 /**
  * Escape Airtable filterByFormula string-literal content. Backslash MUST be
- * escaped FIRST, then single-quote — otherwise the backslashes we insert for
+ * escaped FIRST, then single-quote - otherwise the backslashes we insert for
  * quotes get re-escaped, breaking the formula.
  *
  *   email = "a\\'@b.com"
@@ -250,22 +255,26 @@ function composeDescription(it: IntakeItem): string {
     .trim();
 }
 
-// ── EmailJS dispatch ─────────────────────────────────────────────────────────
+// ── Email body builder ────────────────────────────────────────────────────────
+// Shared by both the Resend and EmailJS paths so the HTML is built once.
 
-interface EmailDispatchInput {
+interface EmailBodyInput {
   quoteNumber: string;
   customer: { name: string; email: string; phone: string; company: string };
   items: IntakeItem[];
   notes: string;
 }
 
-async function sendEmail(input: EmailDispatchInput): Promise<{ ok: boolean; status?: number; error?: string }> {
-  const { quoteNumber, customer, items, notes } = input;
+interface EmailBody {
+  itemsHtml: string;
+  itemsText: string;
+  message: string;
+  total: number;
+  date: string;
+}
 
-  if (!EMAILJS_PRIVATE_KEY) {
-    console.error("[quote-requests] EMAILJS_PRIVATE_KEY is not configured");
-    return { ok: false, error: "emailjs_not_configured" };
-  }
+function buildEmailBody(input: EmailBodyInput): EmailBody {
+  const { quoteNumber, customer, items, notes } = input;
 
   const date = new Date().toLocaleDateString("en-AU", {
     day: "2-digit",
@@ -363,6 +372,28 @@ async function sendEmail(input: EmailDispatchInput): Promise<{ ok: boolean; stat
     "NOTES",
     notes || "None",
   ].join("\n");
+
+  return { itemsHtml, itemsText, message, total, date };
+}
+
+// ── EmailJS dispatch ─────────────────────────────────────────────────────────
+
+interface EmailDispatchInput {
+  quoteNumber: string;
+  customer: { name: string; email: string; phone: string; company: string };
+  items: IntakeItem[];
+  notes: string;
+}
+
+async function sendEmail(input: EmailDispatchInput): Promise<{ ok: boolean; status?: number; error?: string }> {
+  const { quoteNumber, customer, items, notes } = input;
+
+  if (!EMAILJS_PRIVATE_KEY) {
+    console.error("[quote-requests] EMAILJS_PRIVATE_KEY is not configured");
+    return { ok: false, error: "emailjs_not_configured" };
+  }
+
+  const { itemsHtml, itemsText, message, total, date } = buildEmailBody({ quoteNumber, customer, items, notes });
 
   const body = {
     service_id: EMAILJS_SERVICE_ID,
@@ -649,8 +680,62 @@ export async function POST(req: Request) {
   const quoteNumber = `QT-${Date.now().toString().slice(-6)}`;
   const safeCustomer = { name, email, phone, company };
 
+  // PDF attachment handling: validate and size-guard the optional base64 PDF.
+  let pdfBase64 = (body.quotePdfBase64 ?? null) as string | null;
+  if (pdfBase64 && Math.floor(pdfBase64.length * 0.75) > 5 * 1024 * 1024) {
+    console.warn(JSON.stringify({ event: "quote_pdf_dropped_oversize", requestId, sizeBytes: Math.floor(pdfBase64.length * 0.75) }));
+    pdfBase64 = null;
+  }
+
+  // Hybrid email path: try Resend first (supports PDF attachment), fall back to EmailJS.
+  async function dispatchEmail(): Promise<{ ok: boolean; status?: number; error?: string }> {
+    if (RESEND_API_KEY) {
+      const { itemsHtml } = buildEmailBody({ quoteNumber, customer: safeCustomer, items, notes });
+
+      const attachments = pdfBase64
+        ? [{ filename: `quote-${quoteNumber}.pdf`, content: pdfBase64 }]
+        : undefined;
+
+      const resendPayload: Record<string, unknown> = {
+        from: "NovaMerch Quotes <quotes@novamerchau.com>",
+        to: [RECIPIENT_EMAIL],
+        subject: `New Quote Request - ${quoteNumber}`,
+        html: itemsHtml,
+        ...(attachments ? { attachments } : {}),
+      };
+
+      if (email) resendPayload.reply_to = email;
+
+      try {
+        const resendRes = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${RESEND_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(resendPayload),
+          signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+        });
+
+        if (!resendRes.ok) {
+          const bodyText = (await resendRes.text()).slice(0, 500);
+          console.warn(JSON.stringify({ event: "resend_failed", requestId, status: resendRes.status, body: bodyText }));
+          return { ok: false, status: resendRes.status, error: "resend_failed" };
+        }
+
+        return { ok: true, status: resendRes.status };
+      } catch (err) {
+        console.warn(JSON.stringify({ event: "resend_error", requestId, error: String(err) }));
+        return { ok: false, error: "resend_exception" };
+      }
+    }
+
+    // EmailJS fallback when RESEND_API_KEY is not set.
+    return sendEmail({ quoteNumber, customer: safeCustomer, items, notes });
+  }
+
   const [emailResult, airtableResult] = await Promise.allSettled([
-    sendEmail({ quoteNumber, customer: safeCustomer, items, notes }),
+    dispatchEmail(),
     persistToAirtable({ quoteNumber, customer: safeCustomer, items, notes }),
   ]);
 

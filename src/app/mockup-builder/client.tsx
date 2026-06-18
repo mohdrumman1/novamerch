@@ -340,15 +340,27 @@ export function MockupBuilderClient() {
       return;
     }
 
-    const pageScript = document.createElement("script");
-    pageScript.src = "/mockup-builder-customer.js";
-    pageScript.async = false;
-    pageScript.onload = () => {
-      if (typeof window !== "undefined") {
-        window.__novamerchMockupLoaded = true;
-      }
-    };
-    document.body.appendChild(pageScript);
+    function appendMainScript() {
+      const pageScript = document.createElement("script");
+      pageScript.src = "/mockup-builder-customer.js";
+      pageScript.async = false;
+      pageScript.onload = () => {
+        if (typeof window !== "undefined") {
+          window.__novamerchMockupLoaded = true;
+        }
+      };
+      document.body.appendChild(pageScript);
+    }
+
+    if (!document.querySelector('script[src*="jspdf"]')) {
+      const jspdfScript = document.createElement("script");
+      jspdfScript.src = "https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js";
+      jspdfScript.onload = appendMainScript;
+      jspdfScript.onerror = appendMainScript;
+      document.body.appendChild(jspdfScript);
+    } else {
+      appendMainScript();
+    }
 
     // No cleanup: deliberately do NOT remove the <script> tag on unmount.
     // Removing the tag does not undo the globals or window listeners the
