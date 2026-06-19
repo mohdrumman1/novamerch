@@ -719,18 +719,19 @@ export async function POST(req: Request) {
 
         if (!resendRes.ok) {
           const bodyText = (await resendRes.text()).slice(0, 500);
-          console.warn(JSON.stringify({ event: "resend_failed", requestId, status: resendRes.status, body: bodyText }));
-          return { ok: false, status: resendRes.status, error: "resend_failed" };
+          console.warn(JSON.stringify({ event: "resend_failed_fallback_emailjs", requestId, status: resendRes.status, body: bodyText }));
+          // Fall through to EmailJS fallback below.
+        } else {
+          return { ok: true, status: resendRes.status };
         }
-
-        return { ok: true, status: resendRes.status };
       } catch (err) {
-        console.warn(JSON.stringify({ event: "resend_error", requestId, error: String(err) }));
-        return { ok: false, error: "resend_exception" };
+        console.warn(JSON.stringify({ event: "resend_error_fallback_emailjs", requestId, error: String(err) }));
+        // Fall through to EmailJS fallback below.
       }
     }
 
-    // EmailJS fallback when RESEND_API_KEY is not set.
+    // EmailJS fallback: used when RESEND_API_KEY is not set OR when Resend fails
+    // (e.g. domain not yet verified).
     return sendEmail({ quoteNumber, customer: safeCustomer, items, notes });
   }
 
