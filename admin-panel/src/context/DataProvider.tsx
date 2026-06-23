@@ -1,5 +1,6 @@
 "use client";
 import React, { createContext, useContext, useReducer, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import type { AppState, Customer, Quote, Order, Invoice, Shipment, Good, AppSettings } from "@/lib/types";
 import { DEFAULT_SETTINGS } from "@/lib/constants";
 import { goods as defaultGoods } from "@/data/goods";
@@ -148,8 +149,10 @@ const DataContext = createContext<DataContextValue | null>(null);
 // ─── Provider ────────────────────────────────────────────────────────────────
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [state, dispatch] = useReducer(reducer, baseState);
   const [loading, setLoading] = React.useState(true);
+  const [loadError, setLoadError] = React.useState<string | null>(null);
   const fetched = useRef(false);
 
   // Load goods + settings from localStorage on mount
@@ -174,16 +177,48 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Fetch all CRM data from Airtable on mount
   useEffect(() => {
+    if (pathname === "/login") {
+      setLoading(false);
+      return;
+    }
     if (fetched.current) return;
     fetched.current = true;
     fetch(apiPath("/api/bootstrap"))
-      .then((r) => r.json())
-      .then((data: { customers: Customer[]; quotes: Quote[]; orders: Order[]; invoices: Invoice[]; shipments: Shipment[] }) => {
-        dispatch({ type: "HYDRATE_REMOTE", ...data });
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`Admin data request failed (${r.status})`);
+        return r.json();
+      })
+      .then((data: {
+        customers?: Customer[];
+        quotes?: Quote[];
+        orders?: Order[];
+        invoices?: Invoice[];
+        shipments?: Shipment[];
+        issues?: string[];
+      }) => {
+        const customers = Array.isArray(data.customers) ? data.customers : [];
+        const quotes = Array.isArray(data.quotes) ? data.quotes : [];
+        const orders = Array.isArray(data.orders) ? data.orders : [];
+        const invoices = Array.isArray(data.invoices) ? data.invoices : [];
+        const shipments = Array.isArray(data.shipments) ? data.shipments : [];
+        dispatch({
+          type: "HYDRATE_REMOTE",
+          customers,
+          quotes,
+          orders,
+          invoices,
+          shipments,
+        });
+        if (data.issues?.length) {
+          setLoadError(`Could not load: ${data.issues.join(", ")}`);
+        }
         setLoading(false);
       })
-      .catch(() => setLoading(false));
-  }, []);
+      .catch((error: unknown) => {
+        setLoadError(error instanceof Error ? error.message : "Could not load admin data");
+        setLoading(false);
+      });
+  }, [pathname]);
 
   // ─── CRUD ─────────────────────────────────────────────────────────────────
 
@@ -281,7 +316,32 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     updateSettings: (s) => dispatch({ type: "UPDATE_SETTINGS", payload: s }),
   };
 
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+  return (
+    <DataContext.Provider value={value}>
+      {children}
+      {loading && pathname !== "/login" && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[var(--bg)]/90">
+          <div className="rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-6 py-5 text-center shadow-lg">
+            <span className="mx-auto mb-3 block h-6 w-6 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
+            <p className="text-sm font-medium text-[var(--text)]">Loading Airtable data…</p>
+          </div>
+        </div>
+      )}
+      {loadError && !loading && pathname !== "/login" && (
+        <div className="fixed bottom-5 right-5 z-[100] max-w-sm rounded-[var(--radius)] border border-[var(--red)] bg-[var(--surface)] p-4 shadow-lg">
+          <p className="text-sm font-semibold text-[var(--red)]">Airtable connection issue</p>
+          <p className="mt-1 text-xs text-[var(--text-muted)]">{loadError}</p>
+          <button
+            type="button"
+            className="mt-3 text-xs font-semibold text-[var(--accent-dark)] underline"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </div>
+      )}
+    </DataContext.Provider>
+  );
 }
 
 export function useData(): DataContextValue {

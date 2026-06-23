@@ -11,7 +11,7 @@ export interface LineItem {
 export type QuoteStatus = "Draft" | "Sent" | "Accepted" | "Declined" | "Expired";
 export type OrderGoodsStatus = "Pending" | "Ordered" | "In Transit" | "Completed" | "Cancelled";
 export type OrderInvoiceStatus = "Need to Invoice" | "Deposit Invoice Sent" | "Paid Deposit" | "Final Invoice Sent" | "Paid Full" | "Invoiced" | "NA";
-export type InvoiceStatus = "Draft" | "Sent" | "Pending" | "Paid" | "Overdue";
+export type InvoiceStatus = "Draft" | "Sent" | "Paid" | "Overdue" | "Void";
 export type InvoiceKind = "Deposit" | "Final" | "Full";
 export type ShipmentStatus = "In Transit" | "Arrived" | "Delayed";
 export type ShippingMethod = "Agent Sea" | "Agent Air" | "Supplier Air";

@@ -6,22 +6,38 @@ import {
 } from "@/lib/airtable-mappers";
 
 export async function GET() {
-  try {
-    const [custRecs, quoteRecs, orderRecs, invRecs, shipRecs] = await Promise.all([
-      listRecords("Customers"),
-      listRecords("Quotes"),
-      listRecords("Orders"),
-      listRecords("Invoices"),
-      listRecords("Shipments"),
-    ]);
-    return NextResponse.json({
-      customers: custRecs.map(recordToCustomer),
-      quotes: quoteRecs.map(recordToQuote),
-      orders: orderRecs.map(recordToOrder),
-      invoices: invRecs.map(recordToInvoice),
-      shipments: shipRecs.map(recordToShipment),
-    });
-  } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
-  }
+  type BootstrapRecord = Parameters<typeof recordToCustomer>[0];
+  type BootstrapSource = {
+    key: string;
+    table: string;
+    mapper: (record: BootstrapRecord) => unknown;
+  };
+
+  const sources: BootstrapSource[] = [
+    { key: "customers", table: "Customers", mapper: recordToCustomer },
+    { key: "quotes", table: "Quotes", mapper: recordToQuote },
+    { key: "orders", table: "Orders", mapper: recordToOrder },
+    { key: "invoices", table: "Invoices", mapper: recordToInvoice },
+    { key: "shipments", table: "Shipments", mapper: recordToShipment },
+  ];
+
+  const results = await Promise.allSettled(
+    sources.map(({ table }) => listRecords(table)),
+  );
+
+  const payload: Record<string, unknown> = {};
+  const issues: string[] = [];
+
+  results.forEach((result, index) => {
+    const { key, table, mapper } = sources[index];
+    if (result.status === "fulfilled") {
+      payload[key] = result.value.map(mapper);
+    } else {
+      payload[key] = [];
+      issues.push(table);
+      console.error(`[bootstrap] Failed to load ${table}`, result.reason);
+    }
+  });
+
+  return NextResponse.json({ ...payload, issues });
 }

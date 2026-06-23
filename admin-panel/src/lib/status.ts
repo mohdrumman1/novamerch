@@ -37,9 +37,9 @@ export const ORDER_INVOICE_STATUS_TONE: Record<OrderInvoiceStatus, BadgeTone> = 
 export const INVOICE_STATUS_TONE: Record<InvoiceStatus, BadgeTone> = {
   Draft: "neutral",
   Sent: "blue",
-  Pending: "orange",
   Paid: "green",
   Overdue: "red",
+  Void: "neutral",
 };
 
 export const SHIPMENT_STATUS_TONE: Record<ShipmentStatus, BadgeTone> = {

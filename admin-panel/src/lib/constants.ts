@@ -23,7 +23,7 @@ export const ORDER_INVOICE_STATUSES = [
   "Need to Invoice", "Deposit Invoice Sent", "Paid Deposit",
   "Final Invoice Sent", "Paid Full", "Invoiced", "NA"
 ] as const;
-export const INVOICE_STATUSES = ["Draft", "Sent", "Pending", "Paid", "Overdue"] as const;
+export const INVOICE_STATUSES = ["Draft", "Sent", "Paid", "Overdue", "Void"] as const;
 export const INVOICE_KINDS = ["Deposit", "Final", "Full"] as const;
 export const SHIPMENT_STATUSES = ["In Transit", "Arrived", "Delayed"] as const;
 export const SHIPPING_METHODS = ["Agent Sea", "Agent Air", "Supplier Air"] as const;
