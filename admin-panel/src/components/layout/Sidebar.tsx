@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/constants";
 import {
   DashboardIcon, QuotesIcon, OrdersIcon, InvoicesIcon,
-  ShipmentsIcon, CustomersIcon, FinancialsIcon, GoodsIcon, LogoutIcon
+  ShipmentsIcon, CustomersIcon, FinancialsIcon, GoodsIcon,
+  MockupBuilderIcon, LogoutIcon
 } from "@/components/icons";
 
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
@@ -17,6 +18,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: 
   Customers: CustomersIcon,
   Financials: FinancialsIcon,
   Goods: GoodsIcon,
+  MockupBuilder: MockupBuilderIcon,
 };
 
 export function Sidebar() {

@@ -10,6 +10,7 @@ declare global {
   }
 }
 
+// TODO: "Create Quote" button still triggers window.print(); replace with real createQuote endpoint when available.
 const BODY_HTML = `
 <div class="mockup-shell">
 
@@ -273,7 +274,7 @@ const BODY_HTML = `
                     <button class="btn btn-ghost" id="copy-btn" onclick="copySpec()">Copy Spec</button>
                     <button class="btn btn-ghost" onclick="addToQuote()" id="add-quote-btn">+ Add to Quote</button>
                     <button class="btn btn-ghost" id="toggle-quote-btn" onclick="toggleQuotePanel()" style="display:none;">Quote &#9650;</button>
-                    <button class="btn btn-primary" onclick="printQuote()" id="print-btn">Print / Save PDF</button>
+                    <button class="btn btn-primary" onclick="createQuote()" id="print-btn">Create Quote</button>
                 </div>
             </div>
             <div class="sum-tip">Tip: in the browser print dialog, set Headers and Footers to "Off" to hide the URL in the corners.</div>

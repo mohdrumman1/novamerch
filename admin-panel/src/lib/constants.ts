@@ -48,6 +48,7 @@ export const NAV_ITEMS = [
   { label: "Customers", href: "/customers", iconKey: "Customers" },
   { label: "Financials", href: "/financials", iconKey: "Financials" },
   { label: "Goods", href: "/goods", iconKey: "Goods" },
+  { label: "Mockup Builder", href: "/mockup-builder", iconKey: "MockupBuilder" },
 ] as const;
 
 export const DEFAULT_SETTINGS: import("./types").AppSettings = {

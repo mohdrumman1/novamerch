@@ -1406,7 +1406,7 @@ function renderQuotePanel() {
     if (quoteItems.length === 0) {
         panel.style.display = 'none';
         toggleBtn.style.display = 'none';
-        printBtn.textContent = 'Print / Save PDF';
+        printBtn.textContent = 'Create Quote';
         return;
     }
 
@@ -1418,7 +1418,7 @@ function renderQuotePanel() {
     const total = sub;
     count.textContent = `${quoteItems.length} item${quoteItems.length > 1 ? 's' : ''}`;
     grand.textContent = `Total (inc. GST): $${total.toFixed(2)}`;
-    printBtn.textContent = `Print Quote (${quoteItems.length})`;
+    printBtn.textContent = `Create Quote (${quoteItems.length})`;
 
     list.innerHTML = quoteItems.map(item => `
         <div class="qp-item">
@@ -1438,6 +1438,9 @@ function renderQuotePanel() {
         </div>
     `).join('');
 }
+
+// TODO: still triggers window.print(); replace with real createQuote endpoint when available.
+function createQuote() { printQuote(); }
 
 function printQuote() {
     const pq = document.getElementById('print-quote');

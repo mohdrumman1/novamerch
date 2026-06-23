@@ -290,6 +290,16 @@ export function CalendarIcon({ className, size = 20 }: IconProps) {
   );
 }
 
+export function MockupBuilderIcon({ className, size = 20 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...defaultProps} className={className}>
+      <path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+      <circle cx="7" cy="7" r="1.5" />
+      <path d="m11 14 2 2 4-4" />
+    </svg>
+  );
+}
+
 export type IconKey =
   | "DashboardIcon"
   | "QuotesIcon"
@@ -319,4 +329,5 @@ export type IconKey =
   | "ExportIcon"
   | "InvoiceIcon"
   | "MailIcon"
-  | "CalendarIcon";
+  | "CalendarIcon"
+  | "MockupBuilderIcon";
