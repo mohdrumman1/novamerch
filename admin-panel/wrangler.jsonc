@@ -15,7 +15,8 @@
   "vars": {
     "ADMIN_USERNAME": "admin",
     "AIRTABLE_BASE_ID": "appxYYtl9qnkcgUVx",
-    "ALLOWED_ORIGINS": "https://novamerchau.com"
+    "ALLOWED_ORIGINS": "https://novamerchau.com",
+    "PUBLIC_ADMIN_ORIGIN": "https://novamerchau.com"
   },
   "routes": [
     {

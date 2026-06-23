@@ -7,6 +7,10 @@ import {
 
 const BASE_PATH = "/admin";
 
+function publicUrl(path: string, request: NextRequest) {
+  return new URL(path, process.env.PUBLIC_ADMIN_ORIGIN || request.url);
+}
+
 function redirectPath(value: FormDataEntryValue | null) {
   if (
     typeof value !== "string" ||
@@ -36,14 +40,14 @@ export async function POST(request: NextRequest) {
   const sessionSecret = process.env.ADMIN_SESSION_SECRET || expectedPassword;
 
   if (username !== expectedUsername || password !== expectedPassword) {
-    const loginUrl = new URL(`${BASE_PATH}/login`, request.url);
+    const loginUrl = publicUrl(`${BASE_PATH}/login`, request);
     loginUrl.searchParams.set("error", "1");
     loginUrl.searchParams.set("next", redirectPath(formData.get("next")));
     return NextResponse.redirect(loginUrl, 303);
   }
 
   const response = NextResponse.redirect(
-    new URL(redirectPath(formData.get("next")), request.url),
+    publicUrl(redirectPath(formData.get("next")), request),
     303,
   );
   response.cookies.set({
