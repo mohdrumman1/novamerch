@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "https://novamerch-admin.rumman-formaai.workers.dev/admin"
+    },
+    {
+      "source": "/admin/",
+      "destination": "https://novamerch-admin.rumman-formaai.workers.dev/admin"
+    },
+    {
+      "source": "/admin/:path*/",
+      "destination": "https://novamerch-admin.rumman-formaai.workers.dev/admin/:path*"
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://novamerch-admin.rumman-formaai.workers.dev/admin/:path*"
+    }
+  ]
+}
