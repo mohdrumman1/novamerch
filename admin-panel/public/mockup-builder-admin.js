@@ -429,7 +429,7 @@ const PRODUCTS = {
         ],
     },
     jacket: {
-        label: 'Rain Jacket',  icon: '🌧️', price: 25.00,
+        label: 'Rain Jacket',  icon: '🌧️', price: 30.00,
         dualItemMaxWidth: '546px',
         image: '/mockup-builder/rain-jackets/rain jacket - black.png',
         colourImages: {
