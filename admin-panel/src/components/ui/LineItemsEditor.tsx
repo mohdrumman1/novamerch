@@ -36,8 +36,7 @@ export function LineItemsEditor({ items, onChange, showCost = false }: LineItems
   }
 
   const subtotal = items.reduce((sum, item) => sum + item.qty * item.unitPrice, 0);
-  const gst = subtotal * 0.1;
-  const total = subtotal + gst;
+  const total = subtotal;
 
   return (
     <div>
@@ -129,12 +128,6 @@ export function LineItemsEditor({ items, onChange, showCost = false }: LineItems
         </Button>
 
         <div className="text-right space-y-1">
-          <div className="text-xs text-[var(--text-muted)]">
-            Subtotal: <span className="font-[var(--font-dm-mono,monospace)] text-[var(--text)]">{formatAUD(subtotal)}</span>
-          </div>
-          <div className="text-xs text-[var(--text-muted)]">
-            GST (10%): <span className="font-[var(--font-dm-mono,monospace)] text-[var(--text)]">{formatAUD(gst)}</span>
-          </div>
           <div className="text-sm font-semibold text-[var(--text)]">
             Total: <span className="font-[var(--font-dm-mono,monospace)]">{formatAUD(total)}</span>
           </div>

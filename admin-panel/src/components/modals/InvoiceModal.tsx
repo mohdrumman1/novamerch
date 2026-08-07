@@ -9,7 +9,7 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { LineItemsEditor } from "@/components/ui/LineItemsEditor";
 import { formatAUD } from "@/lib/format";
-import { gstOf, depositSplit } from "@/lib/calc";
+import { depositSplit } from "@/lib/calc";
 import { INVOICE_STATUSES, INVOICE_KINDS } from "@/lib/constants";
 
 interface InvoiceModalProps {
@@ -66,17 +66,14 @@ export function InvoiceModal({ open, onClose, invoice }: InvoiceModalProps) {
   // Recalculate totals from line items
   function handleLineItemsChange(items: LineItem[]) {
     const subtotal = items.reduce((sum, item) => sum + item.qty * item.unitPrice, 0);
-    const gst = gstOf(subtotal);
-    const total = subtotal + gst;
-    setForm((prev) => ({ ...prev, lineItems: items, subtotal, gst, total }));
+    setForm((prev) => ({ ...prev, lineItems: items, subtotal, gst: 0, total: subtotal }));
   }
 
   // When kind changes to Deposit, apply deposit percentage to total
   function handleKindChange(kind: InvoiceKind) {
     if (kind === "Deposit" && form.subtotal > 0) {
       const { deposit } = depositSplit(form.subtotal, depositPct);
-      const depositGst = gstOf(deposit);
-      setForm((prev) => ({ ...prev, kind, subtotal: deposit, gst: depositGst, total: deposit + depositGst }));
+      setForm((prev) => ({ ...prev, kind, subtotal: deposit, gst: 0, total: deposit }));
     } else {
       setForm((prev) => ({ ...prev, kind }));
     }
@@ -95,7 +92,6 @@ export function InvoiceModal({ open, onClose, invoice }: InvoiceModalProps) {
         const finalId = crypto.randomUUID();
         const depositSubtotal = form.subtotal;
         const remaining = form.subtotal / (depositPct / 100) - depositSubtotal;
-        const finalGst = gstOf(remaining);
 
         const depositInvoice: Invoice = {
           ...form,
@@ -110,8 +106,8 @@ export function InvoiceModal({ open, onClose, invoice }: InvoiceModalProps) {
           kind: "Final",
           pairedInvoiceId: newId,
           subtotal: remaining,
-          gst: finalGst,
-          total: remaining + finalGst,
+          gst: 0,
+          total: remaining,
           status: "Draft",
         };
         addInvoice(depositInvoice);
