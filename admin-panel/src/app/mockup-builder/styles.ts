@@ -118,7 +118,7 @@ export const STYLES_CSS = `
             .main { --sidebar-width: 240px; }
         }
 
-        /* Splitter — vertical drag handle between sidebar and preview.
+        /* Splitter. Vertical drag handle between sidebar and preview.
            Sits in the 6px middle grid track. Cyan tint on hover / active. */
         .splitter {
             background: transparent;
@@ -156,7 +156,7 @@ export const STYLES_CSS = `
             .splitter { display: none !important; }
         }
 
-        /* Horizontal splitter — drag handle between the canvas stage and the
+        /* Horizontal splitter. Drag handle between the canvas stage and the
            bottom summary bar. Same visual language as the vertical .splitter,
            rotated 90deg: 6px tall, row-resize cursor, cyan glow on hover and
            active, 1px center line that grows on interaction. */
@@ -199,7 +199,7 @@ export const STYLES_CSS = `
             .splitter-h { display: none !important; }
         }
 
-        /* Options panel — fills its grid track and scrolls internally so the
+        /* Options panel. Fills its grid track and scrolls internally so the
            page never gets pushed past the viewport on short laptop screens. */
         .opts {
             background: #0D1526;
@@ -563,7 +563,7 @@ export const STYLES_CSS = `
         /* Inline editable Qty in the summary bar. Mirrors the sidebar qty
            input visually (#0A1020 navy fill, cyan focus ring) but compact
            enough to sit between the other summary fields without wrapping
-           the row. Browser spinners stripped — users type a value directly
+           the row. Browser spinners stripped. Users type a value directly
            or use the sidebar +/- buttons. */
         .s-input {
             width: 64px;
@@ -781,7 +781,7 @@ export const STYLES_CSS = `
 
         .offset-val { font-size: 10px; color: #94A3B8; min-width: 22px; text-align: right; }
 
-        /* Quote panel — overrides .preview grid rows to include the quote drawer */
+        /* Quote panel. Overrides .preview grid rows to include the quote drawer */
         .preview {
             display: grid;
             grid-template-rows: 1fr auto auto;

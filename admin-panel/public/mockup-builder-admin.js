@@ -302,7 +302,7 @@ const APPAREL_PLACEMENTS = [
 
 const PRODUCTS = {
     tshirt: {
-        label: 'T-Shirt',      icon: '👕', price: 12.00,
+        label: 'T-Shirt',      icon: '👕', price: 18.00,
         dualItemMaxWidth: '546px',
         dualCanvasAspect: 1402 / 1122,
         image: '/mockup-builder/t-shirts/t-shirt - front - black.png',
@@ -357,7 +357,7 @@ const PRODUCTS = {
         placements: APPAREL_PLACEMENTS,
     },
     singlet: {
-        label: 'Singlet',      icon: '🎽', price: 20.00,
+        label: 'Singlet',      icon: '🎽', price: 27.00,
         dualItemMaxWidth: '546px',
         image: '/mockup-builder/singlets/singlet black - front.png',
         colourImages: {
@@ -389,7 +389,7 @@ const PRODUCTS = {
         ],
     },
     jumper: {
-        label: 'Jumper',       icon: '🧥', price: 25.00,
+        label: 'Jumper',       icon: '🧥', price: 34.00,
         dualItemMaxWidth: '546px',
         dualCanvasAspect: 1402 / 1122,
         image: '/mockup-builder/jumpers/jumper black - front.png',
@@ -429,7 +429,7 @@ const PRODUCTS = {
         ],
     },
     jacket: {
-        label: 'Rain Jacket',  icon: '🌧️', price: 30.00,
+        label: 'Rain Jacket',  icon: '🌧️', price: 40.00,
         dualItemMaxWidth: '546px',
         image: '/mockup-builder/rain-jackets/rain jacket - black.png',
         colourImages: {
@@ -459,7 +459,7 @@ const PRODUCTS = {
         ],
     },
     cap: {
-        label: 'Cap',          icon: '🧢', price: 15.00,
+        label: 'Cap',          icon: '🧢', price: 20.00,
         maxWidth: '546px',
         dualCanvasAspect: 1402 / 1122,
         canvasSidePad: 0.04,
@@ -489,7 +489,7 @@ const PRODUCTS = {
         ],
     },
     beanie: {
-        label: 'Beanie',       icon: '🎩', price: 12.00,
+        label: 'Beanie',       icon: '🎩', price: 16.00,
         maxWidth: '546px',
         dualCanvasAspect: 1402 / 1122,
         canvasSidePad: 0.04,
@@ -527,7 +527,7 @@ const PRODUCTS = {
         ],
     },
     shorts: {
-        label: 'Shorts',       icon: '🩳', price: 15.00,
+        label: 'Shorts',       icon: '🩳', price: 20.00,
         dualItemMaxWidth: '546px',
         dualCanvasAspect: 1402 / 1122,
         canvasSidePad: 0.01,
@@ -576,7 +576,7 @@ const PRODUCTS = {
         ],
     },
     socks: {
-        label: 'Socks',        icon: '🧦', price: 8.00,
+        label: 'Socks',        icon: '🧦', price: 11.00,
         maxWidth: '640px',
         image: '/mockup-builder/socks/socks white.png',
         colourImages: {
@@ -600,11 +600,11 @@ const PRODUCTS = {
         ],
     },
     bottle: {
-        label: 'Drinkware', icon: '🍶', price: 20.00,
+        label: 'Drinkware', icon: '🍶', price: 27.00,
         stylePrices: {
-            'Insulated Bottle - Straw Lid': 20.00,
-            'Insulated Bottle':             20.00,
-            'Travel Cup':                   22.00,
+            'Insulated Bottle - Straw Lid': 27.00,
+            'Insulated Bottle':             27.00,
+            'Travel Cup':                   29.00,
         },
         styleMaxWidth: {
             'Insulated Bottle': '559px',
@@ -754,7 +754,7 @@ const COLOURS = [
     { id: 'dark-grey',     label: 'Dark Grey',      hex: '#404040' },
     { id: 'dark-orange',   label: 'Dark Orange',    hex: '#c85a00' },
     { id: 'deep-pink',     label: 'Deep Pink',      hex: '#c0186a' },
-    { id: 'dark-gray',    label: 'Dark Gray',      hex: '#94A3B8555' },
+    { id: 'dark-gray',    label: 'Dark Gray',      hex: '#94A3B8' },
     { id: 'emerald',      label: 'Emerald',        hex: '#1c7c4a' },
     { id: 'gold',         label: 'Gold',           hex: '#c8a000' },
     { id: 'gray',         label: 'Gray',           hex: '#909090' },

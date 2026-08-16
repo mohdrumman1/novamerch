@@ -48,6 +48,7 @@ export const NAV_ITEMS = [
   { label: "Customers", href: "/customers", iconKey: "Customers" },
   { label: "Financials", href: "/financials", iconKey: "Financials" },
   { label: "Goods", href: "/goods", iconKey: "Goods" },
+  { label: "Supplier Orders", href: "/supplier-orders", iconKey: "SupplierOrders" },
   { label: "Mockup Builder", href: "/mockup-builder", iconKey: "MockupBuilder" },
 ] as const;
 

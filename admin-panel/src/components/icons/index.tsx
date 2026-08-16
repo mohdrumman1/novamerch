@@ -91,6 +91,15 @@ export function GoodsIcon({ className, size = 20 }: IconProps) {
   );
 }
 
+export function SupplierOrdersIcon({ className, size = 20 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...defaultProps} className={className}>
+      <rect x="3" y="7" width="18" height="14" rx="1" />
+      <path d="M7 7V5a5 5 0 0110 0v2" />
+    </svg>
+  );
+}
+
 export function LogoutIcon({ className, size = 20 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" {...defaultProps} className={className}>
@@ -309,6 +318,7 @@ export type IconKey =
   | "CustomersIcon"
   | "FinancialsIcon"
   | "GoodsIcon"
+  | "SupplierOrdersIcon"
   | "LogoutIcon"
   | "PlusIcon"
   | "SearchIcon"

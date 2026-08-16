@@ -14,7 +14,7 @@
   },
   "vars": {
     "ADMIN_USERNAME": "admin",
-    "AIRTABLE_BASE_ID": "appxYYtl9qnkcgUVx",
+    "AIRTABLE_BASE_ID": "appkQYN4Gcb1pSzu1",
     "ALLOWED_ORIGINS": "https://novamerchau.com",
     "PUBLIC_ADMIN_ORIGIN": "https://novamerchau.com"
   },

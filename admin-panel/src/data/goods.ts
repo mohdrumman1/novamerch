@@ -204,7 +204,7 @@ export const goods: Good[] = [
   {
     id: "good-015",
     sku: "PR-PEN",
-    name: "Pen – Classic Ballpoint",
+    name: "Pen - Classic Ballpoint",
     category: "Promotional",
     costUsd: 0.85,
     logoFee: 0.80,
@@ -242,6 +242,25 @@ export const goods: Good[] = [
     depthCm: 8.0,
     weightKg: 0.03,
     qtyPerCarton: 250,
+  },
+  {
+    id: "good-021",
+    sku: "PR-BOTLOPEN",
+    name: "Bottle Opener",
+    category: "Promotional",
+    costUsd: 0.80,
+    logoFee: 0,
+    minQty: 50,
+    widthCm: 0,
+    lengthCm: 0,
+    depthCm: 0,
+    weightKg: 0,
+    qtyPerCarton: 50,
+    supplierName: "Ivan Li",
+    supplierUrl:
+      "https://www.alibaba.com/product-detail/Customized-Logo-Promotional-Mini-Portable-Llavero_1601600001291.html?chatToken=U1ZkdVJIVkhVRXB3VVd0MVF6QnFTSEJEV21jNEt6SmtiMnBMZWprNGIxVlNlRGRFYm05WmJXa3JlRzlZU2xoNFZVSjRSV0Y2V0dkTVMyWm1Mell4UTJJclNFeFVaRlkwUW5SelVITnZOWFJyU0hRMU1ETkxXVEJxUWk4NWRuTjZTRmx0VTA0MmFHRnFWRnBMY0VWU2VISkVORVJzTURGeFRFdFNjMGhRYmxKRVkzZDZTSFZ2Y2tkQlZHY3dWbVp2V0ZCUFRra3pOUzkwV1RsMVkxaHZjR3hzUzAxNlkwWm5jQ3RvWWpBMVJ6bHFXWGhzVjA5dGIyTnVWVWd2V0hVMiZ2ZXJzaW9uPTIuMC4w&encryptTargetLoginId=8pctgRBMALPBBaBw6Z%2FeSGcBq1XJvwUo6wdkfYSa%2Bs4%3D",
+    supplierNotes:
+      "Material: Metal. Craft: Laser. Attachment: Ring. Packaging: Clear bag. Qty: 50. Unit price: $0.20. Shipping fee: $30 (to Australia). Total: $40 USD. Production time: 6-8 workdays. Shipping time: 5-7 workdays. Cost AUD above is landed (unit + freight). Sell price: $3.50 each.",
   },
   {
     id: "good-018",

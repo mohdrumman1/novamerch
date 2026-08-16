@@ -248,7 +248,7 @@ const BODY_HTML = `
             </div>
         </div>
 
-        <!-- Horizontal splitter — drag handle between canvas stage and summary bar -->
+        <!-- Horizontal splitter: drag handle between canvas stage and summary bar -->
         <div class="splitter-h" id="splitter-h"
              role="separator"
              aria-label="Resize summary bar"
@@ -305,7 +305,7 @@ const BODY_HTML = `
 `;
 
 // Resolve where the customer-site assets (PNG mockups under /mockup-builder/*)
-// are served from. The admin-panel does NOT bundle these images — they live
+// are served from. The admin-panel does NOT bundle these images. They live
 // on the customer site. The browser must therefore load them via a fully-
 // qualified URL pointing at the customer site for the active environment.
 function resolveAssetBase(): string {
@@ -330,7 +330,7 @@ export function MockupBuilderAdminClient() {
     }
 
     const pageScript = document.createElement("script");
-    // basePath is "/admin" — Next serves /admin/mockup-builder-admin.js from
+    // basePath is "/admin". Next serves /admin/mockup-builder-admin.js from
     // admin-panel/public/mockup-builder-admin.js.
     pageScript.src = "/admin/mockup-builder-admin.js";
     pageScript.async = false;

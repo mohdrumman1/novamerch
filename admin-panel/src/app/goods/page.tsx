@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { FilterBar } from "@/components/ui/FilterBar";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { formatAUD } from "@/lib/format";
@@ -34,6 +35,9 @@ function emptyGood(): Omit<Good, "id"> {
     depthCm: 0,
     weightKg: 0,
     qtyPerCarton: 1,
+    supplierName: "",
+    supplierUrl: "",
+    supplierNotes: "",
   };
 }
 
@@ -88,7 +92,28 @@ export default function GoodsPage() {
 
   const columns = [
     { key: "sku", header: "SKU", sortable: true },
-    { key: "name", header: "Product Name", sortable: true },
+    {
+      key: "name",
+      header: "Product Name",
+      sortable: true,
+      render: (row: Good) => (
+        <span className="inline-flex items-center gap-2">
+          {row.name}
+          {row.supplierUrl && (
+            <a
+              href={row.supplierUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-xs text-[var(--accent)] hover:underline"
+              title={row.supplierName ? `Supplier: ${row.supplierName}` : "Supplier link"}
+            >
+              supplier ↗
+            </a>
+          )}
+        </span>
+      ),
+    },
     { key: "category", header: "Category" },
     {
       key: "costUsd",
@@ -533,6 +558,38 @@ export default function GoodsPage() {
                 }
               />
             </div>
+          </div>
+
+          <div>
+            <p className="text-sm font-medium text-[var(--text)] mb-2">
+              Supplier
+            </p>
+            <div className="grid grid-cols-2 gap-4 mb-3">
+              <Input
+                label="Supplier Name"
+                name="supplierName"
+                value={form.supplierName ?? ""}
+                onChange={(e) =>
+                  setForm({ ...form, supplierName: e.target.value })
+                }
+              />
+              <Input
+                label="Supplier URL"
+                name="supplierUrl"
+                value={form.supplierUrl ?? ""}
+                onChange={(e) =>
+                  setForm({ ...form, supplierUrl: e.target.value })
+                }
+              />
+            </div>
+            <Textarea
+              label="Supplier Quote / Notes"
+              name="supplierNotes"
+              value={form.supplierNotes ?? ""}
+              onChange={(e) =>
+                setForm({ ...form, supplierNotes: e.target.value })
+              }
+            />
           </div>
 
           {/* Auto-calculated preview */}

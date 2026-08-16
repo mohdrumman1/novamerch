@@ -55,7 +55,7 @@ These replace the CSS shape placeholders in the `CatalogueSection` component on 
 ### CAT-06: Sports Club Bottle Pack
 **File:** `public/catalogue/sports-bottle-mockup.png`
 **Used in:** Catalogue card "Sports Club Bottle Pack" (category: Sports Clubs)
-**Description:** A cluster of 3–4 matching branded drink bottles standing together, slight variation in angle. Consistent club-style branding on each (e.g. "CITY FC" or "YOUR CLUB"). Dark background, violet ambient glow. Suggests a team order.
+**Description:** A cluster of 3 to 4 matching branded drink bottles standing together, slight variation in angle. Consistent club-style branding on each (e.g. "CITY FC" or "YOUR CLUB"). Dark background, violet ambient glow. Suggests a team order.
 
 ---
 
@@ -150,7 +150,7 @@ These are small accent images for the `CatalogueBundles` section.
 These are **optional** background or accent images for the 4 industry cards in `src/components/Industries.tsx`.
 **File location:** `public/`
 **Current state:** SVG icon + text only in glassmorphism cards.
-**Display size:** images would sit as subtle card backgrounds (~280×180px, very low opacity, around 10–15%, behind the card text, like a watermark)
+**Display size:** images would sit as subtle card backgrounds (~280×180px, very low opacity, around 10 to 15%, behind the card text, like a watermark)
 **Recommended output:** 560×360px JPG, dark-toned lifestyle photo
 
 ---

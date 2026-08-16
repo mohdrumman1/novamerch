@@ -25,7 +25,7 @@ export const customers: Customer[] = [
   {
     id: "cust-003",
     name: "Priya Sharma",
-    company: "Beyond Blue Fundraising Chapter – VIC",
+    company: "Beyond Blue Fundraising Chapter - VIC",
     email: "priya.sharma@beyondbluevc.org.au",
     phone: "0438 901 234",
     abn: "71 234 567 890",
@@ -69,7 +69,7 @@ export const customers: Customer[] = [
   {
     id: "cust-007",
     name: "Angela Torres",
-    company: "Red Cross Australia – NSW Chapter",
+    company: "Red Cross Australia - NSW Chapter",
     email: "angela.torres@redcross.org.au",
     phone: "(02) 8268 1111",
     abn: "50 169 561 394",

@@ -120,6 +120,44 @@ export interface Good {
   depthCm: number;
   weightKg: number;
   qtyPerCarton: number;
+  supplierName?: string;
+  supplierUrl?: string;
+  supplierNotes?: string;
+}
+
+export interface SupplierOrderItem {
+  id: ID;
+  productName: string;
+  url?: string;
+  spec?: string;
+  unitPriceUsd: number;
+  qty: number;
+  totalUsd: number;
+}
+
+export interface SupplierOrder {
+  id: ID;
+  orderNumber: string;
+  orderDate: string; // ISO date string
+  supplierName: string;
+  supplierContactName?: string;
+  supplierPhone?: string;
+  supplierEmail?: string;
+  supplierAddress?: string;
+  storeUrl?: string;
+  shipFrom?: string;
+  shippingMethod?: string;
+  incoterms?: string;
+  itemSubtotalUsd: number;
+  shippingFeeUsd: number;
+  totalUsd: number;
+  initialPaymentUsd?: number;
+  initialPaymentDate?: string; // ISO date string
+  balanceUsd?: number;
+  balanceStatus?: string;
+  relatedCustomer?: string;
+  items: SupplierOrderItem[];
+  notes?: string;
 }
 
 export interface ShippingRate {
@@ -142,5 +180,6 @@ export interface AppState {
   invoices: Invoice[];
   shipments: Shipment[];
   goods: Good[];
+  supplierOrders: SupplierOrder[];
   settings: AppSettings;
 }

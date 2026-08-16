@@ -18,7 +18,7 @@ export const invoices: Invoice[] = [
     total: 2758.53,
     amountReceived: 2758.53,
     lineItems: [
-      { id: "li-inv001-1", description: "50% Deposit – Order #O1001", qty: 1, unitPrice: 2507.75 },
+      { id: "li-inv001-1", description: "50% Deposit - Order #O1001", qty: 1, unitPrice: 2507.75 },
     ],
   },
   {
@@ -37,7 +37,7 @@ export const invoices: Invoice[] = [
     total: 2758.53,
     amountReceived: 2758.53,
     lineItems: [
-      { id: "li-inv002-1", description: "Balance – Order #O1001 (Polo Shirts, Caps, Tote Bags)", qty: 1, unitPrice: 2507.75 },
+      { id: "li-inv002-1", description: "Balance - Order #O1001 (Polo Shirts, Caps, Tote Bags)", qty: 1, unitPrice: 2507.75 },
     ],
   },
 
@@ -57,8 +57,8 @@ export const invoices: Invoice[] = [
     total: 4675.00,
     amountReceived: 4675.00,
     lineItems: [
-      { id: "li-inv003-1", description: "Water Bottle 600ml x200 – BPA Free, logo print", qty: 200, unitPrice: 14.50 },
-      { id: "li-inv003-2", description: "Lanyard x200 – Polyester, full colour sublimation", qty: 200, unitPrice: 6.50 },
+      { id: "li-inv003-1", description: "Water Bottle 600ml x200 - BPA Free, logo print", qty: 200, unitPrice: 14.50 },
+      { id: "li-inv003-2", description: "Lanyard x200 - Polyester, full colour sublimation", qty: 200, unitPrice: 6.50 },
     ],
   },
 
@@ -79,7 +79,7 @@ export const invoices: Invoice[] = [
     total: 5505.50,
     amountReceived: 5505.50,
     lineItems: [
-      { id: "li-inv004-1", description: "50% Deposit – Order #O1003", qty: 1, unitPrice: 5005.00 },
+      { id: "li-inv004-1", description: "50% Deposit - Order #O1003", qty: 1, unitPrice: 5005.00 },
     ],
   },
   {
@@ -98,7 +98,7 @@ export const invoices: Invoice[] = [
     total: 5505.50,
     amountReceived: 5505.50,
     lineItems: [
-      { id: "li-inv005-1", description: "Balance – Order #O1003 (T-Shirts, Pens, Tote Bags)", qty: 1, unitPrice: 5005.00 },
+      { id: "li-inv005-1", description: "Balance - Order #O1003 (T-Shirts, Pens, Tote Bags)", qty: 1, unitPrice: 5005.00 },
     ],
   },
 
@@ -118,8 +118,8 @@ export const invoices: Invoice[] = [
     total: 9339.00,
     amountReceived: 9339.00,
     lineItems: [
-      { id: "li-inv006-1", description: "HiVis Shirt x150 – embroidered", qty: 150, unitPrice: 42.00 },
-      { id: "li-inv006-2", description: "Cap x150 – HiVis Yellow, embroidered", qty: 150, unitPrice: 19.50 },
+      { id: "li-inv006-1", description: "HiVis Shirt x150 - embroidered", qty: 150, unitPrice: 42.00 },
+      { id: "li-inv006-2", description: "Cap x150 - HiVis Yellow, embroidered", qty: 150, unitPrice: 19.50 },
     ],
   },
 
@@ -139,9 +139,9 @@ export const invoices: Invoice[] = [
     total: 7095.00,
     amountReceived: 7095.00,
     lineItems: [
-      { id: "li-inv007-1", description: "Travel Mug x100 – 350ml, laser engraved", qty: 100, unitPrice: 28.00 },
-      { id: "li-inv007-2", description: "USB Drive x100 – 16GB metal swivel", qty: 100, unitPrice: 18.50 },
-      { id: "li-inv007-3", description: "Backpack x50 – laptop compatible, embroidered", qty: 50, unitPrice: 44.00 },
+      { id: "li-inv007-1", description: "Travel Mug x100 - 350ml, laser engraved", qty: 100, unitPrice: 28.00 },
+      { id: "li-inv007-2", description: "USB Drive x100 - 16GB metal swivel", qty: 100, unitPrice: 18.50 },
+      { id: "li-inv007-3", description: "Backpack x50 - laptop compatible, embroidered", qty: 50, unitPrice: 44.00 },
     ],
   },
 
@@ -162,7 +162,7 @@ export const invoices: Invoice[] = [
     total: 7232.50,
     amountReceived: 7232.50,
     lineItems: [
-      { id: "li-inv008-1", description: "50% Deposit – Order #O1006", qty: 1, unitPrice: 6575.00 },
+      { id: "li-inv008-1", description: "50% Deposit - Order #O1006", qty: 1, unitPrice: 6575.00 },
     ],
   },
   {
@@ -181,7 +181,7 @@ export const invoices: Invoice[] = [
     total: 7232.50,
     amountReceived: 7232.50,
     lineItems: [
-      { id: "li-inv009-1", description: "Balance – Order #O1006 (T-Shirts, Lanyards, Pens)", qty: 1, unitPrice: 6575.00 },
+      { id: "li-inv009-1", description: "Balance - Order #O1006 (T-Shirts, Lanyards, Pens)", qty: 1, unitPrice: 6575.00 },
     ],
   },
 
@@ -201,9 +201,9 @@ export const invoices: Invoice[] = [
     total: 6162.75,
     amountReceived: 6162.75,
     lineItems: [
-      { id: "li-inv010-1", description: "Water Bottle 1L x150 – Stainless steel", qty: 150, unitPrice: 22.00 },
-      { id: "li-inv010-2", description: "Drawstring Bag x150 – Vented, screen print", qty: 150, unitPrice: 9.50 },
-      { id: "li-inv010-3", description: "Lanyard x150 – Club colours, dye sublimation", qty: 150, unitPrice: 6.00 },
+      { id: "li-inv010-1", description: "Water Bottle 1L x150 - Stainless steel", qty: 150, unitPrice: 22.00 },
+      { id: "li-inv010-2", description: "Drawstring Bag x150 - Vented, screen print", qty: 150, unitPrice: 9.50 },
+      { id: "li-inv010-3", description: "Lanyard x150 - Club colours, dye sublimation", qty: 150, unitPrice: 6.00 },
     ],
   },
 
@@ -224,7 +224,7 @@ export const invoices: Invoice[] = [
     total: 6187.50,
     amountReceived: 6187.50,
     lineItems: [
-      { id: "li-inv011-1", description: "50% Deposit – Order #O1008", qty: 1, unitPrice: 5625.00 },
+      { id: "li-inv011-1", description: "50% Deposit - Order #O1008", qty: 1, unitPrice: 5625.00 },
     ],
   },
   {
@@ -243,7 +243,7 @@ export const invoices: Invoice[] = [
     total: 6187.50,
     amountReceived: 6187.50,
     lineItems: [
-      { id: "li-inv012-1", description: "Balance – Order #O1008 (T-Shirts, Caps, Tote Bags)", qty: 1, unitPrice: 5625.00 },
+      { id: "li-inv012-1", description: "Balance - Order #O1008 (T-Shirts, Caps, Tote Bags)", qty: 1, unitPrice: 5625.00 },
     ],
   },
 
@@ -263,8 +263,8 @@ export const invoices: Invoice[] = [
     total: 3850.00,
     amountReceived: 3850.00,
     lineItems: [
-      { id: "li-inv013-1", description: "Coffee Cup x100 – Ceramic, full wrap print", qty: 100, unitPrice: 19.00 },
-      { id: "li-inv013-2", description: "USB Drive x100 – 32GB, credit card style", qty: 100, unitPrice: 16.00 },
+      { id: "li-inv013-1", description: "Coffee Cup x100 - Ceramic, full wrap print", qty: 100, unitPrice: 19.00 },
+      { id: "li-inv013-2", description: "USB Drive x100 - 32GB, credit card style", qty: 100, unitPrice: 16.00 },
     ],
   },
 
@@ -285,7 +285,7 @@ export const invoices: Invoice[] = [
     total: 2536.88,
     amountReceived: 2536.88,
     lineItems: [
-      { id: "li-inv014-1", description: "50% Deposit – Order #O1010", qty: 1, unitPrice: 2306.25 },
+      { id: "li-inv014-1", description: "50% Deposit - Order #O1010", qty: 1, unitPrice: 2306.25 },
     ],
   },
   {
@@ -303,7 +303,7 @@ export const invoices: Invoice[] = [
     total: 2536.88,
     amountReceived: 0,
     lineItems: [
-      { id: "li-inv015-1", description: "Balance – Order #O1010 (Hoodies, Beanies)", qty: 1, unitPrice: 2306.25 },
+      { id: "li-inv015-1", description: "Balance - Order #O1010 (Hoodies, Beanies)", qty: 1, unitPrice: 2306.25 },
     ],
     comments: "Overdue. Follow up required.",
   },
@@ -324,7 +324,7 @@ export const invoices: Invoice[] = [
     total: 5060.00,
     amountReceived: 5060.00,
     lineItems: [
-      { id: "li-inv016-1", description: "50% Deposit – Order #O1011 (HiVis Shirts, Duffle Bags)", qty: 1, unitPrice: 4600.00 },
+      { id: "li-inv016-1", description: "50% Deposit - Order #O1011 (HiVis Shirts, Duffle Bags)", qty: 1, unitPrice: 4600.00 },
     ],
   },
 ];
