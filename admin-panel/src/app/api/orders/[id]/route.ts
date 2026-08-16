@@ -9,8 +9,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const body: Order = await req.json();
     const record = await updateRecord("Orders", id, orderToFields(body));
     return NextResponse.json(recordToOrder(record));
-  } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+  } catch (error) {
+    console.error("[orders] Update failed", error);
+    return NextResponse.json({ error: "Could not save order" }, { status: 500 });
   }
 }
 
@@ -19,7 +20,8 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     const { id } = await params;
     await deleteRecord("Orders", id);
     return NextResponse.json({ ok: true });
-  } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+  } catch (error) {
+    console.error("[orders] Delete failed", error);
+    return NextResponse.json({ error: "Could not delete order" }, { status: 500 });
   }
 }

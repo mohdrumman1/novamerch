@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import type { AppState, Customer, Quote, Order, Invoice, Shipment, Good, SupplierOrder, AppSettings } from "@/lib/types";
 import { DEFAULT_SETTINGS } from "@/lib/constants";
 import { goods as defaultGoods } from "@/data/goods";
-import { supplierOrders as defaultSupplierOrders } from "@/data/supplierOrders";
 
 // ─── State ───────────────────────────────────────────────────────────────────
 
@@ -15,7 +14,7 @@ const baseState: AppState = {
   invoices: [],
   shipments: [],
   goods: defaultGoods,
-  supplierOrders: defaultSupplierOrders,
+  supplierOrders: [],
   settings: DEFAULT_SETTINGS,
 };
 
@@ -57,10 +56,9 @@ type Action =
   | { type: "ADD_SUPPLIER_ORDER"; payload: SupplierOrder }
   | { type: "UPDATE_SUPPLIER_ORDER"; payload: SupplierOrder }
   | { type: "DELETE_SUPPLIER_ORDER"; id: string }
-  | { type: "SET_SUPPLIER_ORDERS"; payload: SupplierOrder[] }
   | { type: "UPDATE_SETTINGS"; payload: Partial<AppSettings> }
   | { type: "SET_GOODS"; payload: Good[] }
-  | { type: "HYDRATE_REMOTE"; customers: Customer[]; quotes: Quote[]; orders: Order[]; invoices: Invoice[]; shipments: Shipment[] };
+  | { type: "HYDRATE_REMOTE"; customers: Customer[]; quotes: Quote[]; orders: Order[]; invoices: Invoice[]; shipments: Shipment[]; supplierOrders: SupplierOrder[] };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -91,7 +89,6 @@ function reducer(state: AppState, action: Action): AppState {
     case "ADD_SUPPLIER_ORDER": return { ...state, supplierOrders: [...state.supplierOrders, action.payload] };
     case "UPDATE_SUPPLIER_ORDER": return { ...state, supplierOrders: state.supplierOrders.map((o) => o.id === action.payload.id ? action.payload : o) };
     case "DELETE_SUPPLIER_ORDER": return { ...state, supplierOrders: state.supplierOrders.filter((o) => o.id !== action.id) };
-    case "SET_SUPPLIER_ORDERS": return { ...state, supplierOrders: action.payload };
     case "UPDATE_SETTINGS": return { ...state, settings: { ...state.settings, ...action.payload } };
     case "HYDRATE_REMOTE": return {
       ...state,
@@ -100,6 +97,7 @@ function reducer(state: AppState, action: Action): AppState {
       orders: action.orders,
       invoices: action.invoices,
       shipments: action.shipments,
+      supplierOrders: action.supplierOrders,
     };
     default: return state;
   }
@@ -141,9 +139,9 @@ interface DataContextValue {
   addQuote: (q: Quote) => void;
   updateQuote: (q: Quote) => void;
   deleteQuote: (id: string) => void;
-  addOrder: (o: Order) => void;
-  updateOrder: (o: Order) => void;
-  deleteOrder: (id: string) => void;
+  addOrder: (o: Order) => Promise<void>;
+  updateOrder: (o: Order) => Promise<void>;
+  deleteOrder: (id: string) => Promise<void>;
   addInvoice: (i: Invoice) => void;
   updateInvoice: (i: Invoice) => void;
   deleteInvoice: (id: string) => void;
@@ -153,9 +151,9 @@ interface DataContextValue {
   addGood: (g: Good) => void;
   updateGood: (g: Good) => void;
   deleteGood: (id: string) => void;
-  addSupplierOrder: (o: SupplierOrder) => void;
-  updateSupplierOrder: (o: SupplierOrder) => void;
-  deleteSupplierOrder: (id: string) => void;
+  addSupplierOrder: (o: SupplierOrder) => Promise<void>;
+  updateSupplierOrder: (o: SupplierOrder) => Promise<void>;
+  deleteSupplierOrder: (id: string) => Promise<void>;
   updateSettings: (s: Partial<AppSettings>) => void;
 }
 
@@ -180,12 +178,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const storedIds = new Set(stored.map((x) => x.id));
         dispatch({ type: "SET_GOODS", payload: [...stored, ...defaultGoods.filter((x) => !storedIds.has(x.id))] });
       }
-      const so = localStorage.getItem(LOCAL_SUPPLIER_ORDERS_KEY);
-      if (so) {
-        const stored = JSON.parse(so) as SupplierOrder[];
-        const storedIds = new Set(stored.map((x) => x.id));
-        dispatch({ type: "SET_SUPPLIER_ORDERS", payload: [...stored, ...defaultSupplierOrders.filter((x) => !storedIds.has(x.id))] });
-      }
       const s = localStorage.getItem(LOCAL_SETTINGS_KEY);
       if (s) dispatch({ type: "UPDATE_SETTINGS", payload: JSON.parse(s) as Partial<AppSettings> });
     } catch { /* ignore */ }
@@ -196,10 +188,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     if (typeof window === "undefined" || loading) return;
     try {
       localStorage.setItem(LOCAL_GOODS_KEY, JSON.stringify(state.goods));
-      localStorage.setItem(LOCAL_SUPPLIER_ORDERS_KEY, JSON.stringify(state.supplierOrders));
       localStorage.setItem(LOCAL_SETTINGS_KEY, JSON.stringify(state.settings));
     } catch { /* ignore */ }
-  }, [state.goods, state.supplierOrders, state.settings, loading]);
+  }, [state.goods, state.settings, loading]);
 
   // Fetch all CRM data from Airtable on mount
   useEffect(() => {
@@ -220,6 +211,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         orders?: Order[];
         invoices?: Invoice[];
         shipments?: Shipment[];
+        supplierOrders?: SupplierOrder[];
         issues?: string[];
       }) => {
         const customers = Array.isArray(data.customers) ? data.customers : [];
@@ -227,6 +219,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const orders = Array.isArray(data.orders) ? data.orders : [];
         const invoices = Array.isArray(data.invoices) ? data.invoices : [];
         const shipments = Array.isArray(data.shipments) ? data.shipments : [];
+        const supplierOrders = Array.isArray(data.supplierOrders) ? data.supplierOrders : [];
         dispatch({
           type: "HYDRATE_REMOTE",
           customers,
@@ -234,7 +227,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           orders,
           invoices,
           shipments,
+          supplierOrders,
         });
+        if (!data.issues?.includes("Supplier Orders")) {
+          localStorage.removeItem(LOCAL_SUPPLIER_ORDERS_KEY);
+        }
         if (data.issues?.length) {
           setLoadError(`Could not load: ${data.issues.join(", ")}`);
         }
@@ -287,20 +284,17 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       del(`/api/quotes/${id}`).catch(() => { if (snap) dispatch({ type: "ADD_QUOTE", payload: snap }); });
     },
 
-    addOrder: (o) => {
-      dispatch({ type: "ADD_ORDER", payload: o });
-      post<Order>("/api/orders", o)
-        .then((created) => dispatch({ type: "REPLACE_ORDER", tempId: o.id, payload: created }))
-        .catch(() => dispatch({ type: "DELETE_ORDER", id: o.id }));
+    addOrder: async (o) => {
+      const created = await post<Order>("/api/orders", o);
+      dispatch({ type: "ADD_ORDER", payload: created });
     },
-    updateOrder: (o) => {
-      dispatch({ type: "UPDATE_ORDER", payload: o });
-      patch(`/api/orders/${o.id}`, o).catch(() => {});
+    updateOrder: async (o) => {
+      const updated = await patch<Order>(`/api/orders/${o.id}`, o);
+      dispatch({ type: "UPDATE_ORDER", payload: updated });
     },
-    deleteOrder: (id) => {
-      const snap = state.orders.find((o) => o.id === id);
+    deleteOrder: async (id) => {
+      await del(`/api/orders/${id}`);
       dispatch({ type: "DELETE_ORDER", id });
-      del(`/api/orders/${id}`).catch(() => { if (snap) dispatch({ type: "ADD_ORDER", payload: snap }); });
     },
 
     addInvoice: (i) => {
@@ -339,9 +333,18 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     addGood: (g) => dispatch({ type: "ADD_GOOD", payload: g }),
     updateGood: (g) => dispatch({ type: "UPDATE_GOOD", payload: g }),
     deleteGood: (id) => dispatch({ type: "DELETE_GOOD", id }),
-    addSupplierOrder: (o) => dispatch({ type: "ADD_SUPPLIER_ORDER", payload: o }),
-    updateSupplierOrder: (o) => dispatch({ type: "UPDATE_SUPPLIER_ORDER", payload: o }),
-    deleteSupplierOrder: (id) => dispatch({ type: "DELETE_SUPPLIER_ORDER", id }),
+    addSupplierOrder: async (o) => {
+      const created = await post<SupplierOrder>("/api/supplier-orders", o);
+      dispatch({ type: "ADD_SUPPLIER_ORDER", payload: created });
+    },
+    updateSupplierOrder: async (o) => {
+      const updated = await patch<SupplierOrder>(`/api/supplier-orders/${o.id}`, o);
+      dispatch({ type: "UPDATE_SUPPLIER_ORDER", payload: updated });
+    },
+    deleteSupplierOrder: async (id) => {
+      await del(`/api/supplier-orders/${id}`);
+      dispatch({ type: "DELETE_SUPPLIER_ORDER", id });
+    },
     updateSettings: (s) => dispatch({ type: "UPDATE_SETTINGS", payload: s }),
   };
 

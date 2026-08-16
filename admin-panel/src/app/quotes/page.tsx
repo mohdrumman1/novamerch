@@ -51,6 +51,7 @@ export default function QuotesPage() {
   const [editingQuote, setEditingQuote] = useState<Quote | null>(null);
   const [creating, setCreating] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [convertingId, setConvertingId] = useState<string | null>(null);
 
   const filtered = quotes.filter((q) => {
     const matchStatus = statusFilter === "All" || q.status === statusFilter;
@@ -113,7 +114,8 @@ export default function QuotesPage() {
             <Button
               variant="ghost"
               size="compact"
-              onClick={() => {
+              disabled={convertingId === row.id}
+              onClick={async () => {
                 const now = new Date();
                 const month = now.getMonth() + 1; // 1-indexed
                 const year = now.getFullYear();
@@ -132,8 +134,15 @@ export default function QuotesPage() {
                   orderedAt: now.toISOString(),
                   lineItems: row.lineItems,
                 };
-                addOrder(order);
-                alert(`Order created from ${row.ref}`);
+                setConvertingId(row.id);
+                try {
+                  await addOrder(order);
+                  alert(`Order created from ${row.ref}`);
+                } catch {
+                  alert("Could not create order. Nothing changed.");
+                } finally {
+                  setConvertingId(null);
+                }
               }}
               style={{ color: "var(--green)", background: "var(--green-soft)" }}
             >

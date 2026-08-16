@@ -8,7 +8,8 @@ export async function POST(req: Request) {
     const body: Order = await req.json();
     const record = await createRecord("Orders", orderToFields(body));
     return NextResponse.json(recordToOrder(record));
-  } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+  } catch (error) {
+    console.error("[orders] Create failed", error);
+    return NextResponse.json({ error: "Could not save order" }, { status: 500 });
   }
 }
