@@ -6,7 +6,6 @@ import { orders } from "./orders";
 import { invoices } from "./invoices";
 import { shipments } from "./shipments";
 import { goods } from "./goods";
-import { supplierOrders } from "./supplierOrders";
 
 export const initialState: AppState = {
   customers,
@@ -15,8 +14,8 @@ export const initialState: AppState = {
   invoices,
   shipments,
   goods,
-  supplierOrders,
+  supplierOrders: [],
   settings: DEFAULT_SETTINGS,
 };
 
-export { customers, quotes, orders, invoices, shipments, goods, supplierOrders };
+export { customers, quotes, orders, invoices, shipments, goods };

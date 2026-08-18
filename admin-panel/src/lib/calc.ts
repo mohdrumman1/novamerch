@@ -1,4 +1,4 @@
-import type { LineItem, Order, Invoice, Quote } from "./types";
+import type { LineItem, Order, Invoice, Quote, SupplierOrder } from "./types";
 import { GST_RATE } from "./constants";
 
 /** Sum line items total (qty * unitPrice) */
@@ -6,12 +6,38 @@ export function lineItemsTotal(items: LineItem[]): number {
   return items.reduce((sum, item) => sum + item.qty * item.unitPrice, 0);
 }
 
-/** Supplier cost total */
-export function lineItemsCost(items: LineItem[]): number {
-  return items.reduce(
-    (sum, item) => sum + item.qty * (item.costPerUnit ?? 0),
-    0
-  );
+/** Supplier cost total when every line has a recorded cost. */
+export function lineItemsCost(items: LineItem[]): number | undefined {
+  if (items.some((item) => item.costPerUnit === undefined)) return undefined;
+  return items.reduce((sum, item) => sum + item.qty * item.costPerUnit!, 0);
+}
+
+function linkedSupplierOrder(order: Order, supplierOrders: SupplierOrder[]): SupplierOrder | undefined {
+  return supplierOrders.find((supplierOrder) => supplierOrder.relatedOrderId === order.id);
+}
+
+function supplierProjectedCost(supplierOrder: SupplierOrder): number | undefined {
+  return supplierOrder.projectedCostAud;
+}
+
+/** Goods-only cost (excludes transport): linked supplier header cost, else manual line-item cost. */
+export function orderGoodsCost(order: Order, supplierOrders: SupplierOrder[] = []): number | undefined {
+  const supplierOrder = linkedSupplierOrder(order, supplierOrders);
+  return supplierOrder ? supplierProjectedCost(supplierOrder) : lineItemsCost(order.lineItems);
+}
+
+export function orderProjectedCost(order: Order, supplierOrders: SupplierOrder[] = []): number | undefined {
+  const goodsCost = orderGoodsCost(order, supplierOrders);
+  if (goodsCost === undefined || order.transportCost === undefined) return undefined;
+  return goodsCost + order.transportCost;
+}
+
+export function orderBookedSupplierPayment(order: Order, supplierOrders: SupplierOrder[] = []): number | undefined {
+  return linkedSupplierOrder(order, supplierOrders)?.bookedPaymentAud;
+}
+
+export function orderPendingSupplierBalanceAud(order: Order, supplierOrders: SupplierOrder[] = []): number | undefined {
+  return linkedSupplierOrder(order, supplierOrders)?.pendingBalanceEstimatedAud;
 }
 
 /** Calculate GST on an ex-GST amount */
@@ -33,17 +59,17 @@ export function depositSplit(
   return { deposit, final: total - deposit };
 }
 
-/** Calculate expected profit for an order */
-export function orderExpectedProfit(order: Order): number {
-  const revenue = lineItemsTotal(order.lineItems);
-  const cost = lineItemsCost(order.lineItems) + (order.transportCost ?? 0);
-  return revenue - cost;
+/** Calculate expected profit for an order when projected cost is recorded. */
+export function orderExpectedProfit(order: Order, supplierOrders: SupplierOrder[] = []): number | undefined {
+  const cost = orderProjectedCost(order, supplierOrders);
+  return cost === undefined ? undefined : lineItemsTotal(order.lineItems) - cost;
 }
 
-/** Calculate actual profit (based on amount received) */
-export function orderActualProfit(order: Order): number {
-  const cost = lineItemsCost(order.lineItems) + (order.transportCost ?? 0);
-  return (order.amountReceived ?? 0) - cost;
+/** Calculate actual profit when both revenue received and projected cost are recorded. */
+export function orderActualProfit(order: Order, supplierOrders: SupplierOrder[] = []): number | undefined {
+  const cost = orderProjectedCost(order, supplierOrders);
+  if (cost === undefined || order.amountReceived === undefined) return undefined;
+  return order.amountReceived - cost;
 }
 
 /** Profit margin as percentage */
@@ -98,32 +124,41 @@ export function invoiceOutstanding(invoice: Invoice): number {
   return Math.max(0, invoice.total - (invoice.amountReceived ?? 0));
 }
 
-export interface PLResult {
-  totalRevenue: number;
-  totalCost: number;
-  grossProfit: number;
-  marginPct: number;
-  gstCollected: number;
-  gstPaid: number;
-  netGst: number;
+export function sumRecordedMoney(values: (number | undefined)[]): number | undefined {
+  if (values.some((value) => value === undefined)) return undefined;
+  return values.reduce<number>((sum, value) => sum + value!, 0);
 }
 
-/** Simple P&L aggregation over a set of orders */
-export function calcPL(orders: Order[]): PLResult {
+export interface PLResult {
+  totalRevenue: number;
+  totalCost: number | undefined;
+  grossProfit: number | undefined;
+  marginPct: number | undefined;
+  gstCollected: number;
+  gstPaid: number | undefined;
+  netGst: number | undefined;
+}
+
+/** P&L aggregation where unrecorded costs keep dependent values unknown. */
+export function calcPL(
+  orders: Order[],
+  supplierOrders: SupplierOrder[] = []
+): PLResult {
   const totalRevenue = orders.reduce(
-    (sum, o) => sum + lineItemsTotal(o.lineItems),
+    (sum, order) => sum + lineItemsTotal(order.lineItems),
     0
   );
-  const totalCost = orders.reduce(
-    (sum, o) =>
-      sum + lineItemsCost(o.lineItems) + (o.transportCost ?? 0),
-    0
+  const totalCost = sumRecordedMoney(
+    orders.map((order) => orderProjectedCost(order, supplierOrders))
   );
-  const grossProfit = totalRevenue - totalCost;
+  const grossProfit =
+    totalCost === undefined ? undefined : totalRevenue - totalCost;
   const marginPct =
+    grossProfit === undefined ? undefined :
     totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
   const gstCollected = gstOf(totalRevenue);
-  const gstPaid = gstOf(totalCost);
+  const gstPaid = totalCost === undefined ? undefined : gstOf(totalCost);
+
   return {
     totalRevenue,
     totalCost,
@@ -131,6 +166,6 @@ export function calcPL(orders: Order[]): PLResult {
     marginPct,
     gstCollected,
     gstPaid,
-    netGst: gstCollected - gstPaid,
+    netGst: gstPaid === undefined ? undefined : gstCollected - gstPaid,
   };
 }

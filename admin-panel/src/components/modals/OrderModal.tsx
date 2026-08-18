@@ -9,7 +9,7 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { LineItemsEditor } from "@/components/ui/LineItemsEditor";
 import { formatAUD } from "@/lib/format";
-import { lineItemsTotal, lineItemsCost } from "@/lib/calc";
+import { lineItemsTotal, orderExpectedProfit, orderProjectedCost } from "@/lib/calc";
 import {
   ORDER_GOODS_STATUSES,
   ORDER_INVOICE_STATUSES,
@@ -34,17 +34,19 @@ function emptyOrder(): Omit<Order, "id"> {
     fy: getFiscalYear(now),
     orderedAt: now.slice(0, 10),
     lineItems: [],
-    transportCost: 0,
-    amountReceived: 0,
+    transportCost: undefined,
+    amountReceived: undefined,
     comments: "",
   };
 }
 
 export function OrderModal({ open, onClose, order }: OrderModalProps) {
-  const { customers, addOrder, updateOrder } = useData();
+  const { customers, supplierOrders, addOrder, updateOrder } = useData();
   const isEdit = order !== null;
 
   const [form, setForm] = useState<Omit<Order, "id">>(emptyOrder());
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (open) {
@@ -58,15 +60,31 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
     }
   }, [open, order]);
 
-  function handleSubmit() {
-    if (!form.customerId) return alert("Please select a customer");
-    const withFy = { ...form, fy: getFiscalYear(form.orderedAt) };
-    if (isEdit && order) {
-      updateOrder({ ...withFy, id: order.id });
-    } else {
-      addOrder({ ...withFy, id: crypto.randomUUID() });
+  async function handleSubmit() {
+    if (!form.customerId) {
+      setError("Select a customer.");
+      return;
     }
-    onClose();
+
+    setSaving(true);
+    setError(null);
+    const withFy = { ...form, fy: getFiscalYear(form.orderedAt) };
+    try {
+      if (isEdit && order) {
+        await updateOrder({ ...withFy, id: order.id });
+      } else {
+        await addOrder({ ...withFy, id: crypto.randomUUID() });
+      }
+      onClose();
+    } catch {
+      setError("Could not save order. Nothing changed.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function closeModal() {
+    if (!saving) onClose();
   }
 
   const customerOptions = customers.map((c) => ({ value: c.id, label: c.company }));
@@ -75,25 +93,26 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
   const transportOptions = TRANSPORT_TYPES.map((t) => ({ value: t, label: t }));
 
   const revenue = lineItemsTotal(form.lineItems);
-  const cost = lineItemsCost(form.lineItems) + (form.transportCost ?? 0);
-  const expectedProfit = revenue - cost;
+  const cost = orderProjectedCost({ ...form, id: order?.id ?? "" }, supplierOrders);
+  const expectedProfit = orderExpectedProfit({ ...form, id: order?.id ?? "" }, supplierOrders);
 
   return (
     <Modal
       open={open}
-      onClose={onClose}
+      onClose={closeModal}
       title={isEdit ? `Edit Order ${order?.ref}` : "New Order"}
       size="xl"
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button variant="ghost" onClick={closeModal} disabled={saving}>Cancel</Button>
+          <Button variant="primary" onClick={handleSubmit} loading={saving}>
             {isEdit ? "Save Changes" : "Create Order"}
           </Button>
         </>
       }
     >
       <div className="space-y-5">
+        {error && <p className="text-sm text-[var(--red)]">{error}</p>}
         {/* Row 1: ref, customer, date */}
         <div className="grid grid-cols-3 gap-4">
           <Input
@@ -152,8 +171,8 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
             type="number"
             min={0}
             step={0.01}
-            value={form.transportCost ?? 0}
-            onChange={(e) => setForm({ ...form, transportCost: Number(e.target.value) })}
+            value={form.transportCost ?? ""}
+            onChange={(e) => setForm({ ...form, transportCost: e.target.value === "" ? undefined : Number(e.target.value) })}
           />
           <Input
             label="Amount Received (AUD)"
@@ -161,8 +180,8 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
             type="number"
             min={0}
             step={0.01}
-            value={form.amountReceived ?? 0}
-            onChange={(e) => setForm({ ...form, amountReceived: Number(e.target.value) })}
+            value={form.amountReceived ?? ""}
+            onChange={(e) => setForm({ ...form, amountReceived: e.target.value === "" ? undefined : Number(e.target.value) })}
           />
         </div>
 
@@ -196,8 +215,8 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
         <div
           className="rounded-[var(--radius-sm)] p-4 border"
           style={{
-            background: expectedProfit >= 0 ? "var(--green-soft)" : "var(--red-soft)",
-            borderColor: expectedProfit >= 0 ? "var(--green)" : "var(--red)",
+            background: expectedProfit === undefined || expectedProfit >= 0 ? "var(--green-soft)" : "var(--red-soft)",
+            borderColor: expectedProfit === undefined || expectedProfit >= 0 ? "var(--green)" : "var(--red)",
           }}
         >
           <div className="grid grid-cols-3 gap-4 text-sm">
@@ -210,7 +229,7 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
             <div>
               <p className="text-[var(--text-muted)] text-xs mb-1">Total Cost</p>
               <p className="font-semibold" style={{ fontFamily: "var(--font-dm-mono, monospace)" }}>
-                {formatAUD(cost)}
+                {cost === undefined ? "Not recorded" : formatAUD(cost)}
               </p>
             </div>
             <div>
@@ -219,10 +238,10 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
                 className="font-semibold text-lg"
                 style={{
                   fontFamily: "var(--font-dm-mono, monospace)",
-                  color: expectedProfit >= 0 ? "var(--green)" : "var(--red)",
+                  color: expectedProfit === undefined || expectedProfit >= 0 ? "var(--green)" : "var(--red)",
                 }}
               >
-                {formatAUD(expectedProfit)}
+                {expectedProfit === undefined ? "Not recorded" : formatAUD(expectedProfit)}
               </p>
             </div>
           </div>

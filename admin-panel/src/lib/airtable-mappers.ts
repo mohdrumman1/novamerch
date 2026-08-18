@@ -2,7 +2,7 @@ import type {
   Customer, Quote, Order, Invoice, Shipment,
   QuoteStatus, QuoteSource, OrderGoodsStatus, OrderInvoiceStatus,
   TransportType, InvoiceStatus, InvoiceKind, ShipmentStatus, ShippingMethod,
-  LineItem, ShipmentItem,
+  LineItem, ShipmentItem, SupplierOrder, SupplierOrderItem, SupplierPaymentStatus,
 } from "./types";
 
 type AirtableRecord = { id: string; fields: Record<string, unknown> };
@@ -10,7 +10,8 @@ type AirtableRecord = { id: string; fields: Record<string, unknown> };
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function str(v: unknown): string { return (v as string) || ""; }
-function num(v: unknown): number { return (v as number) || 0; }
+function num(v: unknown): number { return typeof v === "number" ? v : 0; }
+function optionalNum(v: unknown): number | undefined { return typeof v === "number" ? v : undefined; }
 function bool(v: unknown): boolean { return (v as boolean) || false; }
 function link(v: unknown): string { return ((v as string[]) || [])[0] || ""; }
 function links(v: unknown): string[] { return (v as string[]) || []; }
@@ -117,7 +118,7 @@ export function recordToOrder(rec: AirtableRecord): Order {
     goodsStatus: (str(f["Goods Status"]) || "Pending") as OrderGoodsStatus,
     invoiceStatus: (str(f["Invoice Status"]) || "Need to Invoice") as OrderInvoiceStatus,
     transportType: (str(f["Transport Type"]) || "Agent Sea") as TransportType,
-    transportCost: num(f["Transport Cost AUD"]) || undefined,
+    transportCost: optionalNum(f["Transport Cost AUD"]),
     fy: str(f["FY"]),
     orderedAt: str(f["Date Placed"]),
     lineItems: parseJSON<LineItem[]>(f["Line Items JSON"], []),
@@ -125,7 +126,7 @@ export function recordToOrder(rec: AirtableRecord): Order {
     freightPaidDate: str(f["Freight Paid Date"]) || undefined,
     trackingAgentToK2: str(f["Tracking Agent to K2"]) || undefined,
     trackingK2ToCustomer: str(f["Tracking K2 to Customer"]) || undefined,
-    amountReceived: num(f["Amount Received AUD"]) || undefined,
+    amountReceived: optionalNum(f["Amount Received AUD"]),
     comments: str(f["Comments"]) || undefined,
   };
 }
@@ -145,10 +146,12 @@ export function orderToFields(o: Order): Record<string, unknown> {
     "Freight Paid Date": o.freightPaidDate ?? null,
     "Tracking Agent to K2": o.trackingAgentToK2 || "",
     "Tracking K2 to Customer": o.trackingK2ToCustomer || "",
-    "Amount Received AUD": o.amountReceived ?? 0,
-    "Transport Cost AUD": o.transportCost ?? 0,
+    "Amount Received AUD": o.amountReceived ?? null,
+    "Transport Cost AUD": o.transportCost ?? null,
     "Comments": o.comments || "",
-    "Total Cost AUD": o.lineItems.reduce((s, li) => s + li.qty * (li.costPerUnit ?? 0), 0),
+    "Total Cost AUD": o.lineItems.every((li) => li.costPerUnit !== undefined)
+      ? o.lineItems.reduce((sum, li) => sum + li.qty * li.costPerUnit!, 0)
+      : null,
   };
 }
 
@@ -170,7 +173,7 @@ export function recordToInvoice(rec: AirtableRecord): Invoice {
     subtotal: num(f["Amount Excl GST AUD"]),
     gst: num(f["GST AUD"]),
     total: num(f["Total Incl GST AUD"]),
-    amountReceived: num(f["Amount Received AUD"]) || undefined,
+    amountReceived: optionalNum(f["Amount Received AUD"]),
     lineItems: parseJSON<LineItem[]>(f["Line Items JSON"], []),
     comments: str(f["Notes"]) || undefined,
   };
@@ -190,9 +193,58 @@ export function invoiceToFields(inv: Invoice): Record<string, unknown> {
     "Amount Excl GST AUD": inv.subtotal,
     "GST AUD": inv.gst,
     "Total Incl GST AUD": inv.total,
-    "Amount Received AUD": inv.amountReceived ?? 0,
+    "Amount Received AUD": inv.amountReceived ?? null,
     "Line Items JSON": JSON.stringify(inv.lineItems),
     "Notes": inv.comments || "",
+  };
+}
+
+// ─── Supplier Orders ─────────────────────────────────────────────────────────
+
+export function recordToSupplierOrder(rec: AirtableRecord): SupplierOrder {
+  const f = rec.fields;
+  const paymentStatus = str(f["Payment Status"]);
+  return {
+    id: rec.id,
+    orderNumber: str(f["Alibaba Order Number"]),
+    orderDate: str(f["Order Date"]),
+    supplierName: str(f["Supplier Name"]),
+    itemSubtotalUsd: num(f["Item Subtotal USD"]),
+    shippingFeeUsd: num(f["Shipping Fee USD"]),
+    totalUsd: num(f["Total USD"]),
+    projectedCostAud: optionalNum(f["Projected Cost AUD"]),
+    bookedPaymentAud: optionalNum(f["Booked Payment AUD"]),
+    bookedPaymentDate: str(f["Booked Payment Date"]) || undefined,
+    pendingBalanceUsd: optionalNum(f["Pending Balance USD"]),
+    pendingBalanceEstimatedAud: optionalNum(f["Pending Balance Estimated AUD"]),
+    paymentStatus: paymentStatus === "Partially Paid" || paymentStatus === "Paid"
+      ? paymentStatus as SupplierPaymentStatus
+      : undefined,
+    relatedOrderId: link(f["Related Order"]) || undefined,
+    relatedCustomerId: link(f["Related Customer"]) || undefined,
+    items: parseJSON<SupplierOrderItem[]>(f["Items JSON"], []),
+    notes: str(f["Notes"]) || undefined,
+  };
+}
+
+export function supplierOrderToFields(order: SupplierOrder): Record<string, unknown> {
+  return {
+    "Alibaba Order Number": order.orderNumber,
+    "Related Order": order.relatedOrderId ? [order.relatedOrderId] : [],
+    "Related Customer": order.relatedCustomerId ? [order.relatedCustomerId] : [],
+    "Supplier Name": order.supplierName,
+    "Order Date": order.orderDate || null,
+    "Item Subtotal USD": order.itemSubtotalUsd,
+    "Shipping Fee USD": order.shippingFeeUsd,
+    "Total USD": order.totalUsd,
+    "Projected Cost AUD": order.projectedCostAud ?? null,
+    "Booked Payment AUD": order.bookedPaymentAud ?? null,
+    "Booked Payment Date": order.bookedPaymentDate ?? null,
+    "Pending Balance USD": order.pendingBalanceUsd ?? null,
+    "Pending Balance Estimated AUD": order.pendingBalanceEstimatedAud ?? null,
+    "Payment Status": order.paymentStatus ?? null,
+    "Items JSON": JSON.stringify(order.items),
+    "Notes": order.notes || "",
   };
 }
 

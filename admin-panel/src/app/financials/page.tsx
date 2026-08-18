@@ -5,7 +5,14 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { StatCard } from "@/components/ui/StatCard";
 import { Tabs } from "@/components/ui/Tabs";
 import { formatAUD, formatPercent } from "@/lib/format";
-import { lineItemsTotal, lineItemsCost } from "@/lib/calc";
+import {
+  lineItemsTotal,
+  orderGoodsCost,
+  orderProjectedCost,
+  orderBookedSupplierPayment,
+  sumRecordedMoney,
+  calcPL,
+} from "@/lib/calc";
 import { GST_THRESHOLD, getFiscalYear } from "@/lib/constants";
 import { RefreshIcon } from "@/components/icons";
 
@@ -30,14 +37,14 @@ type MonthData = {
   key: string;
   label: string;
   revenue: number;
-  expenditure: number;
-  ebit: number;
-  marginPct: number;
+  expenditure: number | undefined;
+  ebit: number | undefined;
+  marginPct: number | undefined;
   orderCount: number;
 };
 
 export default function FinancialsPage() {
-  const { orders, invoices } = useData();
+  const { orders, invoices, supplierOrders } = useData();
   const [activeTab, setActiveTab] = useState("monthly");
   const [selectedYear, setSelectedYear] = useState("FY2025/26");
   const [gstRegistered, setGstRegistered] = useState(false);
@@ -64,7 +71,7 @@ export default function FinancialsPage() {
     });
 
   // Expenditure: exclude Pending and Cancelled, group by orderedAt month
-  const expenditureByMonth = new Map<string, number>();
+  const expenditureCostsByMonth = new Map<string, (number | undefined)[]>();
   const orderCountByMonth = new Map<string, number>();
   orders
     .filter((o) => getFiscalYear(o.orderedAt) === selectedYear)
@@ -72,8 +79,9 @@ export default function FinancialsPage() {
       const key = getMonthKey(o.orderedAt);
       orderCountByMonth.set(key, (orderCountByMonth.get(key) ?? 0) + 1);
       if (o.goodsStatus !== "Pending" && o.goodsStatus !== "Cancelled") {
-        const exp = lineItemsCost(o.lineItems) + (o.transportCost ?? 0);
-        expenditureByMonth.set(key, (expenditureByMonth.get(key) ?? 0) + exp);
+        const arr = expenditureCostsByMonth.get(key) ?? [];
+        arr.push(orderProjectedCost(o, supplierOrders));
+        expenditureCostsByMonth.set(key, arr);
       }
     });
 
@@ -87,9 +95,9 @@ export default function FinancialsPage() {
     .sort()
     .map((key) => {
       const revenue = revenueByMonth.get(key) ?? 0;
-      const expenditure = expenditureByMonth.get(key) ?? 0;
-      const ebit = revenue - expenditure;
-      const marginPct = revenue > 0 ? (ebit / revenue) * 100 : 0;
+      const expenditure = sumRecordedMoney(expenditureCostsByMonth.get(key) ?? []);
+      const ebit = expenditure === undefined ? undefined : revenue - expenditure;
+      const marginPct = ebit === undefined ? undefined : revenue > 0 ? (ebit / revenue) * 100 : 0;
       return {
         key,
         label: getMonthLabel(key),
@@ -102,34 +110,41 @@ export default function FinancialsPage() {
     });
 
   const totalMonthlyRevenue = months.reduce((sum, m) => sum + m.revenue, 0);
-  const totalMonthlyExpenditure = months.reduce((sum, m) => sum + m.expenditure, 0);
-  const totalMonthlyEBIT = totalMonthlyRevenue - totalMonthlyExpenditure;
-  const totalMonthlyMargin = totalMonthlyRevenue > 0 ? (totalMonthlyEBIT / totalMonthlyRevenue) * 100 : 0;
+  const totalMonthlyExpenditure = sumRecordedMoney(months.map((m) => m.expenditure));
+  const totalMonthlyEBIT =
+    totalMonthlyExpenditure === undefined ? undefined : totalMonthlyRevenue - totalMonthlyExpenditure;
+  const totalMonthlyMargin =
+    totalMonthlyEBIT === undefined ? undefined : totalMonthlyRevenue > 0 ? (totalMonthlyEBIT / totalMonthlyRevenue) * 100 : 0;
 
   // ── P&L Report ─────────────────────────────────────────────────────────
 
   // All-time figures (no FY filter)
-  const totalRevenue = orders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
-  const costOfGoods = orders.reduce((sum, o) => sum + lineItemsCost(o.lineItems), 0);
-  const transport = orders.reduce((sum, o) => sum + (o.transportCost ?? 0), 0);
-  const totalExpenses = costOfGoods + transport;
-  const netProfit = totalRevenue - totalExpenses;
-  const marginPct = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
+  const pl = calcPL(orders, supplierOrders);
+  const totalRevenue = pl.totalRevenue;
+  const costOfGoods = sumRecordedMoney(orders.map((o) => orderGoodsCost(o, supplierOrders)));
+  const transport = sumRecordedMoney(orders.map((o) => o.transportCost));
+  const totalExpenses = pl.totalCost;
+  const netProfit = pl.grossProfit;
+  const marginPct = pl.marginPct;
 
-  const gstCollected = totalRevenue * 0.10;
-  const gstCredits = totalExpenses * 0.10;
-  const gstPayable = gstCollected - gstCredits;
+  const gstCollected = pl.gstCollected;
+  const gstCredits = pl.gstPaid;
+  const gstPayable = pl.netGst;
 
   // Cash Position
-  const cashReceived = orders.reduce((sum, o) => sum + (o.amountReceived ?? 0), 0);
-  const outstanding = totalRevenue - cashReceived;
-  const actualProfitToday = cashReceived - totalExpenses;
+  const cashReceived = sumRecordedMoney(orders.map((o) => o.amountReceived));
+  const costsPaid = sumRecordedMoney(orders.map((o) => orderBookedSupplierPayment(o, supplierOrders)));
+  const outstanding = cashReceived === undefined ? undefined : totalRevenue - cashReceived;
+  const actualProfitToday =
+    cashReceived === undefined || costsPaid === undefined ? undefined : cashReceived - costsPaid;
 
   // GST Threshold: all-time revenue (no date filter)
   const allTimeRevenue = orders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
   const gstThresholdPct = Math.min(100, (allTimeRevenue / GST_THRESHOLD) * 100);
   const gstThresholdColor =
     gstThresholdPct >= 100 ? "var(--red)" : gstThresholdPct >= 80 ? "var(--orange)" : "var(--green)";
+
+  const fmtMoney = (v: number | undefined) => (v === undefined ? "Not recorded" : formatAUD(v));
 
   function marginBadgeColor(pct: number): string {
     if (pct >= 30) return "var(--green-soft)";
@@ -177,12 +192,28 @@ export default function FinancialsPage() {
           {/* Summary cards */}
           <div className="grid gap-4 mb-6" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))" }}>
             <StatCard label="Total Revenue" value={formatAUD(totalMonthlyRevenue)} tone="blue" />
-            <StatCard label="Total Expenditure" value={formatAUD(totalMonthlyExpenditure)} tone="red" />
-            <StatCard label="EBIT" value={formatAUD(totalMonthlyEBIT)} tone={totalMonthlyEBIT >= 0 ? "green" : "red"} />
+            <StatCard
+              label="Total Expenditure"
+              value={totalMonthlyExpenditure === undefined ? "Not recorded" : formatAUD(totalMonthlyExpenditure)}
+              tone="red"
+            />
+            <StatCard
+              label="EBIT"
+              value={totalMonthlyEBIT === undefined ? "Not recorded" : formatAUD(totalMonthlyEBIT)}
+              tone={totalMonthlyEBIT === undefined || totalMonthlyEBIT >= 0 ? "green" : "red"}
+            />
             <StatCard
               label="Avg Margin"
-              value={formatPercent(totalMonthlyMargin)}
-              tone={totalMonthlyMargin >= 20 ? "green" : totalMonthlyMargin >= 10 ? "orange" : "red"}
+              value={totalMonthlyMargin === undefined ? "Not recorded" : formatPercent(totalMonthlyMargin)}
+              tone={
+                totalMonthlyMargin === undefined
+                  ? "default"
+                  : totalMonthlyMargin >= 20
+                  ? "green"
+                  : totalMonthlyMargin >= 10
+                  ? "orange"
+                  : "red"
+              }
             />
           </div>
 
@@ -221,27 +252,31 @@ export default function FinancialsPage() {
                         {formatAUD(m.revenue)}
                       </td>
                       <td className="px-4 py-3" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--red)" }}>
-                        {formatAUD(m.expenditure)}
+                        {m.expenditure === undefined ? "Not recorded" : formatAUD(m.expenditure)}
                       </td>
                       <td
                         className="px-4 py-3"
                         style={{
                           fontFamily: "var(--font-dm-mono, monospace)",
-                          color: m.ebit >= 0 ? "var(--green)" : "var(--red)",
+                          color: m.ebit === undefined || m.ebit >= 0 ? "var(--green)" : "var(--red)",
                         }}
                       >
-                        {formatAUD(m.ebit)}
+                        {m.ebit === undefined ? "Not recorded" : formatAUD(m.ebit)}
                       </td>
                       <td className="px-4 py-3">
-                        <span
-                          className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium"
-                          style={{
-                            background: marginBadgeColor(m.marginPct),
-                            color: marginTextColor(m.marginPct),
-                          }}
-                        >
-                          {formatPercent(m.marginPct)}
-                        </span>
+                        {m.marginPct === undefined ? (
+                          "Not recorded"
+                        ) : (
+                          <span
+                            className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium"
+                            style={{
+                              background: marginBadgeColor(m.marginPct),
+                              color: marginTextColor(m.marginPct),
+                            }}
+                          >
+                            {formatPercent(m.marginPct)}
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-center text-[var(--text-muted)]">{m.orderCount}</td>
                     </tr>
@@ -251,12 +286,20 @@ export default function FinancialsPage() {
                   <tr className="border-t-2 border-[var(--border-dark)] font-semibold" style={{ background: "var(--surface-2)" }}>
                     <td className="px-4 py-3">Total</td>
                     <td className="px-4 py-3" style={{ fontFamily: "var(--font-dm-mono, monospace)" }}>{formatAUD(totalMonthlyRevenue)}</td>
-                    <td className="px-4 py-3" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--red)" }}>{formatAUD(totalMonthlyExpenditure)}</td>
-                    <td className="px-4 py-3" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: totalMonthlyEBIT >= 0 ? "var(--green)" : "var(--red)" }}>{formatAUD(totalMonthlyEBIT)}</td>
+                    <td className="px-4 py-3" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: "var(--red)" }}>
+                      {totalMonthlyExpenditure === undefined ? "Not recorded" : formatAUD(totalMonthlyExpenditure)}
+                    </td>
+                    <td className="px-4 py-3" style={{ fontFamily: "var(--font-dm-mono, monospace)", color: totalMonthlyEBIT === undefined || totalMonthlyEBIT >= 0 ? "var(--green)" : "var(--red)" }}>
+                      {totalMonthlyEBIT === undefined ? "Not recorded" : formatAUD(totalMonthlyEBIT)}
+                    </td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: marginBadgeColor(totalMonthlyMargin), color: marginTextColor(totalMonthlyMargin) }}>
-                        {formatPercent(totalMonthlyMargin)}
-                      </span>
+                      {totalMonthlyMargin === undefined ? (
+                        "Not recorded"
+                      ) : (
+                        <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: marginBadgeColor(totalMonthlyMargin), color: marginTextColor(totalMonthlyMargin) }}>
+                          {formatPercent(totalMonthlyMargin)}
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-center">{months.reduce((sum, m) => sum + m.orderCount, 0)}</td>
                   </tr>
@@ -322,17 +365,17 @@ export default function FinancialsPage() {
 
                 {/* EXPENSES section */}
                 <PLRow label="Expenses" value="" section />
-                <PLRow label="Cost of Goods" value={formatAUD(costOfGoods)} indent negative />
-                <PLRow label="Transport / Freight" value={formatAUD(transport)} indent negative />
-                <PLRow label="Total Expenses" value={formatAUD(totalExpenses)} negative />
+                <PLRow label="Cost of Goods" value={fmtMoney(costOfGoods)} indent negative />
+                <PLRow label="Transport / Freight" value={fmtMoney(transport)} indent negative />
+                <PLRow label="Total Expenses" value={fmtMoney(totalExpenses)} negative />
 
                 {/* GST Position */}
                 {gstRegistered && (
                   <>
                     <PLRow label="GST Position" value="" section />
                     <PLRow label="GST Collected" value={formatAUD(gstCollected)} indent />
-                    <PLRow label="GST Credits on Costs" value={formatAUD(gstCredits)} indent negative />
-                    <PLRow label="GST Payable to ATO" value={formatAUD(gstPayable)} />
+                    <PLRow label="GST Credits on Costs" value={fmtMoney(gstCredits)} indent negative />
+                    <PLRow label="GST Payable to ATO" value={fmtMoney(gstPayable)} />
                   </>
                 )}
               </tbody>
@@ -343,16 +386,16 @@ export default function FinancialsPage() {
                     className="px-4 py-4 text-right font-bold text-lg"
                     style={{
                       fontFamily: "var(--font-dm-mono, monospace)",
-                      color: netProfit >= 0 ? "var(--accent)" : "var(--red)",
+                      color: netProfit === undefined || netProfit >= 0 ? "var(--accent)" : "var(--red)",
                     }}
                   >
-                    {formatAUD(netProfit)}
+                    {fmtMoney(netProfit)}
                   </td>
                 </tr>
                 <tr style={{ background: "var(--surface-2)" }}>
                   <td className="px-4 py-2 text-sm text-[var(--text-muted)]">Profit Margin</td>
                   <td className="px-4 py-2 text-right text-sm font-semibold" style={{ fontFamily: "var(--font-dm-mono, monospace)" }}>
-                    {formatPercent(marginPct)}
+                    {marginPct === undefined ? "Not recorded" : formatPercent(marginPct)}
                   </td>
                 </tr>
               </tfoot>
@@ -363,13 +406,17 @@ export default function FinancialsPage() {
           <div>
             <h3 className="text-sm font-semibold text-[var(--text)] mb-3">Cash Position</h3>
             <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))" }}>
-              <StatCard label="Cash Received" value={formatAUD(cashReceived)} tone="blue" />
-              <StatCard label="Costs Paid" value={formatAUD(totalExpenses)} tone="red" />
-              <StatCard label="Outstanding" value={formatAUD(outstanding)} tone={outstanding > 0 ? "orange" : "green"} />
+              <StatCard label="Cash Received" value={fmtMoney(cashReceived)} tone="blue" />
+              <StatCard label="Booked Supplier Payments" value={fmtMoney(costsPaid)} tone="red" />
               <StatCard
-                label="Actual Profit Today"
-                value={formatAUD(actualProfitToday)}
-                tone={actualProfitToday >= 0 ? "green" : "red"}
+                label="Outstanding"
+                value={fmtMoney(outstanding)}
+                tone={outstanding === undefined ? "default" : outstanding > 0 ? "orange" : "green"}
+              />
+              <StatCard
+                label="Cash Flow"
+                value={fmtMoney(actualProfitToday)}
+                tone={actualProfitToday === undefined || actualProfitToday >= 0 ? "green" : "red"}
               />
             </div>
           </div>
