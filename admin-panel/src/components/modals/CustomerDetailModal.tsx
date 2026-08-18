@@ -6,7 +6,7 @@ import { Modal } from "@/components/ui/Modal";
 import { Badge } from "@/components/ui/Badge";
 import { StatCard } from "@/components/ui/StatCard";
 import { formatAUD, formatDate } from "@/lib/format";
-import { lineItemsTotal, orderExpectedProfit } from "@/lib/calc";
+import { lineItemsTotal, orderExpectedProfit, sumRecordedMoney } from "@/lib/calc";
 import { ORDER_GOODS_STATUS_TONE } from "@/lib/status";
 
 interface CustomerDetailModalProps {
@@ -16,17 +16,19 @@ interface CustomerDetailModalProps {
 }
 
 export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailModalProps) {
-  const { orders, invoices } = useData();
+  const { orders, invoices, supplierOrders } = useData();
 
   if (!customer) return null;
 
   const customerOrders = orders.filter((o) => o.customerId === customer.id);
   const customerInvoices = invoices.filter((i) => i.customerId === customer.id);
   const totalRevenue = customerOrders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
-  const totalProfit = customerOrders.reduce((sum, o) => sum + orderExpectedProfit(o), 0);
-  const cashReceived = customerInvoices
-    .filter((i) => i.status === "Paid")
-    .reduce((sum, i) => sum + (i.amountReceived ?? i.total), 0);
+  const totalProfit = sumRecordedMoney(
+    customerOrders.map((o) => orderExpectedProfit(o, supplierOrders))
+  );
+  const cashReceived = sumRecordedMoney(
+    customerInvoices.filter((i) => i.status === "Paid").map((i) => i.amountReceived)
+  );
 
   return (
     <Modal open={open} onClose={onClose} title={customer.company} size="xl">
@@ -63,14 +65,14 @@ export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailM
           <StatCard label="Total Revenue" value={formatAUD(totalRevenue)} />
           <StatCard
             label="Total Profit"
-            value={formatAUD(totalProfit)}
-            tone={totalProfit >= 0 ? "green" : "red"}
+            value={totalProfit === undefined ? "Not recorded" : formatAUD(totalProfit)}
+            tone={totalProfit === undefined || totalProfit >= 0 ? "green" : "red"}
           />
         </div>
 
         <StatCard
           label="Cash Received"
-          value={formatAUD(cashReceived)}
+          value={cashReceived === undefined ? "Not recorded" : formatAUD(cashReceived)}
           tone="blue"
           accentColor="var(--blue)"
         />
@@ -92,7 +94,7 @@ export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailM
                 </thead>
                 <tbody>
                   {customerOrders.map((order) => {
-                    const profit = orderExpectedProfit(order);
+                    const profit = orderExpectedProfit(order, supplierOrders);
                     return (
                       <tr key={order.id} className="border-t border-[var(--border)]">
                         <td className="px-3 py-2 font-medium">{order.ref}</td>
@@ -107,10 +109,10 @@ export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailM
                           className="px-3 py-2 text-right"
                           style={{
                             fontFamily: "var(--font-dm-mono, monospace)",
-                            color: profit >= 0 ? "var(--green)" : "var(--red)",
+                            color: profit === undefined || profit >= 0 ? "var(--green)" : "var(--red)",
                           }}
                         >
-                          {formatAUD(profit)}
+                          {profit === undefined ? "Not recorded" : formatAUD(profit)}
                         </td>
                       </tr>
                     );

@@ -44,7 +44,7 @@ body: username=...&password=...&next=/admin/dashboard
 ```
 capture the `Set-Cookie` header and send it on subsequent requests. Hitting a route without `/admin` prefix or without the cookie returns a misleading 404/307 that looks like the route is broken when it isn't.
 
-The Supplier Orders page's Add/Edit/Delete UI (`/supplier-orders`) is currently **local-only** — it writes to `DataProvider`'s in-memory state, not Airtable. This is a known, intentional gap (out of scope unless the user asks for it), not something to silently "fix" by guessing at a write path.
+The Supplier Orders page's Add/Edit/Delete UI (`/supplier-orders`) persists through `/api/supplier-orders` to Airtable. Keep `SupplierOrder` financial fields optional end to end: use `undefined` in app state and `null` in Airtable writes for unrecorded money; never coerce it to `$0`.
 
 ## local-catalogues — creating a client catalogue/proposal
 

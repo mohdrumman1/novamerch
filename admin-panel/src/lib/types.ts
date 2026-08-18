@@ -135,7 +135,7 @@ export interface SupplierOrderItem {
   totalUsd: number;
 }
 
-export type SupplierOrderPaymentStatus = "Partially Paid" | "Paid";
+export type SupplierPaymentStatus = "Partially Paid" | "Paid";
 
 export interface SupplierOrder {
   id: ID;
@@ -153,18 +153,14 @@ export interface SupplierOrder {
   itemSubtotalUsd: number;
   shippingFeeUsd: number;
   totalUsd: number;
-  initialPaymentUsd?: number;
-  initialPaymentDate?: string; // ISO date string
-  balanceUsd?: number;
-  balanceStatus?: string;
-  relatedCustomer?: string;
-  relatedOrderId?: ID; // links to Order.id for dashboard cost aggregation
-  relatedCustomerId?: ID;
-  projectedCostAud?: number; // full landed cost estimate in AUD
-  bookedPaymentAud?: number; // actual AUD charged to the bank account so far
+  projectedCostAud?: number;
+  bookedPaymentAud?: number;
   bookedPaymentDate?: string; // ISO date string
+  pendingBalanceUsd?: number;
   pendingBalanceEstimatedAud?: number;
-  paymentStatus?: SupplierOrderPaymentStatus;
+  paymentStatus?: SupplierPaymentStatus;
+  relatedOrderId?: ID;
+  relatedCustomerId?: ID;
   items: SupplierOrderItem[];
   notes?: string;
 }

@@ -16,13 +16,15 @@ import { OrderModal } from "@/components/modals/OrderModal";
 import { PlusIcon, EditIcon, TrashIcon } from "@/components/icons";
 
 export default function OrdersPage() {
-  const { orders, getCustomer, deleteOrder } = useData();
+  const { orders, getCustomer, deleteOrder, supplierOrders } = useData();
   const [goodsStatusFilter, setGoodsStatusFilter] = useState("All");
   const [fyFilter, setFyFilter] = useState(FY_ALL);
   const [search, setSearch] = useState("");
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [creating, setCreating] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const fyOptions = [FY_ALL, ...Array.from(new Set(orders.map((o) => o.fy))).sort().reverse()];
 
@@ -37,7 +39,7 @@ export default function OrdersPage() {
     return matchFy && matchStatus && matchSearch;
   });
 
-  const profit = (row: Order) => orderExpectedProfit(row);
+  const profit = (row: Order) => orderExpectedProfit(row, supplierOrders);
 
   const columns = [
     { key: "ref", header: "Order #", sortable: true },
@@ -88,10 +90,10 @@ export default function OrdersPage() {
           <span
             style={{
               fontFamily: "var(--font-dm-mono, monospace)",
-              color: p >= 0 ? "var(--green)" : "var(--red)",
+              color: p === undefined || p >= 0 ? "var(--green)" : "var(--red)",
             }}
           >
-            {formatAUD(p)}
+            {p === undefined ? "Not recorded" : formatAUD(p)}
           </span>
         );
       },
@@ -105,7 +107,7 @@ export default function OrdersPage() {
           <Button variant="subtle" size="compact" onClick={() => setEditingOrder(row)}>
             <EditIcon size={13} /> Edit
           </Button>
-          <Button variant="danger" size="compact" onClick={() => setDeletingId(row.id)}>
+          <Button variant="danger" size="compact" onClick={() => { setDeletingId(row.id); setDeleteError(null); }}>
             <TrashIcon size={13} />
           </Button>
         </div>
@@ -162,10 +164,23 @@ export default function OrdersPage() {
 
       <ConfirmDialog
         open={deletingId !== null}
-        onClose={() => setDeletingId(null)}
-        onConfirm={() => { if (deletingId) { deleteOrder(deletingId); setDeletingId(null); } }}
+        onClose={() => { if (!deleting) { setDeletingId(null); setDeleteError(null); } }}
+        onConfirm={async () => {
+          if (!deletingId) return;
+          setDeleting(true);
+          setDeleteError(null);
+          try {
+            await deleteOrder(deletingId);
+            setDeletingId(null);
+          } catch {
+            setDeleteError("Could not delete order. Nothing changed.");
+          } finally {
+            setDeleting(false);
+          }
+        }}
+        loading={deleting}
         title="Delete Order"
-        message="Are you sure you want to delete this order?"
+        message={deleteError ?? "Are you sure you want to delete this order?"}
       />
     </div>
   );

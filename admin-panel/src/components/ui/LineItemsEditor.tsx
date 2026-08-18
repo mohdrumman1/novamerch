@@ -18,7 +18,7 @@ export function LineItemsEditor({ items, onChange, showCost = false }: LineItems
       description: "",
       qty: 1,
       unitPrice: 0,
-      costPerUnit: showCost ? 0 : undefined,
+      costPerUnit: undefined,
     };
     onChange([...items, newItem]);
   }
@@ -27,11 +27,16 @@ export function LineItemsEditor({ items, onChange, showCost = false }: LineItems
     onChange(items.filter((item) => item.id !== id));
   }
 
-  function updateItem(id: string, field: keyof LineItem, value: string | number) {
+  function updateItem(id: string, field: keyof LineItem, value: string) {
     onChange(
-      items.map((item) =>
-        item.id === id ? { ...item, [field]: field === "description" ? value : Number(value) } : item
-      )
+      items.map((item) => {
+        if (item.id !== id) return item;
+        if (field === "description") return { ...item, description: value };
+        if (field === "costPerUnit") {
+          return { ...item, costPerUnit: value === "" ? undefined : Number(value) };
+        }
+        return { ...item, [field]: Number(value) };
+      })
     );
   }
 
@@ -98,7 +103,7 @@ export function LineItemsEditor({ items, onChange, showCost = false }: LineItems
                       type="number"
                       min={0}
                       step={0.01}
-                      value={item.costPerUnit ?? 0}
+                      value={item.costPerUnit ?? ""}
                       onChange={(e) => updateItem(item.id, "costPerUnit", e.target.value)}
                       className="w-24 px-2 py-1 rounded border border-[var(--border)] text-sm text-right bg-[var(--surface)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
                     />
