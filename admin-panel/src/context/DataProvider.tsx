@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import type { AppState, Customer, Quote, Order, Invoice, Shipment, Good, SupplierOrder, AppSettings } from "@/lib/types";
 import { DEFAULT_SETTINGS } from "@/lib/constants";
 import { goods as defaultGoods } from "@/data/goods";
-import { supplierOrders as defaultSupplierOrders } from "@/data/supplierOrders";
 
 // ─── State ───────────────────────────────────────────────────────────────────
 
@@ -15,12 +14,11 @@ const baseState: AppState = {
   invoices: [],
   shipments: [],
   goods: defaultGoods,
-  supplierOrders: defaultSupplierOrders,
+  supplierOrders: [],
   settings: DEFAULT_SETTINGS,
 };
 
 const LOCAL_GOODS_KEY = "novamerch-goods-v1";
-const LOCAL_SUPPLIER_ORDERS_KEY = "novamerch-supplier-orders-v1";
 const LOCAL_SETTINGS_KEY = "novamerch-settings-v1";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -60,7 +58,7 @@ type Action =
   | { type: "SET_SUPPLIER_ORDERS"; payload: SupplierOrder[] }
   | { type: "UPDATE_SETTINGS"; payload: Partial<AppSettings> }
   | { type: "SET_GOODS"; payload: Good[] }
-  | { type: "HYDRATE_REMOTE"; customers: Customer[]; quotes: Quote[]; orders: Order[]; invoices: Invoice[]; shipments: Shipment[] };
+  | { type: "HYDRATE_REMOTE"; customers: Customer[]; quotes: Quote[]; orders: Order[]; invoices: Invoice[]; shipments: Shipment[]; supplierOrders: SupplierOrder[] };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -100,6 +98,7 @@ function reducer(state: AppState, action: Action): AppState {
       orders: action.orders,
       invoices: action.invoices,
       shipments: action.shipments,
+      supplierOrders: action.supplierOrders,
     };
     default: return state;
   }
@@ -180,12 +179,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const storedIds = new Set(stored.map((x) => x.id));
         dispatch({ type: "SET_GOODS", payload: [...stored, ...defaultGoods.filter((x) => !storedIds.has(x.id))] });
       }
-      const so = localStorage.getItem(LOCAL_SUPPLIER_ORDERS_KEY);
-      if (so) {
-        const stored = JSON.parse(so) as SupplierOrder[];
-        const storedIds = new Set(stored.map((x) => x.id));
-        dispatch({ type: "SET_SUPPLIER_ORDERS", payload: [...stored, ...defaultSupplierOrders.filter((x) => !storedIds.has(x.id))] });
-      }
       const s = localStorage.getItem(LOCAL_SETTINGS_KEY);
       if (s) dispatch({ type: "UPDATE_SETTINGS", payload: JSON.parse(s) as Partial<AppSettings> });
     } catch { /* ignore */ }
@@ -196,10 +189,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     if (typeof window === "undefined" || loading) return;
     try {
       localStorage.setItem(LOCAL_GOODS_KEY, JSON.stringify(state.goods));
-      localStorage.setItem(LOCAL_SUPPLIER_ORDERS_KEY, JSON.stringify(state.supplierOrders));
       localStorage.setItem(LOCAL_SETTINGS_KEY, JSON.stringify(state.settings));
     } catch { /* ignore */ }
-  }, [state.goods, state.supplierOrders, state.settings, loading]);
+  }, [state.goods, state.settings, loading]);
 
   // Fetch all CRM data from Airtable on mount
   useEffect(() => {
@@ -220,6 +212,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         orders?: Order[];
         invoices?: Invoice[];
         shipments?: Shipment[];
+        supplierOrders?: SupplierOrder[];
         issues?: string[];
       }) => {
         const customers = Array.isArray(data.customers) ? data.customers : [];
@@ -227,6 +220,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const orders = Array.isArray(data.orders) ? data.orders : [];
         const invoices = Array.isArray(data.invoices) ? data.invoices : [];
         const shipments = Array.isArray(data.shipments) ? data.shipments : [];
+        const supplierOrders = Array.isArray(data.supplierOrders) ? data.supplierOrders : [];
         dispatch({
           type: "HYDRATE_REMOTE",
           customers,
@@ -234,6 +228,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           orders,
           invoices,
           shipments,
+          supplierOrders,
         });
         if (data.issues?.length) {
           setLoadError(`Could not load: ${data.issues.join(", ")}`);

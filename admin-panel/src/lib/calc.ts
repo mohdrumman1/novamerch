@@ -1,4 +1,4 @@
-import type { LineItem, Order, Invoice, Quote } from "./types";
+import type { LineItem, Order, Invoice, Quote, SupplierOrder } from "./types";
 import { GST_RATE } from "./constants";
 
 /** Sum line items total (qty * unitPrice) */
@@ -33,17 +33,46 @@ export function depositSplit(
   return { deposit, final: total - deposit };
 }
 
-/** Calculate expected profit for an order */
-export function orderExpectedProfit(order: Order): number {
-  const revenue = lineItemsTotal(order.lineItems);
-  const cost = lineItemsCost(order.lineItems) + (order.transportCost ?? 0);
-  return revenue - cost;
+/** Supplier orders linked to a given order */
+export function supplierOrdersForOrder(
+  orderId: string,
+  supplierOrders: SupplierOrder[]
+): SupplierOrder[] {
+  return supplierOrders.filter((so) => so.relatedOrderId === orderId);
 }
 
-/** Calculate actual profit (based on amount received) */
-export function orderActualProfit(order: Order): number {
-  const cost = lineItemsCost(order.lineItems) + (order.transportCost ?? 0);
-  return (order.amountReceived ?? 0) - cost;
+/** Projected (expected) supplier cost for an order: linked supplier orders' projected cost, falling back to line-item cost */
+export function orderProjectedCost(order: Order, supplierOrders: SupplierOrder[]): number {
+  const linked = supplierOrdersForOrder(order.id, supplierOrders);
+  if (linked.length === 0) {
+    return lineItemsCost(order.lineItems) + (order.transportCost ?? 0);
+  }
+  return linked.reduce((sum, so) => sum + (so.projectedCostAud ?? so.totalUsd ?? 0), 0);
+}
+
+/** Actual booked supplier payment for an order: linked supplier orders' booked payment, falling back to line-item cost */
+export function orderBookedCost(order: Order, supplierOrders: SupplierOrder[]): number {
+  const linked = supplierOrdersForOrder(order.id, supplierOrders);
+  if (linked.length === 0) {
+    return lineItemsCost(order.lineItems) + (order.transportCost ?? 0);
+  }
+  return linked.reduce((sum, so) => sum + (so.bookedPaymentAud ?? 0), 0);
+}
+
+/** Outstanding supplier balance for an order: projected cost minus booked payment, floored at 0 */
+export function orderOutstandingSupplierCost(order: Order, supplierOrders: SupplierOrder[]): number {
+  return Math.max(0, orderProjectedCost(order, supplierOrders) - orderBookedCost(order, supplierOrders));
+}
+
+/** Calculate expected profit for an order */
+export function orderExpectedProfit(order: Order, supplierOrders: SupplierOrder[] = []): number {
+  const revenue = lineItemsTotal(order.lineItems);
+  return revenue - orderProjectedCost(order, supplierOrders);
+}
+
+/** Calculate actual profit (based on amount received and booked supplier payments) */
+export function orderActualProfit(order: Order, supplierOrders: SupplierOrder[] = []): number {
+  return (order.amountReceived ?? 0) - orderBookedCost(order, supplierOrders);
 }
 
 /** Profit margin as percentage */
@@ -109,14 +138,13 @@ export interface PLResult {
 }
 
 /** Simple P&L aggregation over a set of orders */
-export function calcPL(orders: Order[]): PLResult {
+export function calcPL(orders: Order[], supplierOrders: SupplierOrder[] = []): PLResult {
   const totalRevenue = orders.reduce(
     (sum, o) => sum + lineItemsTotal(o.lineItems),
     0
   );
   const totalCost = orders.reduce(
-    (sum, o) =>
-      sum + lineItemsCost(o.lineItems) + (o.transportCost ?? 0),
+    (sum, o) => sum + orderProjectedCost(o, supplierOrders),
     0
   );
   const grossProfit = totalRevenue - totalCost;

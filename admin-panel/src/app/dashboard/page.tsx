@@ -6,13 +6,13 @@ import { StatCard } from "@/components/ui/StatCard";
 import { Table } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
 import { formatAUD, formatDate } from "@/lib/format";
-import { lineItemsTotal, lineItemsCost } from "@/lib/calc";
+import { lineItemsTotal, orderProjectedCost, orderBookedCost, orderOutstandingSupplierCost } from "@/lib/calc";
 import { FY_ALL } from "@/lib/constants";
 import { ORDER_GOODS_STATUS_TONE } from "@/lib/status";
 import type { Order } from "@/lib/types";
 
 export default function DashboardPage() {
-  const { orders, invoices, quotes, customers, shipments } = useData();
+  const { orders, invoices, quotes, customers, shipments, supplierOrders } = useData();
   const [fy, setFy] = useState<string>(FY_ALL);
 
   // FY filter options
@@ -24,7 +24,7 @@ export default function DashboardPage() {
   // ── Expected Financial ──────────────────────────────────────────────────
   const expectedRevenue = filteredOrders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
   const totalCosts = filteredOrders.reduce(
-    (sum, o) => sum + lineItemsCost(o.lineItems) + (o.transportCost ?? 0),
+    (sum, o) => sum + orderProjectedCost(o, supplierOrders),
     0
   );
   const expectedProfit = expectedRevenue - totalCosts;
@@ -33,14 +33,19 @@ export default function DashboardPage() {
   // ── Actual Cash Flow ────────────────────────────────────────────────────
   // cashReceived: sum order.amountReceived directly (not from invoices)
   const cashReceived = filteredOrders.reduce((sum, o) => sum + (o.amountReceived ?? 0), 0);
-  // costsPaid: all orders in FY (not just completed)
+  // costsPaid: all orders in FY (not just completed), based on actual booked supplier payments
   const costsPaid = filteredOrders.reduce(
-    (sum, o) => sum + lineItemsCost(o.lineItems) + (o.transportCost ?? 0),
+    (sum, o) => sum + orderBookedCost(o, supplierOrders),
     0
   );
   // outstanding: ALL-TIME, floor at 0 per order
   const outstandingInvoices = orders.reduce(
     (sum, o) => sum + Math.max(0, lineItemsTotal(o.lineItems) - (o.amountReceived ?? 0)),
+    0
+  );
+  // outstanding supplier balance: ALL-TIME, what we still owe suppliers (projected - booked, floor 0)
+  const outstandingSupplierCosts = orders.reduce(
+    (sum, o) => sum + orderOutstandingSupplierCost(o, supplierOrders),
     0
   );
 
@@ -51,7 +56,7 @@ export default function DashboardPage() {
   const inTransitCount = orders.filter((o) => o.goodsStatus === "In Transit").length;
   const inTransitCost = orders
     .filter((o) => o.goodsStatus === "In Transit")
-    .reduce((sum, o) => sum + lineItemsCost(o.lineItems) + (o.transportCost ?? 0), 0);
+    .reduce((sum, o) => sum + orderProjectedCost(o, supplierOrders), 0);
 
   // ── Recent Orders ───────────────────────────────────────────────────────
   const recentOrders = [...orders]
@@ -128,6 +133,11 @@ export default function DashboardPage() {
             value={formatAUD(outstandingInvoices)}
             tone="orange"
             accentColor="#FF9800"
+          />
+          <StatCard
+            label="Owed to Suppliers"
+            value={formatAUD(outstandingSupplierCosts)}
+            tone="red"
           />
           <StatCard
             label="Actual Profit Today"

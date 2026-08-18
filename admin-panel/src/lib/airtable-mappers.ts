@@ -1,8 +1,8 @@
 import type {
-  Customer, Quote, Order, Invoice, Shipment,
+  Customer, Quote, Order, Invoice, Shipment, SupplierOrder,
   QuoteStatus, QuoteSource, OrderGoodsStatus, OrderInvoiceStatus,
   TransportType, InvoiceStatus, InvoiceKind, ShipmentStatus, ShippingMethod,
-  LineItem, ShipmentItem,
+  SupplierOrderPaymentStatus, LineItem, ShipmentItem, SupplierOrderItem,
 } from "./types";
 
 type AirtableRecord = { id: string; fields: Record<string, unknown> };
@@ -241,6 +241,52 @@ export function shipmentToFields(s: Shipment): Record<string, unknown> {
     "Ship Date": s.shippedAt ?? null,
     "ETA": s.expectedArrival ?? null,
     "Actual Delivery": s.arrivedAt ?? null,
+    "Items JSON": JSON.stringify(s.items),
+    "Notes": s.notes || "",
+  };
+}
+
+// ─── Supplier Orders ─────────────────────────────────────────────────────────
+
+export function recordToSupplierOrder(rec: AirtableRecord): SupplierOrder {
+  const f = rec.fields;
+  return {
+    id: rec.id,
+    orderNumber: str(f["Alibaba Order Number"]),
+    orderDate: str(f["Order Date"]),
+    supplierName: str(f["Supplier Name"]),
+    itemSubtotalUsd: num(f["Item Subtotal USD"]),
+    shippingFeeUsd: num(f["Shipping Fee USD"]),
+    totalUsd: num(f["Total USD"]),
+    balanceUsd: num(f["Pending Balance USD"]) || undefined,
+    relatedOrderId: link(f["Related Order"]) || undefined,
+    relatedCustomerId: link(f["Related Customer"]) || undefined,
+    projectedCostAud: num(f["Projected Cost AUD"]) || undefined,
+    bookedPaymentAud: num(f["Booked Payment AUD"]) || undefined,
+    bookedPaymentDate: str(f["Booked Payment Date"]) || undefined,
+    pendingBalanceEstimatedAud: num(f["Pending Balance Estimated AUD"]) || undefined,
+    paymentStatus: (str(f["Payment Status"]) as SupplierOrderPaymentStatus) || undefined,
+    items: parseJSON<SupplierOrderItem[]>(f["Items JSON"], []),
+    notes: str(f["Notes"]) || undefined,
+  };
+}
+
+export function supplierOrderToFields(s: SupplierOrder): Record<string, unknown> {
+  return {
+    "Alibaba Order Number": s.orderNumber,
+    "Related Order": s.relatedOrderId ? [s.relatedOrderId] : [],
+    "Related Customer": s.relatedCustomerId ? [s.relatedCustomerId] : [],
+    "Supplier Name": s.supplierName,
+    "Order Date": s.orderDate ? s.orderDate.split("T")[0] : null,
+    "Item Subtotal USD": s.itemSubtotalUsd,
+    "Shipping Fee USD": s.shippingFeeUsd,
+    "Total USD": s.totalUsd,
+    "Projected Cost AUD": s.projectedCostAud ?? 0,
+    "Booked Payment AUD": s.bookedPaymentAud ?? 0,
+    "Booked Payment Date": s.bookedPaymentDate ? s.bookedPaymentDate.split("T")[0] : null,
+    "Pending Balance USD": s.balanceUsd ?? 0,
+    "Pending Balance Estimated AUD": s.pendingBalanceEstimatedAud ?? 0,
+    "Payment Status": s.paymentStatus || "Partially Paid",
     "Items JSON": JSON.stringify(s.items),
     "Notes": s.notes || "",
   };

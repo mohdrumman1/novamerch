@@ -1,3 +1,80 @@
+## 2026-08-18 - Admin dashboard showed $0 costs/profit despite real supplier data existing in Airtable (Supplier Orders never wired to app)
+
+**Tags:** admin-panel, airtable, supplier-orders, dashboard, calc, data-provider, bootstrap, orphaned-record
+**Status:** Fixed
+
+**Issue:** `admin-panel` dashboard (`/dashboard`) showed $0.00 for Total Costs, Expected Profit, Costs Paid, and Actual Profit for orders that had real, known supplier costs (e.g. Cooks Hill #O1002, Swell Fitness #O1001). Airtable's `Supplier Orders` table actually had the correct-ish data for Cooks Hill, but it never reached the dashboard.
+
+**Root cause (5 layers, all had to be fixed together):**
+1. `admin-panel/src/lib/airtable-mappers.ts` had **no mapper functions at all** for the `Supplier Orders` table — Airtable field names (`Projected Cost AUD`, `Booked Payment AUD`, `Related Order`, etc.) had no path into the app's TypeScript model.
+2. `admin-panel/src/app/api/bootstrap/route.ts` never fetched the `Supplier Orders` table — even a correct mapper would go unused.
+3. `admin-panel/src/context/DataProvider.tsx` sourced `supplierOrders` state from a **local seed file** (`src/data/supplierOrders.ts`) + `localStorage`, fully disconnected from Airtable, regardless of what was in the base.
+4. `admin-panel/src/app/dashboard/page.tsx` never consumed `supplierOrders` from `useData()` — all cost math came only from `Order.lineItems[].costPerUnit` (always unset for real orders) and `Order.transportCost` (always 0), which is why every cost figure was exactly $0.
+5. The one existing Supplier Orders Airtable record for Cooks Hill (`recZWqE1XlqCJLMIa`) was **orphaned** — its `Related Order`/`Related Customer` link fields were empty, so even a fully-wired app couldn't have traversed to it from the Order.
+
+**Fix:**
+- `airtable-mappers.ts`: added `recordToSupplierOrder` / `supplierOrderToFields`, keyed on exact Airtable field names (see the file for the mapping — e.g. `f["Projected Cost AUD"]` → `projectedCostAud`).
+- `api/bootstrap/route.ts`: added `{ key: "supplierOrders", table: "Supplier Orders", mapper: recordToSupplierOrder }` to the `sources` array.
+- `context/DataProvider.tsx`: `supplierOrders` now hydrates only from the `/api/bootstrap` `HYDRATE_REMOTE` payload; removed the local-seed/localStorage path (`src/data/supplierOrders.ts` is now unused dead seed data — do not resurrect it as a data source).
+- `lib/calc.ts`: added `supplierOrdersForOrder`, `orderProjectedCost`, `orderBookedCost` — these look up `SupplierOrder[]` by `relatedOrderId` and fall back to the old `lineItemsCost()`/`transportCost` behavior only when an order has no linked Supplier Order record. `orderExpectedProfit`, `orderActualProfit`, and `calcPL` now take an optional `supplierOrders` param and use these helpers.
+- `app/dashboard/page.tsx`: now destructures `supplierOrders` from `useData()` and uses `orderProjectedCost`/`orderBookedCost` instead of raw `lineItemsCost()` for Total Costs, Expected Profit, Costs Paid, and In-Transit Cost.
+- Airtable data: PATCHed `recZWqE1XlqCJLMIa` to set `Related Order`/`Related Customer` links and correct `Pending Balance Estimated AUD`/`Projected Cost AUD`; created 2 new linked Supplier Orders records for Swell Fitness (`#O1001`).
+
+**Verify:**
+```
+# Confirm every Order that should have a cost has a linked, non-orphaned Supplier Orders record:
+node -e '
+require("dotenv").config({ path: "admin-panel/.env.local" });
+const key = process.env.AIRTABLE_API_KEY, base = process.env.AIRTABLE_BASE_ID;
+fetch(`https://api.airtable.com/v0/${base}/Supplier%20Orders`, { headers: { Authorization: `Bearer ${key}` } })
+  .then(r => r.json())
+  .then(d => d.records.forEach(r => console.log(r.id, r.fields["Related Order"], r.fields["Related Customer"])));
+'
+```
+Every record should show a non-empty `Related Order` and `Related Customer` array. Then hit `/api/bootstrap` (see "If it recurs" below for the login step — it's cookie-gated) and confirm `supplierOrders` is non-empty and `orders[].id` values appear as `relatedOrderId` on at least one supplier order.
+
+**If it recurs — checklist:**
+1. **New order with a real supplier cost shows $0 on the dashboard** → check, in this order: (a) does a Supplier Orders record exist in Airtable for it at all? (b) is its `Related Order` link field actually populated (Airtable link fields can read back empty for ~1-2s after a write — re-fetch before concluding it failed, this happened twice in this session and was a transient read lag, not a real bug)? (c) does `orderProjectedCost`/`orderBookedCost` in `calc.ts` find it via `relatedOrderId`?
+2. **Adding a NEW field to the Supplier Orders Airtable table** → it will silently be dropped until you add it to both `recordToSupplierOrder` and `supplierOrderToFields` in `airtable-mappers.ts`. Field name strings must match Airtable exactly (case, spacing) — check via `GET /v0/meta/bases/{base}/tables` if unsure, don't guess.
+3. **Testing `/api/bootstrap` directly with curl** → the admin panel is behind cookie auth and served under the `/admin` base path. Log in first: `POST /admin/api/auth/login` as `application/x-www-form-urlencoded` (NOT JSON) with `username`/`password`/`next` fields, capture the `Set-Cookie` header, then pass it on subsequent requests. Hitting `/api/bootstrap` (no `/admin` prefix, no cookie) returns the wrong app's 404 page or a 307 redirect — both look like failures but aren't the real bug.
+4. **The Supplier Orders page (`/supplier-orders`) Add/Edit/Delete UI is still local-only** — it dispatches to `DataProvider`'s in-memory reducer state only, with NO Airtable write. This is a known, intentional gap, not a regression. If a user asks to edit a Supplier Order from that page and expects it to persist/show on the dashboard after reload, it currently won't — wiring that page's CRUD to Airtable (mirroring how Customers/Orders/Quotes already do it) is unstarted follow-up work, not a bug to "fix" by guessing.
+
+---
+
+## 2026-08-18 - New catalogue built from a copied template inherited stale brand colours + cropped product images (Alliance Group)
+
+**Tags:** catalogue, local-catalogues, colour-scheme, object-fit, image-cropping, template-copy, checklist
+**Status:** Fixed
+
+**Issue:** Building `local-catalogues/Alliance Group/` by copying `business-catalogue.css` produced two visible defects: (1) the cover page had a green glow behind the title on a black/orange brand, and (2) product photos looked "too zoomed in" with edges cut off.
+
+**Root cause:**
+1. **Stale hardcoded colour, not just unset variables.** `business-catalogue.css` is not a clean template — it still carries the previous client's (Green Thumbs) colours in two places: the `:root` variables (expected, meant to be overridden) AND a hardcoded `rgba(22,101,52,0.4)` inside `.page-cover::after` (the cover accent glow), which does NOT reference `var(--primary)`. Overriding only the `:root` block leaves this glow silently green regardless of brand. `grep -i` for the old hex (`166534`, `052E16`, `4ADE80`) after any colour swap would have caught it; I only skimmed the `:root` block.
+2. **Source images had way more white-space padding than the CSS assumed.** `.img-box img { object-fit: cover }` assumes supplier photos are already tightly cropped to the product (true for the Cooks-Hill/blue-horizon style photos). These 4 images (product mockups with logo overlaid) had 30-50% empty white canvas around the product and widely varying aspect ratios (checked with Pillow: content fill ranged 50-71%, aspect ratios from 0.78 to 2.35). `object-fit: cover` on a box with a fixed ~1.3 aspect crops to fill, which on a portrait or very-wide source image cuts into the product itself.
+
+**Fix:**
+- Cropped each image to its content bounding box (whitespace trimmed, +8% padding) using Pillow (`ImageChops.difference` against a white canvas to find the bbox).
+- Changed `.img-box img` from `object-fit: cover` to `object-fit: contain` and added `padding: 4mm` to `.img-box`, so the whole product is always visible regardless of source aspect ratio, letterboxed on the box's existing `#F5F5F5` background.
+- Replaced the hardcoded `rgba(22,101,52,0.4)` in `.page-cover::after` with the new brand's primary colour as rgba.
+
+**Verify:**
+```
+grep -n "rgba(" "local-catalogues/Alliance Group/alliance-group-catalogue.css" | grep -v "255,255,255\|0,0,0"
+```
+Should only show the current brand's colour, not a prior client's.
+```python
+from PIL import Image, ImageChops
+# diff each product image against a white canvas; getbbox() should be
+# noticeably smaller than the full image size before shipping the crop
+```
+
+**If it recurs — checklist before shipping any new catalogue:**
+1. After copying a template CSS, `grep -niE "#[0-9a-f]{6}|rgba\(" <new-file>.css` and check EVERY hit resolves to the new brand, not just the `:root` block — templates carry stale hardcoded colours outside `:root`.
+2. Before dropping product photos into `img-box`, check each image's content-to-canvas fill ratio and aspect ratio (Pillow bbox trick above). If fill% is low (lots of white padding) or aspect ratios vary widely across the set, either pre-crop the whitespace or use `object-fit: contain` instead of `cover` — don't assume supplier-photo conventions hold for mockup-generator images.
+3. Always render a headless Chrome screenshot of the finished catalogue (`chrome --headless --screenshot`) and actually look at it before calling the catalogue done — do not just trust that CSS variables were swapped correctly.
+
+---
+
 ## 2026-06-24 - Em-dashes hidden in HTML en-dash entities on Swell Fitness catalogue files
 
 **Tags:** em-dash, en-dash, html-entity, ndash, swell-fitness, catalogue, content-pseudo-element
