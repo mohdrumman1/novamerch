@@ -98,8 +98,8 @@ Website + social + approved outreach
 
 ## Next steps now
 
-1. Deploy the admin endpoint and website changes, including `ALLOWED_ORIGINS` containing the production storefront origin.
-2. Run a synthetic end-to-end test and confirm one test record appears in the admin panel as `New`; delete or archive the test record after verification.
+1. Deploy the website changes. The admin endpoint is already live, with `ALLOWED_ORIGINS` set to `https://novamerchau.com`; the current Vercel CLI token is invalid and must be refreshed by an owner.
+2. Run a synthetic end-to-end test and confirm one test record appears in the admin panel as `New`; delete or archive the test record after verification. This has not been run yet because it writes to Airtable.
 3. Add the repository interface while Airtable remains the adapter.
 4. Choose Supabase or Cloudflare D1 for a no-cost pilot after measuring the current record volume, attachments and admin users.
 5. Keep Formspree only as a monitored fallback during the first deployment window; do not automatically dual-submit and create duplicates.
