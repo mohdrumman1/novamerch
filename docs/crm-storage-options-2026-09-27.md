@@ -98,7 +98,7 @@ Website + social + approved outreach
 
 ## Next steps now
 
-1. Deploy the website changes. The storefront passes a clean production build and the admin endpoint is already live, with `ALLOWED_ORIGINS` set to `https://novamerchau.com`; the current Vercel CLI is logged out and must be authenticated by an owner.
+1. ~~Deploy the website changes.~~ Completed 28 September 2026: the storefront is live on Vercel and the admin endpoint is live, with `ALLOWED_ORIGINS` set to `https://novamerchau.com`.
 2. Run a synthetic end-to-end test and confirm one test record appears in the admin panel as `New`; delete or archive the test record after verification. This has not been run yet because it writes to Airtable.
 3. Add the repository interface while Airtable remains the adapter.
 4. Choose Supabase or Cloudflare D1 for a no-cost pilot after measuring the current record volume, attachments and admin users.
