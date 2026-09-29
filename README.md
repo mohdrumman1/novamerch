@@ -1,4 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NovaMerch
+
+NovaMerch is a Newcastle-based custom merchandise business website and admin CRM.
+
+## Start here
+
+The [NovaMerch complete setup plan](docs/novamerch-setup-master-plan-2026-09-29.md) is the working source of truth for what is live, what needs building, owners, timing and growth guardrails.
+
+The [documentation index](docs/README.md) links to the detailed outreach, CRM, SEO, social, Hermes and Monid plans.
+
+## Live services
+
+- Storefront: [novamerchau.com](https://novamerchau.com)
+- Admin CRM: [novamerchau.com/admin](https://novamerchau.com/admin)
+
+## Development
+
+This is a [Next.js](https://nextjs.org) project.
 
 ## Getting Started
 
