@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import { createRecord, listRecords, updateRecord } from "@/lib/airtable";
-import { customerToFields } from "@/lib/airtable-mappers";
-import type { Customer } from "@/lib/types";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LEN = 500;
@@ -31,6 +29,8 @@ interface IntakeBody {
 
 interface IntakeResponse {
   success: true;
+  leadId: string;
+  /** @deprecated Kept for clients that used the initial intake response. */
   customerId: string;
   status: "New";
   duplicate?: boolean;
@@ -140,34 +140,33 @@ export async function POST(req: Request) {
   });
 
   try {
-    const existing = await listRecords("Customers", {
+    const existing = await listRecords("Leads", {
       filterByFormula: `LOWER({Email}) = '${email.replace(/'/g, "\\'")}'`,
       maxRecords: 1,
     });
 
-    let customerId: string;
+    let leadId: string;
     if (existing.length > 0) {
-      customerId = existing[0].id;
+      leadId = existing[0].id;
       const previous = typeof existing[0].fields.Notes === "string" ? `${existing[0].fields.Notes}\n` : "";
-      // Keep an existing customer's operational status; the new enquiry is
-      // recorded in Notes without moving an active order backwards.
-      await updateRecord("Customers", customerId, { Notes: `${previous}${notes}`.slice(-4000) });
+      // Keep an existing lead's operational status; the new enquiry is
+      // recorded in Notes without moving a manually progressed lead backwards.
+      await updateRecord("Leads", leadId, { Notes: `${previous}${notes}`.slice(-4000) });
     } else {
-      const customer: Customer = {
-        id: "",
-        name,
-        company: company || name,
-        email,
-        phone,
-        billingAddress: text(body.suburb),
-        createdAt: new Date().toISOString(),
-        notes,
-      };
-      const created = await createRecord("Customers", { ...customerToFields(customer), Status: "New" });
-      customerId = created.id;
+      const created = await createRecord("Leads", {
+        "Business Name": company || name,
+        Email: email,
+        Phone: phone,
+        Website: text(body.website),
+        Category: text(body.product),
+        Status: "New",
+        Notes: notes,
+        "Dedupe Key": email,
+      });
+      leadId = created.id;
     }
 
-    const response: IntakeResponse = { success: true, customerId, status: "New" };
+    const response: IntakeResponse = { success: true, leadId, customerId: leadId, status: "New" };
     if (key) idempotency.set(key, { expiresAt: Date.now() + 5 * 60_000, response });
     return json(response, 200, origin);
   } catch (error) {
