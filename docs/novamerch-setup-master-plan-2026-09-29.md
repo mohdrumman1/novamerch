@@ -60,6 +60,36 @@ Do not add more sending volume or advertising until each arrow is visible, owned
 | 5 | Check the operational response path | Sales owner | A real enquiry can be acknowledged, qualified, quoted and assigned without relying on memory or scattered inbox threads. |
 | 6 | Repair the outreach decision gate | Workflow owner | One approval view, one suppression list and reply/bounce/opt-out events are authoritative before the next campaign. |
 
+## Current next big step: build the social foundation
+
+The next practical growth step is to make NovaMerch easy to recognise and trust across the channels local customers already use. This is a setup and approval task first, not a request to publish at scale immediately.
+
+### Do this in order
+
+1. Prepare one identity kit: approved logo, handle (preferably `@novamerch` where available), website, service areas, business email, phone number and recovery/2FA owner.
+2. Create the Instagram Professional account.
+3. Create the Facebook Page and connect it to Meta Business Suite on the same day, so approved posts can be scheduled once and reused safely.
+4. Create the LinkedIn Company Page, then the YouTube Brand Channel.
+5. Add the same approved description and `https://novamerchau.com/free-mockup/` link to each profile.
+6. Prepare three launch posts: local proof, useful ordering advice and a behind-the-scenes/process post.
+7. Obtain written permission before mentioning Cooks Hill United FC, using its logo, or publishing any photos or 570-shirt result.
+8. After the first four profiles are complete, schedule one approved weekly batch and review enquiries, not follower count.
+
+### What needs Rumman at account-creation time
+
+- Sign-in, recovery email and two-factor authentication cannot be delegated safely.
+- Rumman must approve the final profile details and any customer proof before the account or post is submitted.
+- A consistent phone number and approved images are still required for the strongest local trust signal.
+
+### What can be automated afterwards
+
+- Caption variants, resizing and a weekly content queue can be prepared automatically.
+- Meta Business Suite can schedule approved Instagram/Facebook content.
+- The CRM can record the source, campaign and resulting enquiry.
+- Account recovery, customer claims, testimonials, pricing, delivery promises and publishing remain human-approved.
+
+This social foundation runs in parallel with Google verification. It is the next big step before increasing outbound volume or paid advertising, because it gives every outreach recipient a credible place to validate NovaMerch.
+
 ## Week one build list
 
 ### 1. CRM and customer handling
