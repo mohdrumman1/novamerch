@@ -20,6 +20,7 @@ const baseState: AppState = {
 
 const LOCAL_GOODS_KEY = "novamerch-goods-v1";
 const LOCAL_SETTINGS_KEY = "novamerch-settings-v1";
+const LOCAL_SUPPLIER_ORDERS_KEY = "novamerch-supplier-orders-v1";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 function apiPath(path: string): string {

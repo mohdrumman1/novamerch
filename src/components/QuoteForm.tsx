@@ -51,7 +51,18 @@ export default function QuoteForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [attribution, setAttribution] = useState({ source: "website", campaign: "direct", landingPage: "home" });
   const sectionRef = useRef<HTMLElement>(null);
+  const requestIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setAttribution({
+      source: params.get("utm_source") || params.get("source") || "website",
+      campaign: params.get("utm_campaign") || params.get("campaign") || "direct",
+      landingPage: window.location.pathname || "/",
+    });
+  }, []);
 
   useEffect(() => {
     const els = sectionRef.current?.querySelectorAll<HTMLElement>(".anim-fade-up");
@@ -74,10 +85,30 @@ export default function QuoteForm() {
     setError(false);
 
     try {
-      const res = await fetch("https://formspree.io/f/xvzlrlnv", {
+      const form = e.currentTarget;
+      const data = new FormData(form);
+      if (!requestIdRef.current) requestIdRef.current = crypto.randomUUID();
+      const res = await fetch("https://novamerch-admin.rumman-formaai.workers.dev/admin/api/public/lead-intake", {
         method: "POST",
-        body: new FormData(e.currentTarget),
-        headers: { Accept: "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          company: data.get("company"),
+          email: data.get("email"),
+          phone: data.get("phone"),
+          suburb: data.get("suburb"),
+          neededBy: data.get("needed_by"),
+          product: data.get("product"),
+          quantity: data.get("quantity"),
+          budget: data.get("budget"),
+          message: data.get("message"),
+          website: data.get("website"),
+          source: data.get("source"),
+          campaign: data.get("campaign"),
+          landingPage: data.get("landing_page"),
+          consent: data.get("contact_consent"),
+          requestId: requestIdRef.current,
+        }),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
       });
 
       if (res.ok) {
@@ -350,6 +381,31 @@ export default function QuoteForm() {
                   />
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label style={labelStyle}>Suburb or delivery area</label>
+                    <input
+                      type="text"
+                      name="suburb"
+                      placeholder="e.g. Cooks Hill, Maitland"
+                      style={inputStyle}
+                      onFocus={focusInput}
+                      onBlur={blurInput}
+                    />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>When do you need it?</label>
+                    <input
+                      type="text"
+                      name="needed_by"
+                      placeholder="e.g. Before 15 November"
+                      style={inputStyle}
+                      onFocus={focusInput}
+                      onBlur={blurInput}
+                    />
+                  </div>
+                </div>
+
                 <div>
                   <label style={labelStyle}>What type of merch are you interested in?</label>
                   <select
@@ -409,6 +465,27 @@ export default function QuoteForm() {
                     You can also reply to our confirmation email with your logo file attached.
                   </p>
                 </div>
+
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "0.65rem" }}>
+                  <input
+                    type="checkbox"
+                    name="contact_consent"
+                    value="yes"
+                    required
+                    style={{ marginTop: "0.2rem", accentColor: "var(--cyan)" }}
+                  />
+                  <label style={{ ...labelStyle, textTransform: "none", letterSpacing: 0, fontSize: "0.78rem", lineHeight: 1.5, marginBottom: 0 }}>
+                    I agree that NovaMerch may contact me about this request. I can opt out at any time. *
+                  </label>
+                </div>
+
+                <input type="hidden" name="source" value={attribution.source} />
+                <input type="hidden" name="campaign" value={attribution.campaign} />
+                <input type="hidden" name="landing_page" value={attribution.landingPage} />
+                <input type="hidden" name="pipeline_status" value="New" />
+                <input type="hidden" name="_subject" value="NovaMerch mock-up pack request" />
+                {/* Honeypot: genuine visitors never see or fill this field. */}
+                <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ display: "none" }} />
 
                 {error && (
                   <div style={{ textAlign: "center" }}>
