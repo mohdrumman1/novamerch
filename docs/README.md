@@ -1,6 +1,6 @@
 # NovaMerch operating documentation
 
-Last reconciled: 16 September 2026. This index records completed work and proposed work; it is not a live system-health dashboard.
+Last reconciled: 29 September 2026. This index records completed work and proposed work; it is not a live system-health dashboard.
 
 ## Current documents
 
@@ -39,12 +39,14 @@ Last reconciled: 16 September 2026. This index records completed work and propos
 
 ## Next work in order
 
-1. Recheck active buying conversations and open orders, including PHYX and Swell, against the latest mailbox and order records.
-2. Confirm the monitored mailbox, current signature/phone, task owners and order/shipment mappings.
-3. Wire reply/bounce/unsubscribe ingestion into Airtable or the replacement prospect store, then resolve discovery, capacity and review handoff before increasing outreach.
-4. Build the local Hermes read/draft pilot, then replay representative messages and test recovery.
-5. Harden the existing catalogue generator and implement reviewed PDF output and private asset backups.
-6. Select production hosting from measured usage. Consider automatic routine customer updates only after the pilot meets the admin plan's acceptance criteria.
+1. Build the social foundation: identity kit, Instagram Professional, Facebook Page/Meta Business Suite, LinkedIn and YouTube; keep final account creation and customer proof approval with Rumman.
+2. Confirm Google Business Profile verification, then add the approved phone and photos.
+3. Recheck active buying conversations and open orders, including PHYX and Swell, against the latest mailbox and order records.
+4. Confirm the monitored mailbox, current signature/phone, task owners and order/shipment mappings.
+5. Wire reply/bounce/unsubscribe ingestion into Airtable or the replacement prospect store, then resolve discovery, capacity and review handoff before increasing outreach.
+6. Build the local Hermes read/draft pilot, then replay representative messages and test recovery.
+7. Harden the existing catalogue generator and implement reviewed PDF output and private asset backups.
+8. Select production hosting from measured usage. Consider automatic routine customer updates only after the pilot meets the admin plan's acceptance criteria.
 
 The current Hermes planning allowance is US$15–30/month incremental operating spend for a controlled hosted pilot, not an approved purchase or a guaranteed bill. It supersedes the earlier tentative A$30 experiment envelope. Existing subscriptions, tax, labour, samples and orders are excluded. See the admin plan for sourced price comparisons and assumptions.
 
