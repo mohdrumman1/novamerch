@@ -6,6 +6,7 @@ Last reconciled: 16 September 2026. This index records completed work and propos
 
 | Document | Purpose and status |
 |---|---|
+| [Complete setup plan](novamerch-setup-master-plan-2026-09-29.md) | The current single checklist for what is live, what needs building, ownership, timing and growth gates. Start here. |
 | [Acquisition audit](acquisition-audit-2026-09-11.md) | Evidence behind zero sends, intake failures and operational risks. Historical inspection snapshot; unresolved faults have not been repaired. |
 | [Acquisition strategy](acquisition-research-and-hermes-plan.md) | Targeting, channels and low-cost acquisition rollout. Its initial Hermes outline is superseded by the detailed admin plan. |
 | [Hermes admin implementation plan](hermes-admin-implementation-plan.md) | Current design for inbox drafts, supplier research, order updates, catalogues and process improvement. Design reference — see the deployment doc below for what's actually running. |

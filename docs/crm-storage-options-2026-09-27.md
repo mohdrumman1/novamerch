@@ -12,7 +12,7 @@ Keep the **admin panel as the CRM interface**. Treat Airtable as the current dat
 - The quote form captures name, organisation, email, phone, suburb/delivery area, required-by date, product, quantity, budget and consent.
 - It also records `source`, `campaign`, `landing_page` and initial `pipeline_status = New` as hidden form fields.
 - The form currently submits through the existing Formspree endpoint. It is not yet a direct admin-panel/Airtable API integration.
-- **Updated this turn:** the form now posts to the new admin-panel `/api/public/lead-intake` endpoint, with origin allowlisting, rate limiting, consent validation, email validation and idempotency. The endpoint writes a `New` customer record to Airtable and stores intake attribution/details in the Notes field.
+- **Updated 29 September 2026:** the form posts to the new admin-panel `/api/public/lead-intake` endpoint, with origin allowlisting, rate limiting, consent validation, email validation and idempotency. The endpoint writes a `New` **lead** to Airtable's `Leads` table and stores intake attribution/details in Notes. A synthetic end-to-end test passed and the labelled test record was deleted.
 - The mock-up builder already has a separate public quote-request endpoint in the admin app; that endpoint writes to the existing operational systems when its production configuration is present.
 - `admin-panel/src/lib/outreach-control.ts` contains the local approval, suppression, dispatch-key and event-ledger rules. Its tests pass, but those rules are not yet the live sender cutover.
 - Production build passes after the new route and form changes.
@@ -99,7 +99,7 @@ Website + social + approved outreach
 ## Next steps now
 
 1. ~~Deploy the website changes.~~ Completed 28 September 2026: the storefront is live on Vercel and the admin endpoint is live, with `ALLOWED_ORIGINS` set to `https://novamerchau.com`.
-2. Run a synthetic end-to-end test and confirm one test record appears in the admin panel as `New`; delete or archive the test record after verification. This has not been run yet because it writes to Airtable.
+2. ~~Run a synthetic end-to-end test and confirm one test record appears in the admin panel as `New`; delete or archive the test record after verification.~~ Completed 29 September 2026: test lead `recI4mb80p3BFvpxv` was created as `New`, read back with attribution intact, then deleted.
 3. Add the repository interface while Airtable remains the adapter.
 4. Choose Supabase or Cloudflare D1 for a no-cost pilot after measuring the current record volume, attachments and admin users.
 5. Keep Formspree only as a monitored fallback during the first deployment window; do not automatically dual-submit and create duplicates.
