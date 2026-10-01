@@ -37,7 +37,7 @@ Do not add more sending volume or advertising until each arrow is visible, owned
 | SEO foundation | Built and deployed | Sitemap, robots rules and core metadata are in the storefront. |
 | Google Business Profile | Submitted | NovaMerch profile has Newcastle and Maitland service areas, website, description and hours. Google verification is pending. No residential address is publicly attached. |
 | Instagram | Business profile live | `@novamerch.au` is a Business account with the Clothing store category, visible category, NovaMerch logo and Newcastle/Maitland free-mock-up bio. Facebook connection is still pending. |
-| Facebook / Meta Business Suite | Parked | Page creation is ready but requires Nick's Facebook login. Do not create a duplicate Page or use another person's account. |
+| Facebook / Meta Business Suite | Approved; awaiting Nick's login | Nick has approved creating a NovaMerch Facebook **Page** and then connecting Meta Business Suite. Facebook Page creation is open, but the Mohammed Chrome session is not logged in. Do not create a personal business profile, duplicate Page, or use another person's account. |
 | LinkedIn Company Page | Form prepared; owner confirmation required | Rumman's LinkedIn sign-in is active and the NovaMerch Company Page form is ready with `novamerch-au`, the website, Retail Apparel and Fashion, and the tagline. The existing `linkedin.com/company/novamerch` page is an unrelated Swedish printing business in Vadstena; do not claim or modify it. Organization size/type, logo upload, and authorization still require owner confirmation before creation. |
 | YouTube Brand Channel | Not started | The available Google session is `healtharc76@gmail.com` with an unrelated Choice Chaos Clips channel. Do not create NovaMerch under that account. |
 | Outreach infrastructure | Partly live | Airtable lead base, n8n schedules, Brevo templates and Hermes/Noah exist. The safe scale gate is not complete. |
@@ -72,7 +72,7 @@ The next practical growth step is to make NovaMerch easy to recognise and trust 
 
 1. Prepare one identity kit: approved logo, handle (preferably `@novamerch` where available), website, service areas, business email, phone number and recovery/2FA owner.
 2. Create the Instagram Professional account. **Complete:** `@novamerch.au` is now a Business account with its bio and logo.
-3. Create the Facebook Page and connect it to Meta Business Suite on the same day, so approved posts can be scheduled once and reused safely. **Parked until Nick provides the Facebook login.**
+3. Create the Facebook Page and connect it to Meta Business Suite on the same day, so approved posts can be scheduled once and reused safely. **Nick has approved this; pause at the login screen until he signs in.**
 4. Finish the LinkedIn Company Page after confirming the factual organization size/type and authorization, using a distinct URL such as `novamerch-au`; then create the YouTube Brand Channel. **The existing `linkedin.com/company/novamerch` page is unrelated and must not be edited. YouTube still needs the intended NovaMerch Google account rather than the unrelated `healtharc76@gmail.com` session.**
 5. Add the same approved description and `https://novamerchau.com/free-mockup/` link to each profile.
 6. Prepare three launch posts: local proof, useful ordering advice and a behind-the-scenes/process post.
