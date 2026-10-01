@@ -70,7 +70,7 @@ The next practical growth step is to make NovaMerch easy to recognise and trust 
 
 ### Do this in order
 
-1. Prepare one identity kit: approved logo, handle (preferably `@novamerch` where available), website, service areas, business email, phone number and recovery/2FA owner.
+1. Prepare one identity kit: approved logo, circular-safe avatar (`public/novamerch-social-avatar.png`), padded full-wordmark (`public/novamerch-social-logo-square-padded.png`), handle (preferably `@novamerch` where available), website, service areas, business email, phone number and recovery/2FA owner.
 2. Create the Instagram Professional account. **Complete:** `@novamerch.au` is now a Business account with its bio and logo.
 3. Create the Facebook Page and connect it to Meta Business Suite on the same day, so approved organic posts can be scheduled once and reused safely. **Complete:** the Page is live with website, email, bio, logo, branded cover image and Newcastle/Maitland service areas. Add the free-mock-up action button next. The account is restricted from advertising and audience use under Account Integrity; do not run ads or create replacement ad accounts until Meta resolves this.**
 4. Finish the LinkedIn Company Page using the confirmed 2–10 / Privately held details and distinct URL `novamerch-au`, then create the YouTube Brand Channel. **The existing `linkedin.com/company/novamerch` page is unrelated and must not be edited. YouTube still needs the intended NovaMerch Google account rather than the unrelated `healtharc76@gmail.com` session.**
