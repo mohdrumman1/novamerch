@@ -2,6 +2,16 @@
 
 **Status:** design and verification plan. No autonomous social replies are enabled by this document.
 
+## Connection check — 3 October 2026
+
+In the Mohammed Chrome profile, the NovaMerch Composio workspace currently shows:
+
+- **Facebook:** one active connection with conversation/message read actions and Page `Send Message` available.
+- **Instagram:** one active connection with `List All Messages`, `Get Conversation` and `Send Text Message` available. The action explicitly requires an existing conversation and an open Meta messaging window.
+- **LinkedIn:** no LinkedIn messaging connection or toolkit was visible in the workspace; keep Page messages human-only for now.
+
+The visible connection names (`spiral-pliny` and `caries-balt`) are Composio aliases, not proof of the selected social handles. Before enabling any reply, run an account-specific read and confirm the returned Page/Instagram identity is NovaMerch. Do not infer identity from the alias.
+
 ## Recommendation
 
 Use Noah as the reply worker behind a small, durable inbox queue. Start with Facebook Messenger and Instagram DMs through Meta’s official messaging APIs (or their Composio actions), using the existing Hermes host and the existing low-cost model. Keep LinkedIn Page messages in LinkedIn’s inbox until a supported Page-messaging partner is deliberately selected.
