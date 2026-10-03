@@ -17,6 +17,7 @@ Last reconciled: 29 September 2026. This index records completed work and propos
 | [Daily report correction](daily-report-node-draft.js) | Locally prepared draft; not deployed. |
 | [Local SEO and AEO content plan](seo-aeo-content-plan-2026-09-27.md) | Jev fit, SEO/AEO baseline, deployment gap and six free local content pieces. |
 | [Social account launch plan](novamerch-social-account-launch-plan-2026-09-27.md) | One-account-per-day setup, security, content rhythm and image-generation workflow. |
+| [Social inbound reply plan](social-inbound-reply-plan-2026-10-03.md) | Controlled Facebook/Instagram/LinkedIn inbound replies through Noah, with platform limits, guardrails and a low-cost rollout. |
 | [CRM and storage options](crm-storage-options-2026-09-27.md) | Admin-panel-first CRM architecture, Airtable assessment and lower-cost migration plan. |
 | [Email enrichment automation research](email-enrichment-automation-research-2026-09-15.md) | n8n enrichment workflow design between lead discovery and review, with Hunter-first vendor research, import artifacts and safety gates. |
 | [Lead discovery provider research](lead-discovery-provider-research-2026-09-16.md) | Low-cost options for replacing or repairing the broken Google Places lead finder. |

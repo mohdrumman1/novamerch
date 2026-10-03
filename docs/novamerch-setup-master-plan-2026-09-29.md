@@ -41,7 +41,7 @@ Do not add more sending volume or advertising until each arrow is visible, owned
 | LinkedIn Company Page | Live; first post next | NovaMerch Company Page is live at `linkedin.com/company/143934590` with public URL `linkedin.com/company/novamerch-au`, the website, Retail Apparel and Fashion, 2–10 employees, Privately held, Newcastle/Maitland/Hunter tagline, padded-safe logo and a search-friendly overview. The existing `linkedin.com/company/novamerch` page is an unrelated Swedish printing business in Vadstena; do not claim or modify it. Publish the first proof post after customer permission is recorded. |
 | YouTube Brand Channel | Not started | The available Google session is `healtharc76@gmail.com` with an unrelated Choice Chaos Clips channel. Do not create NovaMerch under that account. |
 | Outreach infrastructure | Partly live | Airtable lead base, n8n schedules, Brevo templates and Hermes/Noah exist. The safe scale gate is not complete. |
-| Noah/Hermes | Live with limits | Telegram, Gmail, GitHub, Brevo, supplier research and Monid discovery access are documented. Noah is draft/research/triage only for customer-facing work. |
+| Noah/Hermes | Live with limits | Telegram, Gmail, GitHub, Brevo, supplier research and Monid discovery access are documented. Social inbound reply design is documented, but Meta connection verification and the shadow pilot remain before any automatic acknowledgement. |
 | Monid | Installed with guardrails | Discovery/enrichment only; never sends, approves or promotes leads. |
 
 ## Non-negotiable operating rules
@@ -50,6 +50,7 @@ Do not add more sending volume or advertising until each arrow is visible, owned
 - `Needs Review` is only for a specific unresolved problem, recorded in Notes with an owner and next action.
 - No outreach send occurs without a verified contact basis, approval evidence, suppression check and campaign match.
 - Noah may research, draft, classify and report. Noah must not autonomously send, promise pricing or delivery, publish advertising, or move leads into sending status.
+- Social messages follow the separate [controlled inbound reply plan](social-inbound-reply-plan-2026-10-03.md): Meta acknowledgement is a gated pilot; LinkedIn Page messaging stays human-only unless an approved partner is selected.
 - Every enquiry gets an owner and a same-business-day acknowledgement target.
 - Customer logos, quotes, delivery times, product claims and reviews need human confirmation before publication.
 
