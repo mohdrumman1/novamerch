@@ -12,6 +12,21 @@ In the Mohammed Chrome profile, the NovaMerch Composio workspace currently shows
 
 The visible connection names (`spiral-pliny` and `caries-balt`) are Composio aliases, not proof of the selected social handles. Before enabling any reply, run an account-specific read and confirm the returned Page/Instagram identity is NovaMerch. Do not infer identity from the alias.
 
+## Noah hourly job update — 3 October 2026
+
+The deployed `social-inbox-monitor` cron (job `5cc37ee78f7b`) now runs every 60 minutes with continuity enabled. Its prompt was tightened so Noah:
+
+- replies only to new messages with plausible merch-buying intent;
+- ignores seen/read receipts, non-buying conversation, generic reactions and spam;
+- does not follow up when NovaMerch has already replied;
+- suppresses opt-outs without replying;
+- treats LinkedIn as human-only;
+- observes Meta’s messaging window and never retries a closed-window send;
+- caps automatic replies at 10 per run and 20 per rolling day; and
+- reports uncertain, sensitive, complaint or exact-pricing requests for human handling.
+
+The job is configured, but its first production reply still depends on the account-specific identity check and the platform returning a live inbound conversation. No outbound test message was sent during this change.
+
 ## Recommendation
 
 Use Noah as the reply worker behind a small, durable inbox queue. Start with Facebook Messenger and Instagram DMs through Meta’s official messaging APIs (or their Composio actions), using the existing Hermes host and the existing low-cost model. Keep LinkedIn Page messages in LinkedIn’s inbox until a supported Page-messaging partner is deliberately selected.
