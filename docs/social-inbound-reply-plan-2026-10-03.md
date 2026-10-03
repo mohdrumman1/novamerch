@@ -27,6 +27,10 @@ The deployed `social-inbox-monitor` cron (job `5cc37ee78f7b`) now runs every 60 
 
 The job is configured, but its first production reply still depends on the account-specific identity check and the platform returning a live inbound conversation. No outbound test message was sent during this change.
 
+### Temporary test-only flag
+
+Until the integration is proven, the live cron is restricted to the exact sender identity `rxmmn_7`. Every other sender is ignored with no reply, follow-up or CRM change. The test cap is three replies per run and five per rolling day. Remove this flag only after the owner explicitly asks for broader processing.
+
 ## Recommendation
 
 Use Noah as the reply worker behind a small, durable inbox queue. Start with Facebook Messenger and Instagram DMs through Meta’s official messaging APIs (or their Composio actions), using the existing Hermes host and the existing low-cost model. Keep LinkedIn Page messages in LinkedIn’s inbox until a supported Page-messaging partner is deliberately selected.
