@@ -35,6 +35,12 @@ Until the integration is proven, the live cron is restricted to the exact sender
 
 Noah’s manual test run found the exact Instagram message (`Hi, what do you do?`) from `rxmmn_7` to `@novamerch.au`. The verified `INSTAGRAM_SEND_TEXT_MESSAGE` call was attempted once and Meta returned HTTP 403, code 10/subcode 2534022: the message was outside the permitted response window. No retry was made. A new inbound message is required to reopen the window before another send attempt.
 
+### Reliability update — 3 October
+
+The Hermes AI cron was paused because it did not have a native Composio toolset and repeatedly spent model time trying to discover shell commands. It has been replaced on the Noah server with a deterministic, no-model monitor running every 15 minutes. It uses the existing Composio CLI, locks against concurrent runs, deduplicates messages, records failures locally, and remains restricted to exact sender `rxmmn_7`. It only attempts the approved product-intent reply; it does not create CRM records, prospect, change lead status or process any other sender.
+
+The Instagram Composio connection for `@novamerch.au` was re-authorised with `instagram_business_manage_messages` on 3 October. The next validation must be a brand-new, clearly product-related inbound DM from `rxmmn_7`; previous messages remain in Meta’s closed response window and must not be retried.
+
 ## Recommendation
 
 Use Noah as the reply worker behind a small, durable inbox queue. Start with Facebook Messenger and Instagram DMs through Meta’s official messaging APIs (or their Composio actions), using the existing Hermes host and the existing low-cost model. Keep LinkedIn Page messages in LinkedIn’s inbox until a supported Page-messaging partner is deliberately selected.
