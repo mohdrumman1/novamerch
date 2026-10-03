@@ -31,6 +31,10 @@ The job is configured, but its first production reply still depends on the accou
 
 Until the integration is proven, the live cron is restricted to the exact sender identity `rxmmn_7`. Every other sender is ignored with no reply, follow-up or CRM change. The test cap is three replies per run and five per rolling day. Remove this flag only after the owner explicitly asks for broader processing.
 
+### Test result — `rxmmn_7`
+
+Noah’s manual test run found the exact Instagram message (`Hi, what do you do?`) from `rxmmn_7` to `@novamerch.au`. The verified `INSTAGRAM_SEND_TEXT_MESSAGE` call was attempted once and Meta returned HTTP 403, code 10/subcode 2534022: the message was outside the permitted response window. No retry was made. A new inbound message is required to reopen the window before another send attempt.
+
 ## Recommendation
 
 Use Noah as the reply worker behind a small, durable inbox queue. Start with Facebook Messenger and Instagram DMs through Meta’s official messaging APIs (or their Composio actions), using the existing Hermes host and the existing low-cost model. Keep LinkedIn Page messages in LinkedIn’s inbox until a supported Page-messaging partner is deliberately selected.
