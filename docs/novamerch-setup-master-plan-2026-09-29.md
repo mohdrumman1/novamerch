@@ -41,7 +41,7 @@ Do not add more sending volume or advertising until each arrow is visible, owned
 | LinkedIn Company Page | Live; first post next | NovaMerch Company Page is live at `linkedin.com/company/143934590` with public URL `linkedin.com/company/novamerch-au`, the website, Retail Apparel and Fashion, 2–10 employees, Privately held, Newcastle/Maitland/Hunter tagline, padded-safe logo and a search-friendly overview. The existing `linkedin.com/company/novamerch` page is an unrelated Swedish printing business in Vadstena; do not claim or modify it. Publish the first proof post after customer permission is recorded. |
 | YouTube Brand Channel | Not started | The available Google session is `healtharc76@gmail.com` with an unrelated Choice Chaos Clips channel. Do not create NovaMerch under that account. |
 | Outreach infrastructure | Partly live | Airtable lead base, n8n schedules, Brevo templates and Hermes/Noah exist. The safe scale gate is not complete. |
-| Noah/Hermes | Live with limits | Telegram, Gmail, GitHub, Brevo, supplier research and Monid discovery access are documented. Social inbound reply design is documented, but Meta connection verification and the shadow pilot remain before any automatic acknowledgement. |
+| Noah/Hermes | Live with limits | Telegram, Gmail, GitHub, Brevo, supplier research and Monid discovery access are documented. The social AI cron is paused; a no-model test monitor is restricted to `rxmmn_7`. A fresh Instagram DM was detected but Meta rejected the reply with error `10/2534022` (“outside allowed window”) after re-authorisation. Keep Instagram `human_only` until Meta/Composio confirms messaging eligibility. |
 | Monid | Installed with guardrails | Discovery/enrichment only; never sends, approves or promotes leads. |
 
 ## Non-negotiable operating rules
@@ -51,6 +51,7 @@ Do not add more sending volume or advertising until each arrow is visible, owned
 - No outreach send occurs without a verified contact basis, approval evidence, suppression check and campaign match.
 - Noah may research, draft, classify and report. Noah must not autonomously send, promise pricing or delivery, publish advertising, or move leads into sending status.
 - Social messages follow the separate [controlled inbound reply plan](social-inbound-reply-plan-2026-10-03.md): Meta acknowledgement is a gated pilot; LinkedIn Page messaging stays human-only unless an approved partner is selected.
+- **Current social blocker:** Instagram detection works, but Meta rejects even a fresh test reply with `10/2534022`. Do not retry old messages, broaden the sender filter, or spend on another inbox tool. Next action is to verify Professional-account/Page linkage and Meta app messaging eligibility, then rerun one fresh test.
 - Every enquiry gets an owner and a same-business-day acknowledgement target.
 - Customer logos, quotes, delivery times, product claims and reviews need human confirmation before publication.
 
