@@ -15,13 +15,14 @@ flock -n 9 || exit 0
 ACCOUNT="instagram_caries-balt"
 SENDER="rxmmn_7"
 RECIPIENT_ID="2887892108234459"
+# The test sender has one known thread. Inspecting it directly avoids walking
+# every historical conversation on every 15-minute run.
+TEST_CONVERSATION_ID="aWdfZAG06MzQwMjgyMzY2ODQxNzEwMzAxMjQ0MjYyNTc3MTE0NjA3MTI2MzU5"
 REPLY="Hey! We help clubs, businesses and events with custom branded shirts, workwear and merchandise. Is there a particular item or rough quantity you’re looking for?"
 
 log() { printf '%s %s\n' "$(date -Is)" "$*" >> "$LOG_FILE"; }
 
-conversations="$(timeout 45 composio execute INSTAGRAM_LIST_ALL_CONVERSATIONS --account "$ACCOUNT" -d '{}' 2>>"$LOG_FILE" || true)"
-printf '%s' "$conversations" | jq -r '.. | objects | .id? // empty' 2>/dev/null | sort -u | while read -r conversation_id; do
-  [ -n "$conversation_id" ] || continue
+printf '%s\n' "$TEST_CONVERSATION_ID" | while read -r conversation_id; do
   messages="$(timeout 45 composio execute INSTAGRAM_LIST_ALL_MESSAGES --account "$ACCOUNT" -d "{\"conversation_id\":\"$conversation_id\",\"limit\":10}" 2>>"$LOG_FILE" || true)"
   printf '%s' "$messages" | jq -c '.. | objects | select((.id? and (.from?.username? // "") == "'"$SENDER"'"))' 2>/dev/null | while read -r message; do
     message_id="$(printf '%s' "$message" | jq -r '.id')"

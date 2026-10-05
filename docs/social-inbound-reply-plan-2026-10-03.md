@@ -41,6 +41,10 @@ The Hermes AI cron was paused because it did not have a native Composio toolset 
 
 The Instagram Composio connection for `@novamerch.au` was re-authorised with `instagram_business_manage_messages` on 3 October. The next validation must be a brand-new, clearly product-related inbound DM from `rxmmn_7`; previous messages remain in Meta’s closed response window and must not be retried.
 
+### Retest result — 5 October
+
+A new product-related inbound DM from `rxmmn_7` was received and the deterministic monitor attempted one reply. Meta again returned error `10/2534022` (“outside of allowed window”), despite the fresh inbound message and refreshed Composio authorisation. The monitor marked that message as window-closed and did not retry. This isolates the outstanding blocker to Meta/Composio messaging eligibility or account configuration, rather than the Noah scheduler, message detection or sender filter. Keep Instagram in `human_only` mode until Composio/Meta confirms the account is eligible for responses.
+
 ## Recommendation
 
 Use Noah as the reply worker behind a small, durable inbox queue. Start with Facebook Messenger and Instagram DMs through Meta’s official messaging APIs (or their Composio actions), using the existing Hermes host and the existing low-cost model. Keep LinkedIn Page messages in LinkedIn’s inbox until a supported Page-messaging partner is deliberately selected.
