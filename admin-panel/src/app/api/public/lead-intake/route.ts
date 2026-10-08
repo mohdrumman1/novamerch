@@ -21,6 +21,7 @@ interface IntakeBody {
   message?: unknown;
   source?: unknown;
   campaign?: unknown;
+  copyVersion?: unknown;
   landingPage?: unknown;
   consent?: unknown;
   requestId?: unknown;
@@ -81,7 +82,10 @@ function requestKey(value: string): string | undefined {
   return value && /^[a-zA-Z0-9_-]{8,120}$/.test(value) ? value : undefined;
 }
 
-function intakeNotes(input: Required<Pick<IntakeBody, "suburb" | "neededBy" | "product" | "quantity" | "budget" | "message" | "source" | "campaign" | "landingPage" | "website">>): string {
+function intakeNotes(
+  input: Required<Pick<IntakeBody, "suburb" | "neededBy" | "product" | "quantity" | "budget" | "message" | "source" | "campaign" | "copyVersion" | "landingPage" | "website">>,
+  consentCapturedAt: string,
+): string {
   return JSON.stringify({
     pipelineStatus: "New",
     suburb: text(input.suburb),
@@ -92,9 +96,10 @@ function intakeNotes(input: Required<Pick<IntakeBody, "suburb" | "neededBy" | "p
     message: text(input.message),
     source: text(input.source) || "website",
     campaign: text(input.campaign) || "direct",
+    copyVersion: text(input.copyVersion) || "website-v1",
     landingPage: text(input.landingPage) || "/free-mockup",
     website: text(input.website),
-    consentCapturedAt: new Date().toISOString(),
+    consentCapturedAt,
   });
 }
 
@@ -126,6 +131,7 @@ export async function POST(req: Request) {
   const cached = key ? idempotency.get(key) : undefined;
   if (cached && cached.expiresAt > Date.now()) return json({ ...cached.response, duplicate: true }, 200, origin);
 
+  const consentCapturedAt = new Date().toISOString();
   const notes = intakeNotes({
     suburb: body.suburb,
     neededBy: body.neededBy,
@@ -135,9 +141,10 @@ export async function POST(req: Request) {
     message: body.message,
     source: body.source,
     campaign: body.campaign,
+    copyVersion: body.copyVersion,
     landingPage: body.landingPage,
     website: body.website,
-  });
+  }, consentCapturedAt);
 
   try {
     const existing = await listRecords("Leads", {
@@ -149,9 +156,13 @@ export async function POST(req: Request) {
     if (existing.length > 0) {
       leadId = existing[0].id;
       const previous = typeof existing[0].fields.Notes === "string" ? `${existing[0].fields.Notes}\n` : "";
-      // Keep an existing lead's operational status; the new enquiry is
-      // recorded in Notes without moving a manually progressed lead backwards.
-      await updateRecord("Leads", leadId, { Notes: `${previous}${notes}`.slice(-4000) });
+      // Keep operational status and suppression untouched. A new consented
+      // form submission is the latest attributable touch for this lead.
+      await updateRecord("Leads", leadId, {
+        "Campaign ID": text(body.campaign) || "direct",
+        "Copy Version": text(body.copyVersion) || "website-v1",
+        Notes: `${previous}${notes}`.slice(-4000),
+      });
     } else {
       const created = await createRecord("Leads", {
         "Business Name": company || name,
@@ -160,6 +171,9 @@ export async function POST(req: Request) {
         Website: text(body.website),
         Category: text(body.product),
         Status: "New",
+        "Contact Basis": `Requested material via website enquiry on ${consentCapturedAt}`,
+        "Campaign ID": text(body.campaign) || "direct",
+        "Copy Version": text(body.copyVersion) || "website-v1",
         Notes: notes,
         "Dedupe Key": email,
       });
