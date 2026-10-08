@@ -6,7 +6,7 @@ import { StatCard } from "@/components/ui/StatCard";
 import { Table } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
 import { formatAUD, formatDate } from "@/lib/format";
-import { lineItemsTotal, lineItemsCost } from "@/lib/calc";
+import { lineItemsTotal, orderProjectedCost, sumRecordedMoney } from "@/lib/calc";
 import { FY_ALL } from "@/lib/constants";
 import { ORDER_GOODS_STATUS_TONE } from "@/lib/status";
 import type { Order } from "@/lib/types";
@@ -23,21 +23,17 @@ export default function DashboardPage() {
 
   // ── Expected Financial ──────────────────────────────────────────────────
   const expectedRevenue = filteredOrders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
-  const totalCosts = filteredOrders.reduce(
-    (sum, o) => sum + (lineItemsCost(o.lineItems) ?? 0) + (o.transportCost ?? 0),
-    0
-  );
-  const expectedProfit = expectedRevenue - totalCosts;
-  const profitMargin = expectedRevenue > 0 ? (expectedProfit / expectedRevenue) * 100 : 0;
+  const totalCosts = sumRecordedMoney(filteredOrders.map((order) => orderProjectedCost(order)));
+  const expectedProfit = totalCosts === undefined ? undefined : expectedRevenue - totalCosts;
+  const profitMargin = expectedProfit === undefined ? undefined : expectedRevenue > 0 ? (expectedProfit / expectedRevenue) * 100 : 0;
 
   // ── Actual Cash Flow ────────────────────────────────────────────────────
   // cashReceived: sum order.amountReceived directly (not from invoices)
   const cashReceived = filteredOrders.reduce((sum, o) => sum + (o.amountReceived ?? 0), 0);
-  // costsPaid: all orders in FY (not just completed)
-  const costsPaid = filteredOrders.reduce(
-    (sum, o) => sum + (lineItemsCost(o.lineItems) ?? 0) + (o.transportCost ?? 0),
-    0
-  );
+  // Supplier payments are not yet recorded separately, so use the projected
+  // cost only when every included order has a complete cost record.
+  const recordedProjectedCosts = sumRecordedMoney(filteredOrders.map((order) => orderProjectedCost(order)));
+  const cashLessProjectedCosts = recordedProjectedCosts === undefined ? undefined : cashReceived - recordedProjectedCosts;
   // outstanding: ALL-TIME, floor at 0 per order
   const outstandingInvoices = orders.reduce(
     (sum, o) => sum + Math.max(0, lineItemsTotal(o.lineItems) - (o.amountReceived ?? 0)),
@@ -49,9 +45,9 @@ export default function DashboardPage() {
     .filter((o) => o.goodsStatus === "Pending")
     .reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
   const inTransitCount = orders.filter((o) => o.goodsStatus === "In Transit").length;
-  const inTransitCost = orders
-    .filter((o) => o.goodsStatus === "In Transit")
-    .reduce((sum, o) => sum + (lineItemsCost(o.lineItems) ?? 0) + (o.transportCost ?? 0), 0);
+  const inTransitCost = sumRecordedMoney(
+    orders.filter((o) => o.goodsStatus === "In Transit").map((order) => orderProjectedCost(order))
+  );
 
   // ── Recent Orders ───────────────────────────────────────────────────────
   const recentOrders = [...orders]
@@ -98,16 +94,16 @@ export default function DashboardPage() {
         </p>
         <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))" }}>
           <StatCard label="Expected Revenue" value={formatAUD(expectedRevenue)} />
-          <StatCard label="Total Costs" value={formatAUD(totalCosts)} tone="red" />
+          <StatCard label="Total Costs" value={formatKnownAUD(totalCosts)} tone="red" />
           <StatCard
             label="Expected Profit"
-            value={formatAUD(expectedProfit)}
-            tone={expectedProfit >= 0 ? "green" : "red"}
+            value={formatKnownAUD(expectedProfit)}
+            tone={expectedProfit === undefined ? undefined : expectedProfit >= 0 ? "green" : "red"}
           />
           <StatCard
             label="Profit Margin"
-            value={`${profitMargin.toFixed(1)}%`}
-            tone={profitMargin >= 20 ? "green" : profitMargin >= 10 ? "orange" : "red"}
+            value={profitMargin === undefined ? "Not recorded" : `${profitMargin.toFixed(1)}%`}
+            tone={profitMargin === undefined ? undefined : profitMargin >= 20 ? "green" : profitMargin >= 10 ? "orange" : "red"}
           />
         </div>
       </section>
@@ -122,7 +118,7 @@ export default function DashboardPage() {
         </p>
         <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))" }}>
           <StatCard label="Cash Received" value={formatAUD(cashReceived)} tone="green" />
-          <StatCard label="Costs Paid" value={formatAUD(costsPaid)} tone="red" />
+          <StatCard label="Recorded Projected Costs" value={formatKnownAUD(recordedProjectedCosts)} tone="red" />
           <StatCard
             label="Outstanding Invoices"
             value={formatAUD(outstandingInvoices)}
@@ -130,9 +126,9 @@ export default function DashboardPage() {
             accentColor="#FF9800"
           />
           <StatCard
-            label="Actual Profit Today"
-            value={formatAUD(cashReceived - costsPaid)}
-            tone={cashReceived - costsPaid >= 0 ? "green" : "red"}
+            label="Cash Less Projected Costs"
+            value={formatKnownAUD(cashLessProjectedCosts)}
+            tone={cashLessProjectedCosts === undefined ? undefined : cashLessProjectedCosts >= 0 ? "green" : "red"}
           />
         </div>
       </section>
@@ -147,7 +143,7 @@ export default function DashboardPage() {
         </p>
         <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))" }}>
           <StatCard label="Pending Orders Value" value={formatAUD(pendingOrdersValue)} accentColor="#999" />
-          <StatCard label="In Transit Cost" value={formatAUD(inTransitCost)} tone="blue" accentColor="var(--blue)" />
+          <StatCard label="In Transit Cost" value={formatKnownAUD(inTransitCost)} tone="blue" accentColor="var(--blue)" />
           <StatCard label="In Transit Orders" value={String(inTransitCount)} tone="blue" accentColor="var(--blue)" />
         </div>
       </section>
@@ -182,6 +178,10 @@ export default function DashboardPage() {
       </section>
     </div>
   );
+}
+
+function formatKnownAUD(value: number | undefined): string {
+  return value === undefined ? "Not recorded" : formatAUD(value);
 }
 
 // Sub-component to avoid inline column renders at the top level referencing useData

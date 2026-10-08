@@ -10,7 +10,7 @@ import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { formatAUD } from "@/lib/format";
-import { lineItemsTotal, orderExpectedProfit } from "@/lib/calc";
+import { lineItemsTotal, orderExpectedProfit, sumRecordedMoney } from "@/lib/calc";
 import type { Customer, Order } from "@/lib/types";
 import { CustomerDetailModal } from "@/components/modals/CustomerDetailModal";
 import { PlusIcon, EditIcon, TrashIcon } from "@/components/icons";
@@ -55,8 +55,8 @@ export default function CustomersPage() {
     return getCustomerOrders(customerId).reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
   }
 
-  function getCustomerProfit(customerId: string): number {
-    return getCustomerOrders(customerId).reduce((sum, o) => sum + (orderExpectedProfit(o) ?? 0), 0);
+  function getCustomerProfit(customerId: string): number | undefined {
+    return sumRecordedMoney(getCustomerOrders(customerId).map((order) => orderExpectedProfit(order)));
   }
 
   function openCreate() {
@@ -119,10 +119,10 @@ export default function CustomersPage() {
           <span
             style={{
               fontFamily: "var(--font-dm-mono, monospace)",
-              color: profit >= 0 ? "var(--green)" : "var(--red)",
+              color: profit === undefined ? "var(--text-muted)" : profit >= 0 ? "var(--green)" : "var(--red)",
             }}
           >
-            {formatAUD(profit)}
+            {profit === undefined ? "Not recorded" : formatAUD(profit)}
           </span>
         );
       },

@@ -3,6 +3,8 @@
 **Created:** 8 October 2026
 **Status:** Phase A measurement system is built and validated. The read-only n8n review remains unpublished; no automated customer messaging has been enabled by this plan.
 
+**Profitability data guardrail (9 October 2026):** Internal profitability reporting now treats an absent supplier or transport cost as unknown. It displays `Not recorded` for dependent cost, profit, margin and GST fields rather than assuming a zero cost. This protects the A$10k profit goal from being managed against false margins.
+
 ## Implementation log — 8–9 October 2026
 
 ### Completed and verified

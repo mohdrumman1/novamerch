@@ -75,8 +75,11 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
   const transportOptions = TRANSPORT_TYPES.map((t) => ({ value: t, label: t }));
 
   const revenue = lineItemsTotal(form.lineItems);
-  const cost = (lineItemsCost(form.lineItems) ?? 0) + (form.transportCost ?? 0);
-  const expectedProfit = revenue - cost;
+  const lineItemCost = lineItemsCost(form.lineItems);
+  const cost = lineItemCost === undefined || form.transportCost === undefined
+    ? undefined
+    : lineItemCost + form.transportCost;
+  const expectedProfit = cost === undefined ? undefined : revenue - cost;
 
   return (
     <Modal
@@ -196,8 +199,8 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
         <div
           className="rounded-[var(--radius-sm)] p-4 border"
           style={{
-            background: expectedProfit >= 0 ? "var(--green-soft)" : "var(--red-soft)",
-            borderColor: expectedProfit >= 0 ? "var(--green)" : "var(--red)",
+            background: expectedProfit === undefined ? "var(--surface-2)" : expectedProfit >= 0 ? "var(--green-soft)" : "var(--red-soft)",
+            borderColor: expectedProfit === undefined ? "var(--border)" : expectedProfit >= 0 ? "var(--green)" : "var(--red)",
           }}
         >
           <div className="grid grid-cols-3 gap-4 text-sm">
@@ -210,7 +213,7 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
             <div>
               <p className="text-[var(--text-muted)] text-xs mb-1">Total Cost</p>
               <p className="font-semibold" style={{ fontFamily: "var(--font-dm-mono, monospace)" }}>
-                {formatAUD(cost)}
+                {cost === undefined ? "Not recorded" : formatAUD(cost)}
               </p>
             </div>
             <div>
@@ -219,10 +222,10 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
                 className="font-semibold text-lg"
                 style={{
                   fontFamily: "var(--font-dm-mono, monospace)",
-                  color: expectedProfit >= 0 ? "var(--green)" : "var(--red)",
+                  color: expectedProfit === undefined ? "var(--text-muted)" : expectedProfit >= 0 ? "var(--green)" : "var(--red)",
                 }}
               >
-                {formatAUD(expectedProfit)}
+                {expectedProfit === undefined ? "Not recorded" : formatAUD(expectedProfit)}
               </p>
             </div>
           </div>

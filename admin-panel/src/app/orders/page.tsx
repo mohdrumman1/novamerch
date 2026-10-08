@@ -37,7 +37,7 @@ export default function OrdersPage() {
     return matchFy && matchStatus && matchSearch;
   });
 
-  const profit = (row: Order) => orderExpectedProfit(row) ?? 0;
+  const profit = (row: Order) => orderExpectedProfit(row);
 
   const columns = [
     { key: "ref", header: "Order #", sortable: true },
@@ -88,10 +88,10 @@ export default function OrdersPage() {
           <span
             style={{
               fontFamily: "var(--font-dm-mono, monospace)",
-              color: p >= 0 ? "var(--green)" : "var(--red)",
+              color: p === undefined ? "var(--text-muted)" : p >= 0 ? "var(--green)" : "var(--red)",
             }}
           >
-            {formatAUD(p)}
+            {p === undefined ? "Not recorded" : formatAUD(p)}
           </span>
         );
       },
