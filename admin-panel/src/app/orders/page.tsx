@@ -37,7 +37,7 @@ export default function OrdersPage() {
     return matchFy && matchStatus && matchSearch;
   });
 
-  const profit = (row: Order) => orderExpectedProfit(row);
+  const profit = (row: Order) => orderExpectedProfit(row) ?? 0;
 
   const columns = [
     { key: "ref", header: "Order #", sortable: true },

@@ -24,7 +24,7 @@ export default function DashboardPage() {
   // ── Expected Financial ──────────────────────────────────────────────────
   const expectedRevenue = filteredOrders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
   const totalCosts = filteredOrders.reduce(
-    (sum, o) => sum + lineItemsCost(o.lineItems) + (o.transportCost ?? 0),
+    (sum, o) => sum + (lineItemsCost(o.lineItems) ?? 0) + (o.transportCost ?? 0),
     0
   );
   const expectedProfit = expectedRevenue - totalCosts;
@@ -35,7 +35,7 @@ export default function DashboardPage() {
   const cashReceived = filteredOrders.reduce((sum, o) => sum + (o.amountReceived ?? 0), 0);
   // costsPaid: all orders in FY (not just completed)
   const costsPaid = filteredOrders.reduce(
-    (sum, o) => sum + lineItemsCost(o.lineItems) + (o.transportCost ?? 0),
+    (sum, o) => sum + (lineItemsCost(o.lineItems) ?? 0) + (o.transportCost ?? 0),
     0
   );
   // outstanding: ALL-TIME, floor at 0 per order
@@ -51,7 +51,7 @@ export default function DashboardPage() {
   const inTransitCount = orders.filter((o) => o.goodsStatus === "In Transit").length;
   const inTransitCost = orders
     .filter((o) => o.goodsStatus === "In Transit")
-    .reduce((sum, o) => sum + lineItemsCost(o.lineItems) + (o.transportCost ?? 0), 0);
+    .reduce((sum, o) => sum + (lineItemsCost(o.lineItems) ?? 0) + (o.transportCost ?? 0), 0);
 
   // ── Recent Orders ───────────────────────────────────────────────────────
   const recentOrders = [...orders]

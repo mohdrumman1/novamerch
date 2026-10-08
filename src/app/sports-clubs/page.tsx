@@ -127,7 +127,7 @@ function SportsHero() {
           style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "2.5rem", animationDelay: "0.24s" }}
         >
           <Link
-            href="/#quote"
+            href="/?utm_source=sports-clubs&utm_campaign=pilot-2026-10-clubwear&copy_version=sports-clubs-v1#quote"
             style={{
               display: "inline-flex",
               alignItems: "center",

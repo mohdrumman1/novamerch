@@ -56,7 +56,7 @@ export default function CustomersPage() {
   }
 
   function getCustomerProfit(customerId: string): number {
-    return getCustomerOrders(customerId).reduce((sum, o) => sum + orderExpectedProfit(o), 0);
+    return getCustomerOrders(customerId).reduce((sum, o) => sum + (orderExpectedProfit(o) ?? 0), 0);
   }
 
   function openCreate() {

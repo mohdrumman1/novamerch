@@ -72,7 +72,7 @@ export default function FinancialsPage() {
       const key = getMonthKey(o.orderedAt);
       orderCountByMonth.set(key, (orderCountByMonth.get(key) ?? 0) + 1);
       if (o.goodsStatus !== "Pending" && o.goodsStatus !== "Cancelled") {
-        const exp = lineItemsCost(o.lineItems) + (o.transportCost ?? 0);
+        const exp = (lineItemsCost(o.lineItems) ?? 0) + (o.transportCost ?? 0);
         expenditureByMonth.set(key, (expenditureByMonth.get(key) ?? 0) + exp);
       }
     });
@@ -110,7 +110,7 @@ export default function FinancialsPage() {
 
   // All-time figures (no FY filter)
   const totalRevenue = orders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
-  const costOfGoods = orders.reduce((sum, o) => sum + lineItemsCost(o.lineItems), 0);
+  const costOfGoods = orders.reduce((sum, o) => sum + (lineItemsCost(o.lineItems) ?? 0), 0);
   const transport = orders.reduce((sum, o) => sum + (o.transportCost ?? 0), 0);
   const totalExpenses = costOfGoods + transport;
   const netProfit = totalRevenue - totalExpenses;

@@ -85,6 +85,15 @@ export interface Invoice {
   comments?: string;
 }
 
+/** Supplier-side financial record linked to one customer order when available. */
+export interface SupplierOrder {
+  id: ID;
+  relatedOrderId: ID;
+  projectedCostAud?: number;
+  bookedPaymentAud?: number;
+  pendingBalanceEstimatedAud?: number;
+}
+
 export interface ShipmentItem {
   description: string;
   qty: number;

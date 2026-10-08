@@ -23,7 +23,7 @@ export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailM
   const customerOrders = orders.filter((o) => o.customerId === customer.id);
   const customerInvoices = invoices.filter((i) => i.customerId === customer.id);
   const totalRevenue = customerOrders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
-  const totalProfit = customerOrders.reduce((sum, o) => sum + orderExpectedProfit(o), 0);
+  const totalProfit = customerOrders.reduce((sum, o) => sum + (orderExpectedProfit(o) ?? 0), 0);
   const cashReceived = customerInvoices
     .filter((i) => i.status === "Paid")
     .reduce((sum, i) => sum + (i.amountReceived ?? i.total), 0);
@@ -92,7 +92,7 @@ export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailM
                 </thead>
                 <tbody>
                   {customerOrders.map((order) => {
-                    const profit = orderExpectedProfit(order);
+                    const profit = orderExpectedProfit(order) ?? 0;
                     return (
                       <tr key={order.id} className="border-t border-[var(--border)]">
                         <td className="px-3 py-2 font-medium">{order.ref}</td>

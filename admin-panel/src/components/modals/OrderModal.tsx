@@ -75,7 +75,7 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
   const transportOptions = TRANSPORT_TYPES.map((t) => ({ value: t, label: t }));
 
   const revenue = lineItemsTotal(form.lineItems);
-  const cost = lineItemsCost(form.lineItems) + (form.transportCost ?? 0);
+  const cost = (lineItemsCost(form.lineItems) ?? 0) + (form.transportCost ?? 0);
   const expectedProfit = revenue - cost;
 
   return (
