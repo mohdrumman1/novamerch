@@ -2,6 +2,8 @@
 
 **Status:** built as a review-and-approval pilot. It is not an automatic-send campaign.
 
+**Queue audit — 9 October 2026:** no verified, sports-club, consent- or referral-based accounts are presently available in Airtable for this pilot. The existing historical records are mainly Google Places chiropractic and veterinary contacts; their public contact details and `Ready to Email` label do not establish permission. No records were relabelled or added to the pilot queue. Build the first ten only from inbound enquiries, explicit referrals, or other documented permission.
+
 ## Objective
 
 Produce the first attributable, high-quality quote opportunities from one narrowly defined account type. The success measure is qualified quote requests and recorded gross profit, not email volume or open rates.
@@ -51,9 +53,9 @@ The sports-clubs CTA now passes `pilot-2026-10-clubwear` and `sports-clubs-v1` i
 
 For a repeat form enquiry, the existing lead keeps its operational status and suppression state. The enquiry is appended to its notes, while `Campaign ID` and `Copy Version` record the latest attributable form touch.
 
-### Publication gate
+### Release verification
 
-The website and admin changes are build-verified but not yet deployed. Publish them only from an isolated release containing the scoped website CTA and admin intake changes; do not deploy the current mixed working tree. Before release, confirm the website origin remains in `ALLOWED_ORIGINS`, submit one labelled synthetic form entry, verify it is created as `New` with the expected contact basis/campaign/copy, then remove the test record.
+**Production verified — 9 October 2026.** The sports-club CTA and admin intake endpoint are live. A labelled synthetic website enquiry returned successfully, was created as `New` with the expected contact basis, campaign and copy version, was verified in Airtable, then deleted. No customer outreach was sent or enabled by this release. Retain the same verification sequence for any material future changes to the form or intake endpoint.
 
 ## Copy: approved factual starting point
 

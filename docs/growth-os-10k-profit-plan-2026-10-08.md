@@ -1,7 +1,7 @@
 # NovaMerch Growth OS: path to A$10k monthly profit
 
 **Created:** 8 October 2026
-**Status:** Phase A measurement system is built and validated. The read-only n8n review remains unpublished; no automated customer messaging has been enabled by this plan.
+**Status:** Phase A measurement system is live and validated in production. The website sports-club CTA and admin intake endpoint were verified end-to-end on 9 October 2026. Noah's DNC review runs separately with least-privilege suppression access. No automated customer messaging has been enabled by this plan.
 
 **Profitability data guardrail (9 October 2026):** Internal profitability reporting now treats an absent supplier or transport cost as unknown. It displays `Not recorded` for dependent cost, profit, margin and GST fields rather than assuming a zero cost. This protects the A$10k profit goal from being managed against false margins.
 
@@ -51,7 +51,7 @@ The public `lead-intake` endpoint now records the timestamped contact basis **Re
 
 The sports-clubs CTA now routes to the quote form with `utm_source=sports-clubs`, `utm_campaign=pilot-2026-10-clubwear`, and `copy_version=sports-clubs-v1`. The intake endpoint records the campaign and copy version with each new lead, so the weekly review can connect inbound demand to quote and win outcomes.
 
-Both website and admin-panel production builds pass, and all 12 outreach safety tests pass after this change. The changes are not published yet: the shared workspace contains unrelated uncommitted work, so deployment must occur from an isolated, reviewed release rather than risk publishing unrelated changes.
+Both website and admin-panel production builds pass, and all 15 outreach and financial-integrity tests pass. On 9 October 2026, the sports-club CTA and admin intake endpoint were released to production. A labelled synthetic website enquiry returned successfully, was created in Airtable as `New` with its required contact basis, campaign and copy version, and was then deleted. No customer outreach was sent as part of this verification.
 
 **Shadow result — 8 October 2026:** Noah reviewed four inbound messages, found one explicit opt-out, and correctly classified it for suppression. Airtable access was blocked by the cron security policy, so it made no automatic change. A human verified the unique Lead record and applied `Do Not Contact`, `Suppressed`, the reply date and an internal audit note manually. This proves the email classification path but not the Airtable matching/write path; retain shadow mode until a least-privilege Airtable integration is available.
 
