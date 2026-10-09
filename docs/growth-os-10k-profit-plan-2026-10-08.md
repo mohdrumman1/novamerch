@@ -3,6 +3,8 @@
 **Created:** 8 October 2026
 **Status:** Phase A measurement system is live and validated in production. The website sports-club CTA and admin intake endpoint were verified end-to-end on 9 October 2026. Noah's DNC review runs separately with least-privilege suppression access. No automated customer messaging has been enabled by this plan.
 
+**Noah operating loop added (10 October 2026):** Hermes job `noah-weekly-growth-review` (`3a771b1d6b25`) now runs weekly on Monday morning Sydney time and delivers a redacted, read-only growth review to Telegram. It reports what changed, the earliest weak funnel stage and evidence, one highest-leverage next action, and safety/data blockers. It cannot send or draft messages, publish content, approve leads, edit Airtable, change statuses, use Monid, or expose customer identifiers or internal pricing/profit data. The existing weekday inbound/opt-out review remains separate.
+
 **Profitability data guardrail (9 October 2026):** Internal profitability reporting now treats an absent supplier or transport cost as unknown. It displays `Not recorded` for dependent cost, profit, margin and GST fields rather than assuming a zero cost. This protects the A$10k profit goal from being managed against false margins.
 
 ## Implementation log — 8–9 October 2026
