@@ -5,6 +5,8 @@
 
 **Noah operating loop added (10 October 2026):** Hermes job `noah-weekly-growth-review` (`3a771b1d6b25`) now runs weekly on Monday morning Sydney time and delivers a redacted, read-only growth review to Telegram. It reports what changed, the earliest weak funnel stage and evidence, one highest-leverage next action, and safety/data blockers. It cannot send or draft messages, publish content, approve leads, edit Airtable, change statuses, use Monid, or expose customer identifiers or internal pricing/profit data. The existing weekday inbound/opt-out review remains separate.
 
+**Inbound operations loop added (10 October 2026):** Hermes job `noah-inbound-enquiry-ops` (`ef73cce62e85`) now runs twice each business day (08:00 and 15:00 Sydney time during daylight saving). It checks new enquiries and buying conversations, prepares human-review reply/mockup/quote briefs, identifies 48-hour and seven-day follow-up due items, and reports missing attribution fields and next actions. It is draft-only and redacted: it cannot send, create Gmail drafts, edit Airtable, approve leads or change status. Same-day reply and one-business-day quote remain the owner’s send/approval step until a reviewed quote ledger and approval path are implemented.
+
 **Profitability data guardrail (9 October 2026):** Internal profitability reporting now treats an absent supplier or transport cost as unknown. It displays `Not recorded` for dependent cost, profit, margin and GST fields rather than assuming a zero cost. This protects the A$10k profit goal from being managed against false margins.
 
 ## Implementation log — 8–9 October 2026
@@ -55,7 +57,7 @@ The sports-clubs CTA now routes to the quote form with `utm_source=sports-clubs`
 
 Both website and admin-panel production builds pass, and all 15 outreach and financial-integrity tests pass. On 9 October 2026, the sports-club CTA and admin intake endpoint were released to production. A labelled synthetic website enquiry returned successfully, was created in Airtable as `New` with its required contact basis, campaign and copy version, and was then deleted. No customer outreach was sent as part of this verification.
 
-**Shadow result — 8 October 2026:** Noah reviewed four inbound messages, found one explicit opt-out, and correctly classified it for suppression. Airtable access was blocked by the cron security policy, so it made no automatic change. A human verified the unique Lead record and applied `Do Not Contact`, `Suppressed`, the reply date and an internal audit note manually. This proves the email classification path but not the Airtable matching/write path; retain shadow mode until a least-privilege Airtable integration is available.
+**Shadow result — 8 October 2026:** Noah reviewed four inbound messages, found one explicit opt-out, and correctly classified it for suppression. Airtable access was blocked by the cron security policy, so it made no automatic change. A human verified the unique Lead record and applied `Do Not Contact`, `Suppressed`, the reply date and an internal audit note manually. A new no-match shadow check completed successfully on 10 October, but no safe, unsuppressed real opt-out has appeared for a write reconciliation. DNC v2 therefore remains in shadow mode; do not claim the write gate is complete until a genuine unique candidate is compared and applied through the helper.
 
 ### What must not happen before the operational gate is cleared
 

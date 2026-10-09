@@ -21,7 +21,7 @@
 
 | Priority | Finding | Evidence and safe response |
 |---|---|---|
-| High | Root web app is on Next.js `15.5.15`, below patched releases for multiple published Next.js advisories, including middleware/proxy bypass classes. | Upgrade the root application to at least `15.5.27`, run the application test/build suite, then deploy through the normal reviewed release path. Do not use a blind `npm audit fix` in production. |
+| High | Root web app was on Next.js `15.5.15`, below patched releases for multiple published Next.js advisories, including middleware/proxy bypass classes. | **Patched locally on 10 October to Next.js `15.5.27` and matching `eslint-config-next`; production deployment still requires the normal reviewed release path and post-deploy check.** Do not use a blind `npm audit fix` in production. |
 | High | The n8n outreach sender/follow-up workflows were previously observed as published, while the historical queue lacks documented contact basis or explicit approval. | Treat every outbound n8n sender as paused pending a visible Rumman-profile verification. Before any reactivation, require `Contact Basis`, explicit approval, suppression/reply/bounce checks, a capped dry run, and a proof-of-send review. |
 | Medium | Hermes is materially behind its upstream version. | Review Hermes release notes and perform a staged update in a maintenance window, with a backup and a post-update read-only cron test. Do not update the production host opportunistically. |
 | Medium | The legacy daily report was capable of autonomous CRM writes/drafts. | It is paused. Replace it only with an explicitly reviewed, least-privilege workflow that has separate opt-out evidence handling and no automatic external side effects. |
