@@ -69,4 +69,10 @@ Do not activate the 20-account pilot until this test and one real shadow-to-writ
 - A read-only acceptance run against a deliberately nonexistent address returned `no_unique_match`; no Airtable write was possible from that path.
 - The active Noah review was updated to call the helper, not Airtable directly, only for clear explicit opt-outs. A direct scheduled-job run completed and delivered its redacted report successfully.
 
-The first future unique explicit opt-out will be the live idempotent write validation. Until then, the 20-account outbound pilot remains review-only.
+### 10 October internal write-path acceptance
+
+- A temporary NovaMerch-only test lead with a non-deliverable internal address was created, processed with `--apply`, and verified to receive only the four allowlisted changes (`Status`, `Suppressed`, `Replied Date`, and an appended audit note).
+- The temporary record was deleted and then queried again to confirm it was absent. No prospect was used or modified.
+- This validates the narrow helper boundary. Keep the first genuine explicit opt-out under observation for end-to-end classification and idempotency evidence.
+
+The 20-account outbound pilot remains review-only until contact-basis and reply checks are also satisfied.
