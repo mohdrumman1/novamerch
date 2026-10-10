@@ -7,6 +7,8 @@
 
 **Inbound operations loop added (10 October 2026):** Hermes job `noah-inbound-enquiry-ops` (`ef73cce62e85`) now runs twice each business day (08:00 and 15:00 Sydney time during daylight saving). It checks new enquiries and buying conversations, prepares human-review reply/mockup/quote briefs, identifies 48-hour and seven-day follow-up due items, and reports missing attribution fields and next actions. It is draft-only and redacted: it cannot send, create Gmail drafts, edit Airtable, approve leads or change status. Same-day reply and one-business-day quote remain the owner’s send/approval step until a reviewed quote ledger and approval path are implemented.
 
+**Permission-first prospect review (10 October 2026):** Airtable was inspected without changing records. The sports-club/academy search returned 25 non-suppressed candidates, but the current records contain no verified referral or requested-material basis; many are historical follow-up stages and some are already marked Do Not Contact. Ten high-fit call/introduction candidates can be selected from the non-suppressed set, but they remain `Contact permission pending` and must not be emailed or enrolled automatically. The next human action is to make permission-first phone calls or obtain introductions, then record the evidence before any material is sent.
+
 **Profitability data guardrail (9 October 2026):** Internal profitability reporting now treats an absent supplier or transport cost as unknown. It displays `Not recorded` for dependent cost, profit, margin and GST fields rather than assuming a zero cost. This protects the A$10k profit goal from being managed against false margins.
 
 ## Implementation log — 8–9 October 2026
