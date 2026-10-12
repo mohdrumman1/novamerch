@@ -1,0 +1,93 @@
+{
+  "name": "NovaMerch - Weekly Growth Review (Read Only)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtDay": [1],
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "5fdd9738-8df9-4654-9bea-2e5502aa3eb1",
+      "name": "Monday Sydney Review",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [240, 160]
+    },
+    {
+      "parameters": {},
+      "id": "84d955d3-4127-4b22-ae2b-399e4c7d883e",
+      "name": "Manual Test Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 340]
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appxYYtl9qnkcgUVx",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1p7cvWR84ZjoKD",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "options": {}
+      },
+      "id": "db402124-6589-4304-b5cf-8c540e558bf7",
+      "name": "Read Lead Snapshot",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [500, 260],
+      "credentials": {
+        "airtableTokenApi": {
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const records = items.map((item) => item.json || {});\nconst now = new Date();\nconst since = new Date(now);\nsince.setDate(now.getDate() - 7);\n\nconst fieldNames = new Set(records.flatMap((record) => Object.keys(record)));\nconst required = ['Status', 'Business Name'];\nconst recommended = ['Date Emailed', 'Follow-up 1 Sent', 'Follow-up 2 Sent', 'Replied Date', 'Campaign ID', 'Copy Version', 'Quote Value', 'Quoted Gross Profit', 'Won Gross Profit'];\nconst missingRequired = required.filter((name) => !fieldNames.has(name));\nconst missingRecommended = recommended.filter((name) => !fieldNames.has(name));\n\nfunction date(value) {\n  if (!value) return null;\n  const parsed = new Date(value);\n  return Number.isNaN(parsed.getTime()) ? null : parsed;\n}\nfunction inWeek(value) {\n  const parsed = date(value);\n  return Boolean(parsed && parsed >= since && parsed <= now);\n}\nfunction number(value) {\n  const parsed = Number(value);\n  return Number.isFinite(parsed) ? parsed : 0;\n}\nfunction status(record) {\n  return String(record.Status || '').trim();\n}\n\nconst counts = {\n  totalRecords: records.length,\n  emailFoundPending: 0,\n  readyToEmail: 0,\n  emailed: 0,\n  followup1: 0,\n  followup2: 0,\n  replied: 0,\n  quoteRequested: 0,\n  won: 0,\n  lost: 0,\n  initialSentLast7Days: 0,\n  followup1SentLast7Days: 0,\n  followup2SentLast7Days: 0,\n  repliesLast7Days: 0,\n  quotedRevenue: 0,\n  quotedGrossProfit: 0,\n  wonGrossProfit: 0\n};\nconst byCampaign = {};\n\nfor (const record of records) {\n  const stage = status(record);\n  if (stage === 'Email Found') counts.emailFoundPending += 1;\n  if (stage === 'Ready to Email') counts.readyToEmail += 1;\n  if (stage === 'Emailed') counts.emailed += 1;\n  if (stage === 'Follow-up 1') counts.followup1 += 1;\n  if (stage === 'Follow-up 2') counts.followup2 += 1;\n  if (stage === 'Replied') counts.replied += 1;\n  if (stage === 'Quote Requested' || stage === 'Quote Sent') counts.quoteRequested += 1;\n  if (stage === 'Won') counts.won += 1;\n  if (stage === 'Lost') counts.lost += 1;\n  if (inWeek(record['Date Emailed'])) counts.initialSentLast7Days += 1;\n  if (inWeek(record['Follow-up 1 Sent'])) counts.followup1SentLast7Days += 1;\n  if (inWeek(record['Follow-up 2 Sent'])) counts.followup2SentLast7Days += 1;\n  if (inWeek(record['Replied Date'])) counts.repliesLast7Days += 1;\n  counts.quotedRevenue += number(record['Quote Value']);\n  counts.quotedGrossProfit += number(record['Quoted Gross Profit']);\n  counts.wonGrossProfit += number(record['Won Gross Profit']);\n\n  const key = String(record['Campaign ID'] || 'unattributed');\n  if (!byCampaign[key]) byCampaign[key] = { records: 0, ready: 0, replied: 0, quotedGP: 0, wonGP: 0 };\n  byCampaign[key].records += 1;\n  if (stage === 'Ready to Email') byCampaign[key].ready += 1;\n  if (stage === 'Replied') byCampaign[key].replied += 1;\n  byCampaign[key].quotedGP += number(record['Quoted Gross Profit']);\n  byCampaign[key].wonGP += number(record['Won Gross Profit']);\n}\n\nconst report = [\n  'NOVAMERCH WEEKLY GROWTH REVIEW',\n  `Generated: ${now.toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })}`,\n  '',\n  `Lead records scanned: ${counts.totalRecords}`,\n  `Email Found awaiting review: ${counts.emailFoundPending}`,\n  `Approved Ready to Email: ${counts.readyToEmail}`,\n  `Active sales stages — Emailed: ${counts.emailed}; Follow-up 1: ${counts.followup1}; Follow-up 2: ${counts.followup2}; Replied: ${counts.replied}; Quote requested/sent: ${counts.quoteRequested}; Won: ${counts.won}; Lost: ${counts.lost}`,\n  '',\n  'LAST 7 DAYS',\n  `Initial sends recorded: ${counts.initialSentLast7Days}`,\n  `Follow-up 1 recorded: ${counts.followup1SentLast7Days}`,\n  `Follow-up 2 recorded: ${counts.followup2SentLast7Days}`,\n  `Replies recorded: ${counts.repliesLast7Days}`,\n  '',\n  'PROFIT SIGNALS',\n  `Quoted revenue recorded: A$${counts.quotedRevenue.toFixed(2)}`,\n  `Quoted gross profit recorded: A$${counts.quotedGrossProfit.toFixed(2)}`,\n  `Won gross profit recorded: A$${counts.wonGrossProfit.toFixed(2)}`,\n  '',\n  missingRequired.length ? `BLOCKER: Missing required fields: ${missingRequired.join(', ')}.` : 'Required lead fields detected.',\n  missingRecommended.length ? `MEASUREMENT GAP: Add or map: ${missingRecommended.join(', ')}.` : 'Recommended funnel fields detected.',\n  '',\n  'NEXT REVIEW QUESTION',\n  'Which source/segment/copy produced the most quoted and won gross profit, and what is the earliest weak funnel stage?'\n].join('\\n');\n\nreturn [{ json: { report, counts, byCampaign, missingRequired, missingRecommended, generatedAt: now.toISOString() } }];"
+      },
+      "id": "0ee8fa29-cb96-451a-985f-2f17c27d233f",
+      "name": "Build Truthful Weekly Review",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [760, 260]
+    }
+  ],
+  "connections": {
+    "Monday Sydney Review": {
+      "main": [[{ "node": "Read Lead Snapshot", "type": "main", "index": 0 }]]
+    },
+    "Manual Test Trigger": {
+      "main": [[{ "node": "Read Lead Snapshot", "type": "main", "index": 0 }]]
+    },
+    "Read Lead Snapshot": {
+      "main": [[{ "node": "Build Truthful Weekly Review", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Australia/Sydney"
+  },
+  "versionId": "bcb9a6b8-5d53-449f-b4f3-49f01f480314",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "description": "Read-only weekly review. Import disabled, run manually, map Airtable fields, then optionally add an approved internal-delivery node."
+  },
+  "tags": []
+}

@@ -1,0 +1,9 @@
+Read NovaMerch Gmail messages received in the last 24 hours. Identify only outreach replies, quote or pricing requests, opt-outs, wrong contacts, hard-bounce or delivery failures, and order or customer-service exceptions.
+
+For DNC v2, act only on an unambiguous explicit opt-out. Do not infer an opt-out from a vague negative reply. For each explicit opt-out, use the exact sender email, message received timestamp and a safe source reference containing only the Gmail message or thread identifier characters, then run:
+
+  /root/.hermes/bin/dnc-v2-airtable.sh --sender-email SENDER_EMAIL --occurred-at ISO8601_TIMESTAMP --source-ref SAFE_SOURCE_REFERENCE --apply
+
+The helper is the only allowed Airtable write path. It matches exactly one Lead by normalised email and is idempotent. Never call Airtable directly, use a broad credential, create/delete records, alter any other fields, create drafts, send messages, use Brevo, approve outreach, promise price or delivery, or use Monid. If the helper reports no unique match, ambiguous match or already suppressed, make no other change.
+
+Deliver a minimal Telegram action queue with category and sender domain only. Never include full names, email addresses, phone numbers, postal addresses, message body text, verbatim subjects, attachments, order numbers, amounts, supplier information, candidate identity, message/thread IDs, helper command arguments or Airtable record identifiers. For DNC report aggregate counts only: explicit opt-outs detected, suppressed, already suppressed, no unique match, ambiguous match, and helper failures. If an item cannot be summarized without personal or sensitive business data, report only its category and mark manual review.

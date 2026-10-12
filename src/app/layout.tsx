@@ -15,10 +15,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "NovaMerch | Branded Merchandise Australia",
+  title: "Custom Branded Merchandise Australia | NovaMerch Newcastle",
   description:
     "Premium custom branded merchandise for Australian businesses, sports clubs and teams. Newcastle-based, shipping Australia-wide. Bottles, caps, apparel, pens, tote bags, corporate gifts and event packs.",
   metadataBase: new URL("https://novamerchau.com"),
+  alternates: { canonical: "/" },
   keywords: [
     "branded merchandise Australia",
     "custom merch Australia",
@@ -47,6 +48,31 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${plusJakarta.variable} ${inter.variable} antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://novamerchau.com/#organization",
+                  name: "NovaMerch",
+                  url: "https://novamerchau.com/",
+                  areaServed: ["Newcastle", "New South Wales", "Australia"],
+                  description: "Custom branded merchandise for Australian businesses, sports clubs and teams.",
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://novamerchau.com/#website",
+                  name: "NovaMerch",
+                  url: "https://novamerchau.com/",
+                  publisher: { "@id": "https://novamerchau.com/#organization" },
+                },
+              ],
+            }),
+          }}
+        />
         {children}
       </body>
     </html>

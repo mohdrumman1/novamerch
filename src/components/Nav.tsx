@@ -6,12 +6,9 @@ import Link from "next/link";
 
 const links = [
   { label: "Products", href: "/#products" },
-  { label: "Catalogue", href: "/#catalogue" },
   { label: "Industries", href: "/#industries" },
-  { label: "Sports Clubs", href: "/sports-clubs/" },
-  { label: "Mockup Builder", href: "/mockup-builder" },
-  { label: "How It Works", href: "/#process" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "How It Works", href: "/#how-it-works" },
+  { label: "FAQs", href: "/#faq" },
 ];
 
 export default function Nav() {
@@ -60,7 +57,6 @@ export default function Nav() {
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => {
-            const isPage = !l.href.startsWith("/#");
             return (
               <a
                 key={l.href}
@@ -69,7 +65,7 @@ export default function Nav() {
                   fontFamily: "var(--font-dm-sans)",
                   fontSize: "0.875rem",
                   fontWeight: 500,
-                  color: isPage ? "var(--violet)" : "var(--text-secondary)",
+                  color: "var(--text-secondary)",
                   textDecoration: "none",
                   transition: "color 0.2s",
                 }}
@@ -77,7 +73,7 @@ export default function Nav() {
                   ((e.currentTarget as HTMLElement).style.color = "var(--text-primary)")
                 }
                 onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = isPage ? "var(--violet)" : "var(--text-secondary)")
+                  ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")
                 }
               >
                 {l.label}
@@ -110,7 +106,7 @@ export default function Nav() {
             (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,207,255,0.3)";
           }}
         >
-          Get a Quote
+          Get free mockups
         </Link>
 
         {/* Mobile hamburger */}
@@ -190,7 +186,7 @@ export default function Nav() {
               textDecoration: "none",
             }}
           >
-            Get a Free Merch Quote
+            Get free mockups
           </Link>
         </div>
       )}

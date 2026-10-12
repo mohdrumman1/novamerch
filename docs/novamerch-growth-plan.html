@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="NovaMerch growth plan for Newcastle, Maitland and Sydney." />
+    <title>NovaMerch Growth Plan</title>
+    <style>
+      :root { --ink:#16211f; --muted:#5d6965; --paper:#f7f6f2; --card:#fff; --green:#146b4d; --lime:#d8f06a; --line:#dbe0dc; --warm:#f6ead8; }
+      * { box-sizing:border-box; }
+      html { scroll-behavior:smooth; }
+      body { margin:0; color:var(--ink); background:var(--paper); font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height:1.55; }
+      a { color:inherit; }
+      .wrap { max-width:1080px; margin:auto; padding:0 24px; }
+      header { color:#fff; background:var(--ink); padding:72px 0 58px; }
+      .eyebrow { color:var(--lime); text-transform:uppercase; font-size:.78rem; font-weight:800; letter-spacing:.12em; }
+      h1,h2,h3,p { margin-top:0; }
+      h1 { max-width:780px; margin:12px 0 16px; font-size:clamp(2.65rem,6vw,5.2rem); line-height:.98; letter-spacing:-.06em; }
+      .intro { max-width:650px; margin:0; font-size:1.13rem; color:#d7dfdc; }
+      .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
+      button,.button { appearance:none; border:0; border-radius:999px; padding:11px 17px; font:inherit; font-weight:750; cursor:pointer; background:var(--lime); color:var(--ink); text-decoration:none; }
+      button.secondary { color:#fff; background:transparent; border:1px solid #6d7975; }
+      main { padding:46px 0 80px; }
+      .callout { border-left:5px solid var(--green); border-radius:9px; background:var(--card); padding:22px 24px; box-shadow:0 5px 25px rgba(16,35,28,.06); }
+      .callout strong { color:var(--green); }
+      h2 { margin:54px 0 16px; font-size:clamp(1.65rem,3vw,2.45rem); line-height:1.1; letter-spacing:-.04em; }
+      h3 { margin-bottom:7px; font-size:1.05rem; }
+      .sub { max-width:680px; color:var(--muted); }
+      .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+      .grid.two { grid-template-columns:repeat(2,1fr); }
+      .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; }
+      .card p:last-child { margin-bottom:0; }
+      .number { display:inline-flex; width:31px; height:31px; align-items:center; justify-content:center; border-radius:50%; color:#fff; background:var(--green); font-weight:800; font-size:.85rem; }
+      .tag { display:inline-block; margin-bottom:12px; padding:4px 9px; border-radius:999px; color:var(--green); background:#e2f3e9; font-size:.76rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
+      .timeline { border-left:2px solid var(--line); margin:24px 0 0 12px; padding-left:27px; }
+      .timeline article { position:relative; padding:0 0 27px; }
+      .timeline article::before { content:""; position:absolute; width:13px; height:13px; left:-35px; top:5px; border-radius:50%; background:var(--lime); border:3px solid var(--green); }
+      .timeline h3 { color:var(--green); }
+      ul { padding-left:20px; }
+      li + li { margin-top:7px; }
+      .do { background:var(--warm); border-radius:14px; padding:24px; }
+      .metric { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+      .metric div { padding:15px; border-radius:12px; background:#e9f2ed; }
+      .metric strong { display:block; color:var(--green); font-size:1.1rem; }
+      .table-wrap { overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:14px; }
+      table { width:100%; border-collapse:collapse; min-width:680px; }
+      th,td { padding:16px; vertical-align:top; text-align:left; border-bottom:1px solid var(--line); }
+      th { color:var(--green); background:#eff7f1; font-size:.82rem; text-transform:uppercase; letter-spacing:.05em; }
+      tr:last-child td { border-bottom:0; }
+      footer { padding:28px 0 42px; color:var(--muted); font-size:.88rem; }
+      @media (max-width:720px) { header { padding:52px 0 42px; } .grid,.grid.two,.metric { grid-template-columns:1fr; } main { padding-top:32px; } h2 { margin-top:40px; } }
+      @media print { body { background:#fff; font-size:10.5pt; } header { padding:28px 0; } h1 { font-size:34pt; } main { padding:10px 0; } h2 { margin-top:28px; } .actions { display:none; } .card,.callout { box-shadow:none; break-inside:avoid; } .grid { gap:8px; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <div class="eyebrow">Newcastle → Maitland → Sydney</div>
+        <h1>NovaMerch growth plan</h1>
+        <p class="intro">A simple 90-day plan to bring in more club and business orders, while protecting the brand and keeping outreach responsible.</p>
+        <div class="actions">
+          <button onclick="window.print()">Save or print as PDF</button>
+          <button class="secondary" onclick="sharePlan()">Share this plan</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="callout">
+        <strong>The goal:</strong> turn the completed 570-shirt Cooks Hill United FC order into local proof, win more profitable Newcastle and Maitland orders, then expand carefully to Sydney.
+      </section>
+
+      <section>
+        <h2>Where we are today</h2>
+        <div class="grid">
+          <article class="card"><span class="tag">We have</span><h3>A working foundation</h3><p>There is an email workflow, a lead list, automation and delivery tools. There is also a strong local success story to show prospects.</p></article>
+          <article class="card"><span class="tag">We need</span><h3>A safer, clearer system</h3><p>Before sending more email, NovaMerch needs a clear record of who can be contacted, who has replied, and who must not be contacted again.</p></article>
+          <article class="card"><span class="tag">We will do</span><h3>More than email</h3><p>Build referrals, local partnerships, useful content, search visibility and small advertising tests. Email supports this; it is not the whole strategy.</p></article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Who we help first</h2>
+        <p class="sub">Start close to home. Choose groups where a good order can lead naturally to repeat business and referrals.</p>
+        <div class="grid two">
+          <article class="card"><span class="number">1</span><h3>Clubs and community teams</h3><p>Football, rugby, netball, basketball, cricket, AFL, dance, martial arts, surf clubs and junior sport.</p></article>
+          <article class="card"><span class="number">2</span><h3>Club sponsors</h3><p>Businesses already investing in local visibility. Offer staff uniforms, sponsor merchandise and event items.</p></article>
+          <article class="card"><span class="number">3</span><h3>Uniform-heavy businesses</h3><p>Trades, hospitality, gyms, healthcare, childcare, real estate, logistics and events.</p></article>
+          <article class="card"><span class="number">4</span><h3>Community organisations</h3><p>Schools, P&amp;Cs, charities, fundraisers and local events.</p></article>
+        </div>
+      </section>
+
+      <section>
+        <h2>The offer</h2>
+        <div class="do">
+          <h3>Make it easy to start</h3>
+          <p>“Send your logo, quantity and deadline for a free mock-up and quote.”</p>
+          <p>For clubs, the focus is teamwear and merchandise. For businesses, it is branded uniforms and promotional products. For events, it is a practical design and delivery plan.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>The real problems we solve</h2>
+        <p class="sub">Customers are not simply buying a shirt, cap or bottle. They are trying to get a complicated job done without errors, surprises or a pile of supplier chasing.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>What customers worry about</th><th>How NovaMerch helps</th></tr></thead>
+            <tbody>
+              <tr><td>“I do not know what to order.”</td><td>A short, practical product recommendation based on audience, budget and purpose.</td></tr>
+              <tr><td>“I need to see it before I commit.”</td><td>Logo mock-ups and clear quote options before the decision.</td></tr>
+              <tr><td>“I am coordinating sizes, sponsors and artwork.”</td><td>One structured order brief and one person to keep it organised.</td></tr>
+              <tr><td>“I cannot risk a late or wrong delivery.”</td><td>A real production plan confirmed before a date is promised, then clear updates through delivery.</td></tr>
+              <tr><td>“Our next order should be easier.”</td><td>Keep approved artwork, products and order details ready for a faster reorder.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>How we will find customers</h2>
+        <div class="grid">
+          <article class="card"><span class="tag">No cost</span><h3>Referrals and relationships</h3><p>Ask each happy customer for a review, a case-study photo and two introductions. Build relationships with club committees, photographers, designers, event organisers and local businesses.</p></article>
+          <article class="card"><span class="tag">No cost</span><h3>Local proof and content</h3><p>Post three times each week: a finished order, a useful ordering tip, and a local community post. Improve Google Business Profile and local service pages.</p></article>
+          <article class="card"><span class="tag">Low cost</span><h3>Small advertising tests</h3><p>Run one 14-day test at A$10–20 a day. Start in Newcastle and Maitland with the free mock-up offer. Keep only ads that produce qualified quote requests.</p></article>
+        </div>
+      </section>
+
+      <section>
+        <h2>How this scales without becoming messy</h2>
+        <p class="sub">The system does the repeatable admin. A person makes the important calls: what to recommend, what to promise and when an order is safe to proceed.</p>
+        <div class="timeline">
+          <article><h3>1. One clear path in</h3><p>A local referral, Google search, social post or small ad takes people to one relevant quote form.</p></article>
+          <article><h3>2. Lead is captured and owned</h3><p>The form creates an Airtable lead, records where it came from and gives one person a same-day follow-up task.</p></article>
+          <article><h3>3. The right solution is prepared</h3><p>We ask only for the essentials: purpose, quantity, budget, deadline, artwork and delivery location. Then we send a shortlist, mock-up and quote.</p></article>
+          <article><h3>4. Delivery is managed, not guessed</h3><p>Before promising a date, confirm stock, decoration, supplier production and shipping. After approval, track artwork, production, dispatch and delivery in one board.</p></article>
+          <article><h3>5. Each order creates the next one</h3><p>At delivery, ask for a review, case-study permission and two introductions. Save the approved specification for reorders.</p></article>
+        </div>
+      </section>
+
+      <section>
+        <h2>What is automated, and what stays human</h2>
+        <div class="grid two">
+          <article class="card"><span class="tag">Automate</span><h3>Speed and organisation</h3><ul><li>Form → Airtable lead record</li><li>Source and campaign tracking</li><li>Lead-owner task and reminders</li><li>Quote and delivery-status reminders</li><li>Weekly reporting by channel</li></ul></article>
+          <article class="card"><span class="tag">Keep human</span><h3>Trust and accountability</h3><ul><li>Product and pricing recommendation</li><li>Artwork and supplier confirmation</li><li>Any delivery promise</li><li>Advertising budget and creative approval</li><li>Personal customer follow-up</li></ul></article>
+        </div>
+        <div class="callout"><strong>Human-light rule:</strong> prepare one weekly content batch, approve it once, then automate formatting, resizing, scheduling, repurposing and reporting. A person only steps in for identity verification, customer permissions, prices, delivery promises, complaints and real buying conversations.</div>
+      </section>
+
+      <section>
+        <h2>Our growth system, in plain English</h2>
+        <p class="sub">We already have the main building blocks. The next step is connecting them around one measurable customer journey.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Part</th><th>Job</th><th>Next move</th></tr></thead>
+            <tbody>
+              <tr><td>Website</td><td>Explain the offer and collect a mock-up or quote request.</td><td>Use one Newcastle/Maitland offer and record the source of every enquiry.</td></tr>
+              <tr><td>Airtable + admin</td><td>Keep customer, quote, order and delivery information together.</td><td>Show the owner, approval evidence and delivery milestones clearly.</td></tr>
+              <tr><td>n8n + Brevo</td><td>Run scheduled tasks and record events.</td><td>Keep the final approval, reply, bounce and unsubscribe checks immediately before any send.</td></tr>
+              <tr><td>Noah</td><td>Research, triage, draft, report and flag exceptions.</td><td>Never let it send, promise pricing/dates or promote a lead by itself.</td></tr>
+              <tr><td>Newsjack</td><td>Find timely local stories and turn real proof into useful PR/content angles.</td><td>Use it for one evidence-backed story at a time, with approval.</td></tr>
+              <tr><td>OpenSEO</td><td>Find local search opportunities and technical gaps.</td><td>Start with free site/Search Console evidence; only buy DataForSEO data when justified.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout"><strong>Jev:</strong> no Jev connection is documented yet. If Jev is added, use it first as an independent weekly research/QA reviewer. It must not receive the Monid key, edit suppression or approval fields, publish ads or send messages until its connector and rules are documented.</div>
+      </section>
+
+      <section>
+        <h2>What we can borrow from the linked video</h2>
+        <div class="callout">
+          <p>The video is about how service businesses create repeatable client acquisition. We are adapting the useful ideas for a local merchandise business, not copying every tactic.</p>
+          <ul>
+            <li><strong>Productise the first step:</strong> sell a free mock-up pack, not a vague “merchandise service.”</li>
+            <li><strong>Start narrow:</strong> clubs, club sponsors and uniform-heavy businesses share useful referral paths.</li>
+            <li><strong>Show the work:</strong> record short demonstrations of mock-ups, sponsor packs, sizing and order preparation.</li>
+            <li><strong>Use local proof:</strong> make the Cooks Hill result visible with permission.</li>
+            <li><strong>Ask for introductions:</strong> request two relevant referrals after a successful order or positive check-in.</li>
+            <li><strong>Reply quickly:</strong> acknowledge enquiries the same business day, while only promising dates after supplier confirmation.</li>
+          </ul>
+          <p><strong>We will not copy:</strong> scraped lists, disguised newsletters, unsolicited directory outreach, mass DMs or notification tricks.</p>
+          <p style="margin-bottom:0"><a href="https://www.youtube.com/watch?v=JOCR2pL6kTI">Watch the linked video</a></p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Our 90-day roadmap</h2>
+        <div class="timeline">
+          <article><h3>Week 1 — get ready</h3><p>Use one clear contact identity, prepare the Cooks Hill story, set up a simple quote page, and create one delivery board with clear order milestones.</p></article>
+          <article><h3>Week 2 — build local paths</h3><p>Make a list of 30 local referral partners. Test that a form reaches Airtable, gets an owner and creates a same-day task. Test that replies, bounces and unsubscribe requests stop future contact.</p></article>
+          <article><h3>Weeks 3–4 — show up locally</h3><p>Ask for introductions, publish helpful content, request reviews, and attend a local business or club event.</p></article>
+          <article><h3>Days 31–60 — test and learn</h3><p>Run one small advertising test. Publish more proof. Find the audience and offer that produce real quote requests, profitable margins and deliverable work.</p></article>
+          <article><h3>Days 61–90 — repeat what works</h3><p>Put more effort into the best local channel and build club-sponsor partnerships. Only increase outreach once the system is proven safe and accurate.</p></article>
+          <article><h3>After 90 days — expand carefully</h3><p>Move through the wider Hunter first. Test one Sydney area and one customer type only after local results and delivery capacity are proven.</p></article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Free content that keeps NovaMerch top of mind</h2>
+        <p class="sub">Publish useful answers that local clubs and businesses can actually use. Each piece should lead to the mock-up builder or quote form.</p>
+        <div class="grid">
+          <article class="card"><span class="tag">Week 1</span><h3>Newcastle club ordering guide</h3><p>Explain sizes, sponsor logos, colours, quantities and deadlines using the real order brief.</p></article>
+          <article class="card"><span class="tag">Week 2</span><h3>Maitland uniform starter guide</h3><p>Show three practical starting options for small teams, with honest budget and supplier caveats.</p></article>
+          <article class="card"><span class="tag">Week 3</span><h3>Cooks Hill project note</h3><p>With written permission, explain the 570-shirt order and what other clubs can learn from it.</p></article>
+          <article class="card"><span class="tag">Monthly</span><h3>Useful answer pages</h3><p>Cover event merch, reorder systems and choosing bottles, caps, apparel or bags by use case.</p></article>
+        </div>
+        <div class="callout"><strong>AEO rule:</strong> answer one real question directly, use only verified facts, keep the answer visible on the page, and never promise rankings, citations or “best in Newcastle.”</div>
+      </section>
+
+      <section>
+        <h2>Simple rules for outreach</h2>
+        <div class="grid two">
+          <article class="card"><h3>Do</h3><ul><li>Contact people through referrals, enquiries, permission-based forms or another recorded approved reason.</li><li>Make every message useful, personal and easy to stop.</li><li>Immediately stop future contact when someone replies, opts out or an email bounces.</li><li>Use Monid to research businesses, not to automatically email them.</li></ul></article>
+          <article class="card"><h3>Do not</h3><ul><li>Increase email volume just because more email addresses have been found.</li><li>Automatically move leads into a send list.</li><li>Use public email addresses as proof that marketing contact is allowed.</li><li>Measure success by email volume instead of profitable orders.</li></ul></article>
+        </div>
+      </section>
+
+      <section>
+        <h2>What success looks like</h2>
+        <div class="metric">
+          <div><strong>More</strong>qualified quote requests</div>
+          <div><strong>Better</strong>quote-to-order conversion</div>
+          <div><strong>Profitable</strong>average order value</div>
+          <div><strong>Growing</strong>referrals and repeat orders</div>
+        </div>
+        <p class="sub" style="margin-top:18px">The key number is not emails sent. It is qualified quote requests that become profitable orders.</p>
+      </section>
+    </main>
+    <footer class="wrap">NovaMerch growth plan · 27 September 2026 · Internal working plan<br><br>Research themes: club coordinators commonly manage sizing, sponsors, artwork and deadlines; uniform buyers need fit, consistency and easy reordering. Delivery dates must be confirmed per order, not assumed.</footer>
+    <script>
+      async function sharePlan() {
+        const data = { title: document.title, text: 'NovaMerch growth plan', url: window.location.href };
+        if (navigator.share) { try { await navigator.share(data); return; } catch (_) {} }
+        try { await navigator.clipboard.writeText(window.location.href); alert('Link copied.'); }
+        catch (_) { alert('Use “Save or print as PDF” to create a shareable copy.'); }
+      }
+    </script>
+  </body>
+</html>

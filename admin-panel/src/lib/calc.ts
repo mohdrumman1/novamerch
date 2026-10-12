@@ -1,5 +1,5 @@
 import type { LineItem, Order, Invoice, Quote, SupplierOrder } from "./types";
-import { GST_RATE } from "./constants";
+import { GST_RATE } from "./constants.ts";
 
 /** Sum line items total (qty * unitPrice) */
 export function lineItemsTotal(items: LineItem[]): number {
@@ -30,6 +30,18 @@ export function orderProjectedCost(order: Order, supplierOrders: SupplierOrder[]
   const goodsCost = orderGoodsCost(order, supplierOrders);
   if (goodsCost === undefined || order.transportCost === undefined) return undefined;
   return goodsCost + order.transportCost;
+}
+
+/** Customer money retained after a processed or pending refund is recorded. */
+export function orderNetRevenue(order: Order): number {
+  if (order.goodsStatus === "Cancelled" && order.refundStatus !== "Declined") return 0;
+  return Math.max(0, (order.amountReceived ?? lineItemsTotal(order.lineItems)) - (order.refundAmountAud ?? 0));
+}
+
+export function pendingOrdersValue(orders: Order[]): number {
+  return orders
+    .filter((order) => order.goodsStatus === "Pending")
+    .reduce((sum, order) => sum + lineItemsTotal(order.lineItems), 0);
 }
 
 export function orderBookedSupplierPayment(order: Order, supplierOrders: SupplierOrder[] = []): number | undefined {
@@ -71,14 +83,14 @@ export function depositSplit(
 /** Calculate expected profit for an order when projected cost is recorded. */
 export function orderExpectedProfit(order: Order, supplierOrders: SupplierOrder[] = []): number | undefined {
   const cost = orderProjectedCost(order, supplierOrders);
-  return cost === undefined ? undefined : lineItemsTotal(order.lineItems) - cost;
+  return cost === undefined ? undefined : orderNetRevenue(order) - cost;
 }
 
 /** Calculate actual profit when both revenue received and booked supplier payment are recorded. */
 export function orderActualProfit(order: Order, supplierOrders: SupplierOrder[] = []): number | undefined {
   const payment = orderBookedSupplierPayment(order, supplierOrders);
   if (payment === undefined || order.amountReceived === undefined) return undefined;
-  return order.amountReceived - payment;
+  return orderNetRevenue(order) - payment;
 }
 
 /** Profit margin as percentage */

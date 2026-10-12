@@ -62,3 +62,7 @@ The Supplier Orders page's Add/Edit/Delete UI (`/supplier-orders`) persists thro
 5. Only after that checklist passes, hand off the PDF-export steps (Chrome print, A4 portrait, no margins, background graphics on) and the `NovaMerch_[Template]_[ClientName]_[MonthYear].pdf` naming convention from `local-catalogues/README.md`.
 
 If the user asks for a "catalog" without specifying which of the above (a new client proposal vs. something else), ask — don't assume.
+
+## Code review before done (Open Code Review)
+
+`.opencodereview/rule.json` holds NovaMerch-specific review rules (Airtable five-link chain, `null`/`undefined` for unrecorded money, tsconfig isolation, `goods`/`settings` stay local, no em-dashes or unconfirmed claims) and excludes lockfiles, `docs/`, `public/`, `local-catalogues/`. After any multi-file feature or behavior change, run the `open-code-review-delegate` skill from the repo root, fix critical/high/medium findings, then verify. `ocr rules check <path>` shows which rule applies to a file.

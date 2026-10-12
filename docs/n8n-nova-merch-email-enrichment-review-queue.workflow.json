@@ -1,0 +1,209 @@
+{
+  "name": "Nova Merch - 1B Email Enrichment Review Queue",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1f2a8734-37b5-4bd2-94bf-8d9715a9f631",
+      "name": "Manual Test Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appxYYtl9qnkcgUVx",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1p7cvWR84ZjoKD",
+          "mode": "id"
+        },
+        "filterByFormula": "AND(OR({Status} = 'Needs Review', {Status} = 'Website Found', {Status} = 'No Email Found'), {Email} = '', {Website} != '', NOT({Status} = 'Do Not Contact'))",
+        "returnAll": false,
+        "limit": 10
+      },
+      "id": "89a8a775-74f2-45aa-9c71-1ce5c49cb2d4",
+      "name": "Get Enrichment Candidates",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        500,
+        300
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "function normalizeDomain(value) {\n  if (!value) return '';\n  try {\n    const url = new URL(String(value).startsWith('http') ? String(value) : `https://${value}`);\n    return url.hostname.replace(/^www\\./i, '').toLowerCase();\n  } catch {\n    return '';\n  }\n}\n\nconst website = $json.Website || $json.website || '';\nconst normalizedDomain = normalizeDomain(website);\n\nreturn {\n  json: {\n    ...$json,\n    normalizedDomain,\n    enrichmentSkipped: !normalizedDomain,\n    enrichmentSkipReason: normalizedDomain ? '' : 'missing_or_invalid_domain'\n  }\n};"
+      },
+      "id": "f4196bfc-6714-473d-83a5-9fb2bb0bc2ad",
+      "name": "Normalize Candidate Domain",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "domainSearch",
+        "domain": "={{ $json.normalizedDomain }}",
+        "onlyEmails": true,
+        "returnAll": false,
+        "limit": 10,
+        "filters": {}
+      },
+      "id": "e39f5221-6308-4617-b0b6-b12de5ff8f41",
+      "name": "Hunter Domain Search",
+      "type": "n8n-nodes-base.hunter",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ],
+      "credentials": {
+        "hunterApi": {
+          "name": "Hunter account"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const normalizedItems = $('Normalize Candidate Domain').all();\nconst byRecord = new Map();\n\nfunction scoreCandidate(email) {\n  const type = String(email.type || '').toLowerCase();\n  const value = String(email.value || email.email || '').toLowerCase();\n  const confidence = Number(email.confidence || email.score || 0);\n  let score = confidence;\n  if (type === 'generic') score += 15;\n  if (/^(info|admin|hello|sales|office|contact)@/.test(value)) score += 10;\n  if (/gmail\\.com|outlook\\.com|hotmail\\.com|yahoo\\.com/.test(value)) score -= 50;\n  return score;\n}\n\nfor (const item of items) {\n  if (item.json?.error) continue;\n  const sourceIndex = Array.isArray(item.pairedItem)\n    ? item.pairedItem[0]?.item\n    : item.pairedItem?.item;\n  const original = normalizedItems[sourceIndex ?? 0]?.json;\n  if (!original?.id) continue;\n\n  const candidate = item.json || {};\n  const value = String(candidate.value || candidate.email || '').trim().toLowerCase();\n  if (!value || !value.includes('@')) continue;\n\n  const existing = byRecord.get(original.id);\n  const scored = { original, candidate, value, score: scoreCandidate(candidate) };\n  if (!existing || scored.score > existing.score) byRecord.set(original.id, scored);\n}\n\nreturn [...byRecord.values()].map(({ original, candidate, value }) => {\n  const sources = Array.isArray(candidate.sources) ? candidate.sources : [];\n  const sourceUri = sources[0]?.uri || sources[0]?.domain || '';\n  const confidence = candidate.confidence || candidate.score || '';\n  const note = [\n    `Hunter enrichment ${new Date().toISOString()}`,\n    `Domain: ${original.normalizedDomain}`,\n    confidence !== '' ? `Confidence: ${confidence}` : '',\n    candidate.type ? `Type: ${candidate.type}` : '',\n    sourceUri ? `Source: ${sourceUri}` : '',\n    'Review required before Ready to Email. This workflow does not establish consent.'\n  ].filter(Boolean).join('\\n');\n\n  return {\n    json: {\n      id: original.id,\n      Email: value,\n      Status: 'Email Found',\n      Notes: note\n    }\n  };\n});"
+      },
+      "id": "75b8c010-441b-4559-917a-0466fc2068e1",
+      "name": "Select Review Candidate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appxYYtl9qnkcgUVx",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1p7cvWR84ZjoKD",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Email": "={{ $json.Email }}",
+            "Status": "={{ $json.Status }}",
+            "Notes": "={{ $json.Notes }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "ec70901a-e517-4c50-b173-8fdd2c55eb17",
+      "name": "Update Lead as Email Found",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1600,
+        300
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Test Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Enrichment Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Enrichment Candidates": {
+      "main": [
+        [
+          {
+            "node": "Normalize Candidate Domain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Candidate Domain": {
+      "main": [
+        [
+          {
+            "node": "Hunter Domain Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hunter Domain Search": {
+      "main": [
+        [
+          {
+            "node": "Select Review Candidate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Review Candidate": {
+      "main": [
+        [
+          {
+            "node": "Update Lead as Email Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8ba4d59e-f436-4310-ac5c-2d480dfd72c1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "nova-merch-email-enrichment-review-queue-draft",
+  "tags": []
+}

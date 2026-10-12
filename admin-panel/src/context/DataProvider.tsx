@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useReducer, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import type { AppState, Customer, Quote, Order, Invoice, Shipment, Good, SupplierOrder, AppSettings } from "@/lib/types";
+import type { AppState, Customer, Quote, Order, Invoice, Shipment, SupplierOrder, Good, AppSettings } from "@/lib/types";
 import { DEFAULT_SETTINGS } from "@/lib/constants";
 import { goods as defaultGoods } from "@/data/goods";
 
@@ -13,6 +13,7 @@ const baseState: AppState = {
   orders: [],
   invoices: [],
   shipments: [],
+  supplierOrders: [],
   goods: defaultGoods,
   supplierOrders: [],
   settings: DEFAULT_SETTINGS,
@@ -126,8 +127,7 @@ async function del(path: string): Promise<void> {
 
 interface DataContextValue {
   customers: Customer[]; quotes: Quote[]; orders: Order[];
-  invoices: Invoice[]; shipments: Shipment[]; goods: Good[];
-  supplierOrders: SupplierOrder[];
+  invoices: Invoice[]; shipments: Shipment[]; supplierOrders: SupplierOrder[]; goods: Good[];
   settings: AppSettings; loading: boolean;
   getCustomer: (id: string) => Customer | undefined;
   getOrder: (id: string) => Order | undefined;

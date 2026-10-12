@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 
 const siteUrl = "https://novamerchau.com";
+const productSlugs = ["custom-drink-bottles", "embroidered-caps", "custom-hoodies", "branded-polos", "branded-workwear", "promotional-pens", "branded-tote-bags", "corporate-gifts"];
+const industrySlugs = ["construction-trades", "gyms-fitness", "corporate", "real-estate", "schools-events"];
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -22,6 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${siteUrl}/products`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: `${siteUrl}/mockup-builder`,
       lastModified: now,
       changeFrequency: "monthly",
@@ -33,5 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    ...productSlugs.map((slug) => ({ url: `${siteUrl}/products/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 })),
+    ...industrySlugs.map((slug) => ({ url: `${siteUrl}/industries/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
   ];
 }

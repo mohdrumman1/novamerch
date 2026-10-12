@@ -14,9 +14,15 @@ Last reconciled: 29 September 2026. This index records completed work and propos
 | [Hermes Monid guardrails](hermes-monid-guardrails.md) | Rules for Noah's use of Monid: discovery only, one approved query per paid run, spend limits, data handling, lead status routing. Deployed to the server's `AGENTS.md`. |
 | [Hermes hosting decision log](hermes-hosting-decision-log.md) | Running log of the hosting-cost back-and-forth (Hetzner vs. free alternatives). Mostly superseded — see the deployment doc for current state. |
 | [Published email copy](outreach-copy-2026-09-11.md) | Four initial templates and two follow-ups published in three n8n workflows. [Expression source](outreach-copy-2026-09-11.json) is a copy snapshot, not a complete workflow backup. |
+| [Growth OS: A$10k profit plan](growth-os-10k-profit-plan-2026-10-08.md) | Current profit-first acquisition strategy, compliance gates, scorecard, self-improvement loop, low-cost rollout and a deferred Admin Panel Growth OS (Phase B) implementation boundary. Includes a disabled, read-only weekly n8n review workflow and CSV scorecard template. |
+| [Cooks Hill benchmark card](cooks-hill-benchmark-card-2026-10-09.md) | Verified operations audit of the Cooks Hill order and its unit economics; used as the current comparable-order benchmark. |
+| [Outreach review queue](outreach-review-queue-2026-10-09.md) | Live Phase A review rules for the 148 queued records: contact-basis requirement, suppression handling, decision outcomes and daily cap. |
+| [Noah outreach-review automation](noah-outreach-review-automation-2026-10-09.md) | Deployed daily Hermes inbox triage: read-only, Telegram-delivered review of replies, quote requests and suppression signals. |
+| [Security and data-handling review](security-and-data-handling-review-2026-10-09.md) | Current Phase A privacy/security controls, confirmed safeguards, risks and the safe reactivation checklist. |
 | [Daily report correction](daily-report-node-draft.js) | Locally prepared draft; not deployed. |
 | [Local SEO and AEO content plan](seo-aeo-content-plan-2026-09-27.md) | Jev fit, SEO/AEO baseline, deployment gap and six free local content pieces. |
 | [Social account launch plan](novamerch-social-account-launch-plan-2026-09-27.md) | One-account-per-day setup, security, content rhythm and image-generation workflow. |
+| [Social inbound reply plan](social-inbound-reply-plan-2026-10-03.md) | Controlled Facebook/Instagram/LinkedIn inbound replies through Noah, with platform limits, guardrails and a low-cost rollout. |
 | [CRM and storage options](crm-storage-options-2026-09-27.md) | Admin-panel-first CRM architecture, Airtable assessment and lower-cost migration plan. |
 | [Email enrichment automation research](email-enrichment-automation-research-2026-09-15.md) | n8n enrichment workflow design between lead discovery and review, with Hunter-first vendor research, import artifacts and safety gates. |
 | [Lead discovery provider research](lead-discovery-provider-research-2026-09-16.md) | Low-cost options for replacing or repairing the broken Google Places lead finder. |

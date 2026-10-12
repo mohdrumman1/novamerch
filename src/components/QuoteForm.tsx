@@ -51,16 +51,17 @@ export default function QuoteForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [attribution, setAttribution] = useState({ source: "website", campaign: "direct", landingPage: "home" });
+  const [attribution, setAttribution] = useState({ source: "website", campaign: "direct", copyVersion: "website-v1", landingPage: "home" });
   const sectionRef = useRef<HTMLElement>(null);
   const requestIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setAttribution({
-      source: params.get("utm_source") || params.get("source") || "website",
-      campaign: params.get("utm_campaign") || params.get("campaign") || "direct",
-      landingPage: window.location.pathname || "/",
+        source: params.get("utm_source") || params.get("source") || "website",
+        campaign: params.get("utm_campaign") || params.get("campaign") || "direct",
+        copyVersion: params.get("copy_version") || "website-v1",
+        landingPage: window.location.pathname || "/",
     });
   }, []);
 
@@ -104,6 +105,7 @@ export default function QuoteForm() {
           website: data.get("website"),
           source: data.get("source"),
           campaign: data.get("campaign"),
+          copyVersion: data.get("copy_version"),
           landingPage: data.get("landing_page"),
           consent: data.get("contact_consent"),
           requestId: requestIdRef.current,
@@ -481,6 +483,7 @@ export default function QuoteForm() {
 
                 <input type="hidden" name="source" value={attribution.source} />
                 <input type="hidden" name="campaign" value={attribution.campaign} />
+                <input type="hidden" name="copy_version" value={attribution.copyVersion} />
                 <input type="hidden" name="landing_page" value={attribution.landingPage} />
                 <input type="hidden" name="pipeline_status" value="New" />
                 <input type="hidden" name="_subject" value="NovaMerch mock-up pack request" />

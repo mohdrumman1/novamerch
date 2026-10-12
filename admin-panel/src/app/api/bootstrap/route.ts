@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { listRecords } from "@/lib/airtable";
 import {
   recordToCustomer, recordToQuote, recordToOrder,
-  recordToInvoice, recordToShipment, recordToSupplierOrder,
+  recordToInvoice, recordToShipment,
+  recordToSupplierOrder,
 } from "@/lib/airtable-mappers";
 
 export async function GET() {

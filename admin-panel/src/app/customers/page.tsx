@@ -56,9 +56,7 @@ export default function CustomersPage() {
   }
 
   function getCustomerProfit(customerId: string): number | undefined {
-    return sumRecordedMoney(
-      getCustomerOrders(customerId).map((o) => orderExpectedProfit(o, supplierOrders))
-    );
+    return sumRecordedMoney(getCustomerOrders(customerId).map((order) => orderExpectedProfit(order)));
   }
 
   function openCreate() {
@@ -121,7 +119,7 @@ export default function CustomersPage() {
           <span
             style={{
               fontFamily: "var(--font-dm-mono, monospace)",
-              color: profit === undefined || profit >= 0 ? "var(--green)" : "var(--red)",
+              color: profit === undefined ? "var(--text-muted)" : profit >= 0 ? "var(--green)" : "var(--red)",
             }}
           >
             {profit === undefined ? "Not recorded" : formatAUD(profit)}

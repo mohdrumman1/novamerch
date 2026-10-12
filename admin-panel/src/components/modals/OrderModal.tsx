@@ -93,8 +93,11 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
   const transportOptions = TRANSPORT_TYPES.map((t) => ({ value: t, label: t }));
 
   const revenue = lineItemsTotal(form.lineItems);
-  const cost = orderProjectedCost({ ...form, id: order?.id ?? "" }, supplierOrders);
-  const expectedProfit = orderExpectedProfit({ ...form, id: order?.id ?? "" }, supplierOrders);
+  const lineItemCost = lineItemsCost(form.lineItems);
+  const cost = lineItemCost === undefined || form.transportCost === undefined
+    ? undefined
+    : lineItemCost + form.transportCost;
+  const expectedProfit = cost === undefined ? undefined : revenue - cost;
 
   return (
     <Modal
@@ -215,8 +218,8 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
         <div
           className="rounded-[var(--radius-sm)] p-4 border"
           style={{
-            background: expectedProfit === undefined || expectedProfit >= 0 ? "var(--green-soft)" : "var(--red-soft)",
-            borderColor: expectedProfit === undefined || expectedProfit >= 0 ? "var(--green)" : "var(--red)",
+            background: expectedProfit === undefined ? "var(--surface-2)" : expectedProfit >= 0 ? "var(--green-soft)" : "var(--red-soft)",
+            borderColor: expectedProfit === undefined ? "var(--border)" : expectedProfit >= 0 ? "var(--green)" : "var(--red)",
           }}
         >
           <div className="grid grid-cols-3 gap-4 text-sm">
@@ -238,7 +241,7 @@ export function OrderModal({ open, onClose, order }: OrderModalProps) {
                 className="font-semibold text-lg"
                 style={{
                   fontFamily: "var(--font-dm-mono, monospace)",
-                  color: expectedProfit === undefined || expectedProfit >= 0 ? "var(--green)" : "var(--red)",
+                  color: expectedProfit === undefined ? "var(--text-muted)" : expectedProfit >= 0 ? "var(--green)" : "var(--red)",
                 }}
               >
                 {expectedProfit === undefined ? "Not recorded" : formatAUD(expectedProfit)}

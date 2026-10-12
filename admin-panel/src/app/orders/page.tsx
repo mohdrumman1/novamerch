@@ -90,7 +90,7 @@ export default function OrdersPage() {
           <span
             style={{
               fontFamily: "var(--font-dm-mono, monospace)",
-              color: p === undefined || p >= 0 ? "var(--green)" : "var(--red)",
+              color: p === undefined ? "var(--text-muted)" : p >= 0 ? "var(--green)" : "var(--red)",
             }}
           >
             {p === undefined ? "Not recorded" : formatAUD(p)}

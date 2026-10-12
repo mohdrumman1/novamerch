@@ -64,6 +64,8 @@ export interface Order {
   trackingK2ToCustomer?: string;
   amountReceived?: number;
   comments?: string;
+  refundAmountAud?: number;
+  refundStatus?: "Pending" | "Paid" | "Declined";
 }
 
 export interface Invoice {
@@ -83,6 +85,15 @@ export interface Invoice {
   amountReceived?: number;
   lineItems: LineItem[];
   comments?: string;
+}
+
+/** Supplier-side financial record linked to one customer order when available. */
+export interface SupplierOrder {
+  id: ID;
+  relatedOrderId: ID;
+  projectedCostAud?: number;
+  bookedPaymentAud?: number;
+  pendingBalanceEstimatedAud?: number;
 }
 
 export interface ShipmentItem {
@@ -184,6 +195,7 @@ export interface AppState {
   orders: Order[];
   invoices: Invoice[];
   shipments: Shipment[];
+  supplierOrders: SupplierOrder[];
   goods: Good[];
   supplierOrders: SupplierOrder[];
   settings: AppSettings;

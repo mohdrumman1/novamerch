@@ -23,12 +23,10 @@ export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailM
   const customerOrders = orders.filter((o) => o.customerId === customer.id);
   const customerInvoices = invoices.filter((i) => i.customerId === customer.id);
   const totalRevenue = customerOrders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
-  const totalProfit = sumRecordedMoney(
-    customerOrders.map((o) => orderExpectedProfit(o, supplierOrders))
-  );
-  const cashReceived = sumRecordedMoney(
-    customerInvoices.filter((i) => i.status === "Paid").map((i) => i.amountReceived)
-  );
+  const totalProfit = sumRecordedMoney(customerOrders.map((order) => orderExpectedProfit(order)));
+  const cashReceived = customerInvoices
+    .filter((i) => i.status === "Paid")
+    .reduce((sum, i) => sum + (i.amountReceived ?? i.total), 0);
 
   return (
     <Modal open={open} onClose={onClose} title={customer.company} size="xl">
@@ -66,7 +64,7 @@ export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailM
           <StatCard
             label="Total Profit"
             value={totalProfit === undefined ? "Not recorded" : formatAUD(totalProfit)}
-            tone={totalProfit === undefined || totalProfit >= 0 ? "green" : "red"}
+            tone={totalProfit === undefined ? undefined : totalProfit >= 0 ? "green" : "red"}
           />
         </div>
 
@@ -109,7 +107,7 @@ export function CustomerDetailModal({ open, onClose, customer }: CustomerDetailM
                           className="px-3 py-2 text-right"
                           style={{
                             fontFamily: "var(--font-dm-mono, monospace)",
-                            color: profit === undefined || profit >= 0 ? "var(--green)" : "var(--red)",
+                            color: profit === undefined ? "var(--text-muted)" : profit >= 0 ? "var(--green)" : "var(--red)",
                           }}
                         >
                           {profit === undefined ? "Not recorded" : formatAUD(profit)}

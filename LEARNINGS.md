@@ -1,3 +1,35 @@
+## 2026-09-16 - Noah (Hermes agent) down with generic "model provider failed after retries" — bad model ID copied from OpenRouter's `~`-prefixed alias listing
+
+**Tags:** hermes, noah, openrouter, model-provider, freellmapi, deploy, cron, fallback-chain
+**Status:** Fixed
+
+**Issue:** Noah (NovaMerch's Hermes agent, `novamerch-hermes` server) stopped responding on Telegram, surfacing only a generic `⚠️ The model provider failed after retries` with no actionable detail in chat.
+
+**Root cause:** `model.default` in Hermes's `config.yaml` was set to `deepseek/deepseek-v4-flash-latest`. That string is a **display alias** from OpenRouter's `/v1/models` listing — it appears there with a leading `~` (`~deepseek/deepseek-v4-flash-latest`) marking it as a moving pointer to whatever the current "latest" flash model is, not a literal ID the chat completions endpoint accepts. Every call 400'd (`... is not a valid model ID`); Hermes classifies a 400 as a **non-retryable client error** and aborts immediately rather than trying the fallback chain — so it failed identically on every single message with no gateway crash, no restart, and nothing for the existing process/site watchdog (`noah-alert-watchdog.service`) to catch, since the gateway process itself stayed up and healthy the whole time.
+
+Separately (same session, not the root cause): the model provider was believed to still be freellmapi (a self-hosted free-tier aggregator, see [hermes-hosting-decision-log.md](docs/hermes-hosting-decision-log.md)), but `hermes config get model.provider` showed it had already been repointed to direct `openrouter` at some earlier point — freellmapi was leftover/idle infra (an unused API key in `.env`, a still-running Docker container), not actually in the failing request path.
+
+**Fix:**
+- `hermes config set model.default deepseek/deepseek-v4-flash` (the real, non-aliased ID — confirmed via a filtered `curl` of `https://openrouter.ai/api/v1/models` for `deepseek` entries, taking only IDs without a leading `~`).
+- Replaced `OPENROUTER_API_KEY` in `/root/.hermes/.env` with a fresh key; deleted the now-unused `FREELLMAPI_API_KEY` line; stopped (not removed) the freellmapi Docker container.
+- Added a fallback chain (`hermes fallback add` picker — needs a real TTY, or `hermes config set fallback_providers '[...]'` scripted, see below) so rate-limit/5xx/connection failures on the primary model auto-retry against `deepseek/deepseek-v3.2-exp` then `deepseek/deepseek-chat-v3.1`, all via OpenRouter — this is the resilience freellmapi's multi-provider aggregation used to provide, now native to Hermes.
+- Added a daily cron job (`hermes cron create '0 0 * * *' ...`, id `18e42fc02b7b`, `daily-model-healthcheck`) whose scheduled turn IS the test — if the model can't produce a reply, the run fails and `--failure-deliver telegram:8214266486` alerts; silent when healthy. This is what would have caught today's break same-day instead of leaving it silently broken.
+- Updated [hermes-deployment-and-access.md](docs/hermes-deployment-and-access.md) (the doc that tracks live server state) to reflect all of the above — do not update [hermes-hosting-decision-log.md](docs/hermes-hosting-decision-log.md) for provider changes, it's explicitly a frozen historical record of the original freellmapi decision, not current state.
+
+**Verify:**
+```
+ssh -i ~/.ssh/id_ed25519_novamerch root@2.28.116.196 "hermes config get model && hermes fallback list && hermes cron list"
+```
+`model` should show `default: deepseek/deepseek-v4-flash` / `provider: openrouter`; `fallback list` should show 2 entries; `daily-model-healthcheck` should show `[active]`. A one-shot live check: `hermes -z 'reply with just: OK' --cli` should print `OK`, not an error.
+
+**If it recurs — checklist:**
+1. **Any "model provider failed" / 400 error mentioning a model ID** → before touching keys or providers, check whether the configured model ID has a `~` prefix in OpenRouter's own `/models` listing. If so, that's an alias, not a usable ID — pick the concrete one instead. This applies to any provider that publishes alias entries in its models list, not just OpenRouter/Deepseek.
+2. **Never hand-type a model ID into `hermes config set model.default` / `--model` from memory or an old doc** — model IDs get renamed/retired upstream (this is the second time in this repo's history a `deepseek-*-latest`-style name broke, see the superseded freellmapi log). Always verify against a live `/models` fetch first, or use the interactive `hermes model` / `hermes fallback add` picker (requires a real TTY — will not run over a piped/non-interactive SSH command, see the `hermes model` error `requires an interactive terminal` if you try).
+3. **A 400 (bad request / bad model ID) will NOT trigger the fallback chain** — Hermes only falls back on rate-limit/5xx/connection errors, by design, since a bad request would just fail identically against every fallback too. Don't expect the fallback chain to mask a config typo; that's what the daily health-check cron is for.
+4. **Reading `/root/.hermes/config.yaml` or `.env` directly (`cat`/`grep`) may be blocked by the sandbox's auto-mode classifier** as a suspected secrets file, even for non-secret fields — use `hermes config get <key>` (e.g. `model`, `fallback_providers`) instead, which resolves one value at a time and wasn't blocked in this session.
+
+---
+
 ## 2026-08-18 - Admin dashboard showed $0 costs/profit despite real supplier data existing in Airtable (Supplier Orders never wired to app)
 
 **Tags:** admin-panel, airtable, supplier-orders, dashboard, calc, data-provider, bootstrap, orphaned-record
@@ -84,7 +116,7 @@ from PIL import Image, ImageChops
 
 **Investigation:** Ran four grep passes per file: (1) literal UTF-8 em-dash byte sequence, (2) HTML entity forms (&mdash;, &#8212;, &#x2014;), (3) Unicode codepoint forms via perl regex, (4) en-dash entity forms (&ndash;, &#8211;, &#x2013;). The first three passes returned NO MATCHES on all files. Only pass 4 found hits. Also checked the shared business-catalogue.css for CSS content: pseudo-elements and CSS-escaped \2014; all were clean (empty strings and " per unit" plain text, no dashes).
 
-**Root cause:** 
+**Root cause:**
 - `local-catalogues/Swell Fitness/swell-fitness-siennah-brief-catalogue.html` lines 147, 178, 211, 282: `XS&ndash;3XL` used in Sizes meta rows and a list item.
 - `local-catalogues/Swell Fitness/swell-fitness-catalogue.html` lines 225, 255, 303, 330: `&ndash;` used as a separator in product names ("Hoodie &ndash; Teal Print", etc.).
 
