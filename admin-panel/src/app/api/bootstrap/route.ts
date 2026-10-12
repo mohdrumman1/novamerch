@@ -3,6 +3,7 @@ import { listRecords } from "@/lib/airtable";
 import {
   recordToCustomer, recordToQuote, recordToOrder,
   recordToInvoice, recordToShipment,
+  recordToSupplierOrder,
 } from "@/lib/airtable-mappers";
 
 export async function GET() {
@@ -19,6 +20,7 @@ export async function GET() {
     { key: "orders", table: "Orders", mapper: recordToOrder },
     { key: "invoices", table: "Invoices", mapper: recordToInvoice },
     { key: "shipments", table: "Shipments", mapper: recordToShipment },
+    { key: "supplierOrders", table: "Supplier Orders", mapper: recordToSupplierOrder },
   ];
 
   const results = await Promise.allSettled(

@@ -64,6 +64,8 @@ export interface Order {
   trackingK2ToCustomer?: string;
   amountReceived?: number;
   comments?: string;
+  refundAmountAud?: number;
+  refundStatus?: "Pending" | "Paid" | "Declined";
 }
 
 export interface Invoice {
@@ -150,6 +152,7 @@ export interface AppState {
   orders: Order[];
   invoices: Invoice[];
   shipments: Shipment[];
+  supplierOrders: SupplierOrder[];
   goods: Good[];
   settings: AppSettings;
 }

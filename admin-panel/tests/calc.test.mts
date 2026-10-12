@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { calcPL, orderExpectedProfit, sumRecordedMoney } from "../src/lib/calc.ts";
+import { calcPL, orderExpectedProfit, orderNetRevenue, pendingOrdersValue, sumRecordedMoney } from "../src/lib/calc.ts";
 import type { Order } from "../src/lib/types.ts";
 
 function order(overrides: Partial<Order> = {}): Order {
@@ -37,4 +37,21 @@ test("P&L does not turn an unrecorded cost into zero", () => {
 test("recorded money aggregation remains available when every value is known", () => {
   assert.equal(sumRecordedMoney([100, 20, 0]), 120);
   assert.equal(sumRecordedMoney([100, undefined]), undefined);
+});
+
+test("cancelled refunded orders are excluded from pending value", () => {
+  assert.equal(pendingOrdersValue([
+    order({ goodsStatus: "Pending" }),
+    order({ id: "refunded", goodsStatus: "Cancelled", refundAmountAud: 500 }),
+  ]), 500);
+});
+
+test("refund reduces expected profit without erasing supplier cost", () => {
+  const refunded = order({ refundAmountAud: 500, refundStatus: "Paid" });
+  assert.equal(orderExpectedProfit(refunded), -270);
+});
+
+test("cancelled refunded order contributes no revenue", () => {
+  assert.equal(orderNetRevenue(order({ goodsStatus: "Cancelled", amountReceived: 385 })), 0);
+  assert.equal(orderNetRevenue(order({ goodsStatus: "Completed", amountReceived: 6840 })), 6840);
 });

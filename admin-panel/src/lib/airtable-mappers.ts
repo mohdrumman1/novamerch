@@ -3,6 +3,7 @@ import type {
   QuoteStatus, QuoteSource, OrderGoodsStatus, OrderInvoiceStatus,
   TransportType, InvoiceStatus, InvoiceKind, ShipmentStatus, ShippingMethod,
   LineItem, ShipmentItem,
+  SupplierOrder,
 } from "./types";
 
 type AirtableRecord = { id: string; fields: Record<string, unknown> };
@@ -117,7 +118,11 @@ export function recordToOrder(rec: AirtableRecord): Order {
     goodsStatus: (str(f["Goods Status"]) || "Pending") as OrderGoodsStatus,
     invoiceStatus: (str(f["Invoice Status"]) || "Need to Invoice") as OrderInvoiceStatus,
     transportType: (str(f["Transport Type"]) || "Agent Sea") as TransportType,
-    transportCost: num(f["Transport Cost AUD"]) || undefined,
+    // Zero is a recorded transport cost, not an unknown value. Preserve it so
+    // supplier costs can flow through to projected profit on the dashboard.
+    transportCost: f["Transport Cost AUD"] === null || f["Transport Cost AUD"] === undefined
+      ? undefined
+      : num(f["Transport Cost AUD"]),
     fy: str(f["FY"]),
     orderedAt: str(f["Date Placed"]),
     lineItems: parseJSON<LineItem[]>(f["Line Items JSON"], []),
@@ -126,7 +131,20 @@ export function recordToOrder(rec: AirtableRecord): Order {
     trackingAgentToK2: str(f["Tracking Agent to K2"]) || undefined,
     trackingK2ToCustomer: str(f["Tracking K2 to Customer"]) || undefined,
     amountReceived: num(f["Amount Received AUD"]) || undefined,
+    refundAmountAud: f["Refund Amount AUD"] === null || f["Refund Amount AUD"] === undefined ? undefined : num(f["Refund Amount AUD"]),
+    refundStatus: (str(f["Refund Status"]) || undefined) as Order["refundStatus"],
     comments: str(f["Comments"]) || undefined,
+  };
+}
+
+export function recordToSupplierOrder(rec: AirtableRecord): SupplierOrder {
+  const f = rec.fields;
+  return {
+    id: rec.id,
+    relatedOrderId: link(f["Related Order"]),
+    projectedCostAud: num(f["Projected Cost AUD"]) || undefined,
+    bookedPaymentAud: num(f["Booked Payment AUD"]) || undefined,
+    pendingBalanceEstimatedAud: num(f["Pending Balance Estimated AUD"]) || undefined,
   };
 }
 
@@ -146,6 +164,8 @@ export function orderToFields(o: Order): Record<string, unknown> {
     "Tracking Agent to K2": o.trackingAgentToK2 || "",
     "Tracking K2 to Customer": o.trackingK2ToCustomer || "",
     "Amount Received AUD": o.amountReceived ?? 0,
+    "Refund Amount AUD": o.refundAmountAud ?? 0,
+    "Refund Status": o.refundStatus || "",
     "Transport Cost AUD": o.transportCost ?? 0,
     "Comments": o.comments || "",
     "Total Cost AUD": o.lineItems.reduce((s, li) => s + li.qty * (li.costPerUnit ?? 0), 0),

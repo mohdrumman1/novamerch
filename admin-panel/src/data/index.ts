@@ -13,6 +13,7 @@ export const initialState: AppState = {
   orders,
   invoices,
   shipments,
+  supplierOrders: [],
   goods,
   settings: DEFAULT_SETTINGS,
 };

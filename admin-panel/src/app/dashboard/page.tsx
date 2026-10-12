@@ -6,13 +6,13 @@ import { StatCard } from "@/components/ui/StatCard";
 import { Table } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
 import { formatAUD, formatDate } from "@/lib/format";
-import { lineItemsTotal, orderProjectedCost, sumRecordedMoney } from "@/lib/calc";
+import { lineItemsTotal, orderNetRevenue, orderProjectedCost, pendingOrdersValue, sumRecordedMoney } from "@/lib/calc";
 import { FY_ALL } from "@/lib/constants";
 import { ORDER_GOODS_STATUS_TONE } from "@/lib/status";
 import type { Order } from "@/lib/types";
 
 export default function DashboardPage() {
-  const { orders, invoices, quotes, customers, shipments } = useData();
+  const { orders, invoices, quotes, customers, shipments, supplierOrders } = useData();
   const [fy, setFy] = useState<string>(FY_ALL);
 
   // FY filter options
@@ -22,31 +22,29 @@ export default function DashboardPage() {
   const filteredOrders = fy === FY_ALL ? orders : orders.filter((o) => o.fy === fy);
 
   // ── Expected Financial ──────────────────────────────────────────────────
-  const expectedRevenue = filteredOrders.reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
-  const totalCosts = sumRecordedMoney(filteredOrders.map((order) => orderProjectedCost(order)));
+  const expectedRevenue = filteredOrders.reduce((sum, o) => sum + orderNetRevenue(o), 0);
+  const totalCosts = sumRecordedMoney(filteredOrders.map((order) => orderProjectedCost(order, supplierOrders)));
   const expectedProfit = totalCosts === undefined ? undefined : expectedRevenue - totalCosts;
   const profitMargin = expectedProfit === undefined ? undefined : expectedRevenue > 0 ? (expectedProfit / expectedRevenue) * 100 : 0;
 
   // ── Actual Cash Flow ────────────────────────────────────────────────────
   // cashReceived: sum order.amountReceived directly (not from invoices)
-  const cashReceived = filteredOrders.reduce((sum, o) => sum + (o.amountReceived ?? 0), 0);
+  const cashReceived = filteredOrders.reduce((sum, o) => sum + orderNetRevenue(o), 0);
   // Supplier payments are not yet recorded separately, so use the projected
   // cost only when every included order has a complete cost record.
-  const recordedProjectedCosts = sumRecordedMoney(filteredOrders.map((order) => orderProjectedCost(order)));
+  const recordedProjectedCosts = sumRecordedMoney(filteredOrders.map((order) => orderProjectedCost(order, supplierOrders)));
   const cashLessProjectedCosts = recordedProjectedCosts === undefined ? undefined : cashReceived - recordedProjectedCosts;
   // outstanding: ALL-TIME, floor at 0 per order
   const outstandingInvoices = orders.reduce(
-    (sum, o) => sum + Math.max(0, lineItemsTotal(o.lineItems) - (o.amountReceived ?? 0)),
+    (sum, o) => sum + Math.max(0, lineItemsTotal(o.lineItems) - (o.amountReceived ?? 0)) + Math.max(0, (o.refundAmountAud ?? 0) - (o.amountReceived ?? 0)),
     0
   );
 
   // ── Pipeline ────────────────────────────────────────────────────────────
-  const pendingOrdersValue = orders
-    .filter((o) => o.goodsStatus === "Pending")
-    .reduce((sum, o) => sum + lineItemsTotal(o.lineItems), 0);
+  const pendingValue = pendingOrdersValue(orders);
   const inTransitCount = orders.filter((o) => o.goodsStatus === "In Transit").length;
   const inTransitCost = sumRecordedMoney(
-    orders.filter((o) => o.goodsStatus === "In Transit").map((order) => orderProjectedCost(order))
+    orders.filter((o) => o.goodsStatus === "In Transit").map((order) => orderProjectedCost(order, supplierOrders))
   );
 
   // ── Recent Orders ───────────────────────────────────────────────────────
@@ -142,7 +140,7 @@ export default function DashboardPage() {
           Pipeline
         </p>
         <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))" }}>
-          <StatCard label="Pending Orders Value" value={formatAUD(pendingOrdersValue)} accentColor="#999" />
+          <StatCard label="Pending Orders Value" value={formatAUD(pendingValue)} accentColor="#999" />
           <StatCard label="In Transit Cost" value={formatKnownAUD(inTransitCost)} tone="blue" accentColor="var(--blue)" />
           <StatCard label="In Transit Orders" value={String(inTransitCount)} tone="blue" accentColor="var(--blue)" />
         </div>

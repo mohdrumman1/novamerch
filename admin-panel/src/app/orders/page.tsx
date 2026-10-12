@@ -16,7 +16,7 @@ import { OrderModal } from "@/components/modals/OrderModal";
 import { PlusIcon, EditIcon, TrashIcon } from "@/components/icons";
 
 export default function OrdersPage() {
-  const { orders, getCustomer, deleteOrder } = useData();
+  const { orders, getCustomer, deleteOrder, supplierOrders } = useData();
   const [goodsStatusFilter, setGoodsStatusFilter] = useState("All");
   const [fyFilter, setFyFilter] = useState(FY_ALL);
   const [search, setSearch] = useState("");
@@ -37,7 +37,7 @@ export default function OrdersPage() {
     return matchFy && matchStatus && matchSearch;
   });
 
-  const profit = (row: Order) => orderExpectedProfit(row);
+  const profit = (row: Order) => orderExpectedProfit(row, supplierOrders);
 
   const columns = [
     { key: "ref", header: "Order #", sortable: true },

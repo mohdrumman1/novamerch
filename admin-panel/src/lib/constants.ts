@@ -40,6 +40,9 @@ export const CARRIERS = [
 ] as const;
 
 export const NAV_ITEMS = [
+  { label: "Action Centre", href: "/action-centre", iconKey: "Dashboard" },
+  { label: "Approvals", href: "/approvals", iconKey: "MockupBuilder" },
+  { label: "Issues & Refunds", href: "/issues", iconKey: "Invoices" },
   { label: "Dashboard", href: "/dashboard", iconKey: "Dashboard" },
   { label: "Quotes", href: "/quotes", iconKey: "Quotes" },
   { label: "Orders", href: "/orders", iconKey: "Orders" },

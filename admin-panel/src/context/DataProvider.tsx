@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useReducer, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import type { AppState, Customer, Quote, Order, Invoice, Shipment, Good, AppSettings } from "@/lib/types";
+import type { AppState, Customer, Quote, Order, Invoice, Shipment, SupplierOrder, Good, AppSettings } from "@/lib/types";
 import { DEFAULT_SETTINGS } from "@/lib/constants";
 import { goods as defaultGoods } from "@/data/goods";
 
@@ -13,6 +13,7 @@ const baseState: AppState = {
   orders: [],
   invoices: [],
   shipments: [],
+  supplierOrders: [],
   goods: defaultGoods,
   settings: DEFAULT_SETTINGS,
 };
@@ -54,7 +55,7 @@ type Action =
   | { type: "DELETE_GOOD"; id: string }
   | { type: "UPDATE_SETTINGS"; payload: Partial<AppSettings> }
   | { type: "SET_GOODS"; payload: Good[] }
-  | { type: "HYDRATE_REMOTE"; customers: Customer[]; quotes: Quote[]; orders: Order[]; invoices: Invoice[]; shipments: Shipment[] };
+  | { type: "HYDRATE_REMOTE"; customers: Customer[]; quotes: Quote[]; orders: Order[]; invoices: Invoice[]; shipments: Shipment[]; supplierOrders: SupplierOrder[] };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -90,6 +91,7 @@ function reducer(state: AppState, action: Action): AppState {
       orders: action.orders,
       invoices: action.invoices,
       shipments: action.shipments,
+      supplierOrders: action.supplierOrders,
     };
     default: return state;
   }
@@ -118,7 +120,7 @@ async function del(path: string): Promise<void> {
 
 interface DataContextValue {
   customers: Customer[]; quotes: Quote[]; orders: Order[];
-  invoices: Invoice[]; shipments: Shipment[]; goods: Good[];
+  invoices: Invoice[]; shipments: Shipment[]; supplierOrders: SupplierOrder[]; goods: Good[];
   settings: AppSettings; loading: boolean;
   getCustomer: (id: string) => Customer | undefined;
   getOrder: (id: string) => Order | undefined;
@@ -195,6 +197,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         orders?: Order[];
         invoices?: Invoice[];
         shipments?: Shipment[];
+        supplierOrders?: SupplierOrder[];
         issues?: string[];
       }) => {
         const customers = Array.isArray(data.customers) ? data.customers : [];
@@ -202,6 +205,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const orders = Array.isArray(data.orders) ? data.orders : [];
         const invoices = Array.isArray(data.invoices) ? data.invoices : [];
         const shipments = Array.isArray(data.shipments) ? data.shipments : [];
+        const supplierOrders = Array.isArray(data.supplierOrders) ? data.supplierOrders : [];
         dispatch({
           type: "HYDRATE_REMOTE",
           customers,
@@ -209,6 +213,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           orders,
           invoices,
           shipments,
+          supplierOrders,
         });
         if (data.issues?.length) {
           setLoadError(`Could not load: ${data.issues.join(", ")}`);

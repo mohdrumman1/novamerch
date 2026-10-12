@@ -304,3 +304,21 @@ Customers → Quotes → Orders → Invoices → Supplier costs → realised pro
 ## Next decision needed from the owner
 
 Confirm the Cooks Hill gross profit and whether NovaMerch has permission to use it as a named case study. That sets the concrete monthly order target and the first account-selection criteria.
+
+## Acquisition lesson applied: warm, value-first experiments
+
+The reviewed acquisition material reinforces a safe Phase A principle: early growth should come from a small number of relevant, permission-first conversations and useful proof—not a larger volume of cold sends. For NovaMerch this means:
+
+- Start with warm introductions, existing community relationships and inbound social interest where a person has raised their hand.
+- Offer a concrete, low-friction artifact first: a three-product mockup, sizing/merch checklist or club-kit recommendation. Do not send a generic sales pitch.
+- Use social posts and community participation to invite a clear action (request the mockup/guide), then respond manually or from a reviewed draft. No auto-DMs, scraping or mass outreach.
+- Record source, campaign, copy version, consent/basis, response, quote value, direct cost, estimated gross profit, outcome and next action for every conversation that reaches a quote.
+- Run one small experiment at a time. The success threshold is a qualified conversation and then a quote; scale only after five attributable quote outcomes show a repeatable path to profitable orders.
+
+### Next needle-moving activity
+
+Run an internal dry-run of the value-first loop using NovaMerch as the subject: submit one test enquiry, generate the three-product mockup/quote brief, verify attribution and follow-up dates, confirm DNC/reply safeguards, and remove the test record. Then publish the reviewed offer to warm/community channels only when the owner approves the copy. This keeps prospects out of testing while producing the evidence needed for the first real experiment.
+
+**Dry-run result — 10 October 2026:** completed against the live intake endpoint using NovaMerch-only test data. The endpoint rejected a request without consent (`400 contact_consent_required`), then accepted the consented test and returned one `New` lead with the expected campaign, copy version and contact-basis fields. No outbound message or quote was sent. The exact Airtable test record was deleted and a follow-up read confirmed it was no longer accessible. No prospect data was used.
+
+The first warm/community experiment is prepared in [phase-a-warm-community-experiment-2026-10-10.md](phase-a-warm-community-experiment-2026-10-10.md). It is ready for channel approval; publication remains intentionally gated.

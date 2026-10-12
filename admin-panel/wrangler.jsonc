@@ -15,8 +15,40 @@
   "vars": {
     "ADMIN_USERNAME": "admin",
     "AIRTABLE_BASE_ID": "appxYYtl9qnkcgUVx",
+    "AIRTABLE_LEADS_BASE_ID": "appxYYtl9qnkcgUVx",
+    "AIRTABLE_OPERATIONS_BASE_ID": "appkQYN4Gcb1pSzu1",
+    "INBOUND_QUOTE_MODE": "legacy",
+    "AUTOMATION_ENABLED": "false",
+    "BREVO_ENABLED": "false",
+    "ORDER_LINKS_ENABLED": "false",
     "ALLOWED_ORIGINS": "https://novamerchau.com",
     "PUBLIC_ADMIN_ORIGIN": "https://novamerchau.com"
+  },
+  "env": {
+    "staging": {
+      "name": "novamerch-admin-staging",
+      "workers_dev": true,
+      "vars": {
+        "ADMIN_USERNAME": "admin",
+        "AIRTABLE_BASE_ID": "appxYYtl9qnkcgUVx",
+        "AIRTABLE_LEADS_BASE_ID": "appxYYtl9qnkcgUVx",
+        "AIRTABLE_OPERATIONS_BASE_ID": "appkQYN4Gcb1pSzu1",
+        "INBOUND_QUOTE_MODE": "operations",
+        "AUTOMATION_ENABLED": "false",
+        "BREVO_ENABLED": "false",
+        "ORDER_LINKS_ENABLED": "false",
+        "ALLOWED_ORIGINS": "http://localhost:3000,http://localhost:3001",
+        "PUBLIC_ADMIN_ORIGIN": "http://localhost:3001"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "novamerch-admin-staging",
+          "database_id": "72024acb-2acd-4c99-8b0f-ccd0549091e8",
+          "migrations_dir": "migrations"
+        }
+      ]
+    }
   },
   "routes": [
     {
