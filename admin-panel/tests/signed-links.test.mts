@@ -9,3 +9,9 @@ test("signed order links are scoped and tamper resistant", async () => {
   const tampered = token.replace("recOrder1", "recOrder2");
   assert.equal(await verifyOrderLinkToken(tampered, "tracking", "test-secret"), null);
 });
+
+test("feedback links are order-scoped and expire", async () => {
+  const token = await createOrderLinkToken("feedback", "#O1001", "test-secret", 60);
+  assert.equal((await verifyOrderLinkToken(token, "feedback", "test-secret"))?.orderId, "#O1001");
+  assert.equal(await verifyOrderLinkToken(token, "tracking", "test-secret"), null);
+});

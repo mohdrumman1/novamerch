@@ -11,8 +11,9 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const isLogin = pathname === "/login";
+  const isCustomerFeedback = pathname.startsWith("/feedback/") || pathname.startsWith("/admin/feedback/");
 
-  if (isLogin) {
+  if (isLogin || isCustomerFeedback) {
     return <>{children}</>;
   }
 

@@ -54,3 +54,10 @@ next-env.d.ts
 
 # OS junk anywhere in the tree
 **/.DS_Store
+
+# Local agent/tool state and generated recovery artifacts
+/.claude/
+/.gstack/
+/.opencodereview/
+/.next-recovery-*/
+/backups/

@@ -24,6 +24,14 @@
     "ALLOWED_ORIGINS": "https://novamerchau.com",
     "PUBLIC_ADMIN_ORIGIN": "https://novamerchau.com"
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "novamerch-customer-feedback",
+      "database_id": "3ce441ad-35a3-48c3-9783-80ee6b4be9b3",
+      "migrations_dir": "migrations"
+    }
+  ],
   "env": {
     "staging": {
       "name": "novamerch-admin-staging",
