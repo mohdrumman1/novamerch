@@ -1,4 +1,4 @@
-# Skeptical production safety review — 2026-10-10
+# Skeptical production safety review  -  2026-10-10
 
 ## Checks completed
 

@@ -4,10 +4,10 @@ No branch is pushed or merged until this checklist is reviewed.
 
 ## Public website
 
-- `http://localhost:3000/` — homepage, previous navy/cyan/violet palette, hero video controls, reduced-motion fallback.
-- `http://localhost:3000/products/` — product index and product detail links.
-- `http://localhost:3000/industries/real-estate/` — dynamic industry route renders without a server error.
-- `http://localhost:3000/#faq` — FAQ spacing, readable questions, and answer text.
+- `http://localhost:3000/`  -  homepage, previous navy/cyan/violet palette, hero video controls, reduced-motion fallback.
+- `http://localhost:3000/products/`  -  product index and product detail links.
+- `http://localhost:3000/industries/real-estate/`  -  dynamic industry route renders without a server error.
+- `http://localhost:3000/#faq`  -  FAQ spacing, readable questions, and answer text.
 - Submit the mockup/quote form with name, email, and phone; verify the success/error state without using a real customer.
 
 ## Admin application

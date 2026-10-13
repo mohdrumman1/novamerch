@@ -1,4 +1,4 @@
-# Outreach review queue — Phase A
+# Outreach review queue  -  Phase A
 
 **Scope:** the 148 records currently marked `Ready to Email`.
 

@@ -14,9 +14,9 @@ Create one dedicated Airtable personal access token with only:
 - resource scope: the Nova Merch Leads base only;
 - operational use: a single DNC v2 workflow.
 
-**Implementation record:** `NovaMerch DNC v2 — suppression only` was created with exactly this one-base, two-scope boundary. Its secret value is intentionally not recorded in source control, documentation, chat, browser storage or logs.
+**Implementation record:** `NovaMerch DNC v2  -  suppression only` was created with exactly this one-base, two-scope boundary. Its secret value is intentionally not recorded in source control, documentation, chat, browser storage or logs.
 
-Airtable tokens are scoped at base level rather than individual field level. Therefore the worker code—not the token alone—must enforce the allowed table and fields.
+Airtable tokens are scoped at base level rather than individual field level. Therefore the worker code - not the token alone - must enforce the allowed table and fields.
 
 ## Worker allowlist
 

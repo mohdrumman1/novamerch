@@ -49,7 +49,7 @@ Website + social + approved outreach
 
 ## Migration plan
 
-### Phase 0 — make the existing path authoritative (1–3 days)
+### Phase 0  -  make the existing path authoritative (1–3 days)
 
 - Decide whether Formspree remains only a temporary notification fallback.
 - Add a public admin-panel intake endpoint for the simple website form, with origin checks, rate limiting, honeypot/Turnstile hook, idempotency and structured fields.
@@ -58,14 +58,14 @@ Website + social + approved outreach
 - Add `source`, `campaign`, `landing_page`, `consent`, `owner`, `next_action_at` and `last_event_at` to the CRM record.
 - Confirm one test submission appears in the admin panel and one notification arrives. Do not use a real customer record for this test.
 
-### Phase 1 — separate the UI from Airtable (3–5 days)
+### Phase 1  -  separate the UI from Airtable (3–5 days)
 
 - Define a typed repository interface for leads, contacts, activities, suppression, quotes and orders.
 - Keep the existing Airtable implementation behind that interface.
 - Add contract tests for create, update, dedupe, suppression, event append and list/filter behaviour.
 - Make the admin panel and public intake use the repository, not Airtable-specific field names.
 
-### Phase 2 — pilot the cheaper backend (5–10 days)
+### Phase 2  -  pilot the cheaper backend (5–10 days)
 
 - Create a separate pilot database with no production secrets.
 - Import a small synthetic dataset plus a redacted copy of 20–50 historical records.
@@ -73,13 +73,13 @@ Website + social + approved outreach
 - Replay intake, dedupe, suppression and event-ledger tests against both adapters.
 - Measure backup/restore, latency, permissions and operator usability.
 
-### Phase 3 — dual-write and reconcile (5 business days)
+### Phase 3  -  dual-write and reconcile (5 business days)
 
 - Keep Airtable authoritative, but write new test submissions to both stores.
 - Compare record counts, normalized emails, statuses, timestamps, suppression and event IDs daily.
 - Stop immediately on any mismatch affecting consent, suppression, quote amount, delivery date or customer identity.
 
-### Phase 4 — cut over (only after sign-off)
+### Phase 4  -  cut over (only after sign-off)
 
 - Export and archive a dated Airtable snapshot.
 - Switch the repository default to the selected backend.

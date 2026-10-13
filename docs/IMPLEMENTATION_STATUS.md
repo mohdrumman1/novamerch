@@ -1,6 +1,6 @@
-# Implementation status — 2026-10-09
+# Implementation status  -  2026-10-09
 
-## Brevo staging verification — 2026-10-10
+## Brevo staging verification  -  2026-10-10
 
 - Local API v3 credentials validated against `GET /v3/account` (HTTP 200).
 - Controlled transactional delivery test sent only to `novamerch.au@gmail.com` (HTTP 201; Brevo message ID returned).
@@ -8,7 +8,7 @@
 - No customer or Siennah email was sent.
 - Production remains disabled pending mailbox receipt and webhook reconciliation.
 
-## Operational data update — 2026-10-10
+## Operational data update  -  2026-10-10
 
 - Cooks Hill `#O1002` was updated in NovaMerch Orders to `Goods Status = Completed`; shipment date is 26/09/2026 and actual delivery is 06/10/2026.
 - The linked delivered shipment record now contains both verified dates.

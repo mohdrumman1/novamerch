@@ -1176,7 +1176,7 @@ function changeQty(d) {
 // Summary-bar Qty input handlers. The summary now hosts an editable
 // <input id="s-qty">; both inputs (sidebar #qty and summary #s-qty) must
 // stay in sync. While typing we accept partial values and only clamp the
-// model state — committing (blur / Enter) writes the clamped value back
+// model state  -  committing (blur / Enter) writes the clamped value back
 // into the field so the user sees what was accepted.
 function onSummaryQtyInput(raw) {
     const n = clampQty(parseInt(raw, 10));
@@ -1596,7 +1596,7 @@ function initSplitter() {
     window.addEventListener('touchend',     onUp);
     window.addEventListener('touchcancel',  onUp);
 
-    // Keyboard accessibility — arrows nudge, Home resets, End maxes out.
+    // Keyboard accessibility  -  arrows nudge, Home resets, End maxes out.
     splitter.addEventListener('keydown', (e) => {
         const current = sidebar.getBoundingClientRect().width;
         let next = null;

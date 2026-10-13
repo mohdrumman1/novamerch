@@ -1,4 +1,4 @@
-# NovaMerch outreach copy — 11 September 2026
+# NovaMerch outreach copy  -  11 September 2026
 
 See [implementation status](README.md) for outstanding pipeline work and the [Hermes admin plan](hermes-admin-implementation-plan.md) for the proposed reply-review process. This document records published copy, not proven campaign performance.
 

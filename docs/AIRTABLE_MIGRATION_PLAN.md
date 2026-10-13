@@ -10,7 +10,7 @@
 
 This plan implements the verified Airtable addendum without recreating existing tables or mutating production data before review.
 
-## Phase 0 — Read-only verification and backup
+## Phase 0  -  Read-only verification and backup
 
 1. Confirm the deployed admin revision and actual `AIRTABLE_BASE_ID`/secret bindings.
 2. Obtain read-only schema snapshots for Base 1 and Base 2: table IDs, field IDs/types, select options, linked-record fields, record counts and sample record IDs.
@@ -18,7 +18,7 @@ This plan implements the verified Airtable addendum without recreating existing 
 4. Verify `#O1001` and its linked records without editing them. Record the Swell reconciliation task separately.
 5. Create a mapping document from Base 1 entities to Base 2 entities. Do not merge by company name alone.
 
-## Phase 1 — Additive Base 2 schema
+## Phase 1  -  Additive Base 2 schema
 
 Add only missing tables/fields in Base 2 after the schema snapshot is reviewed:
 
@@ -32,7 +32,7 @@ Add only missing tables/fields in Base 2 after the schema snapshot is reviewed:
 
 Keep existing Customers, Quotes, Orders, Invoices, Shipments and Supplier Orders. Preserve existing record IDs and readable line-item JSON. Add structured line-item records only as a later, dual-read migration if reporting needs justify it.
 
-## Phase 2 — Application read/write adapter
+## Phase 2  -  Application read/write adapter
 
 1. Replace the single `AIRTABLE_BASE_ID` assumption with explicit server-only base configuration: `AIRTABLE_LEADS_BASE_ID` and `AIRTABLE_OPERATIONS_BASE_ID`.
 2. Add table-ID configuration and schema guards so a missing/renamed field fails closed with an actionable error.
@@ -41,7 +41,7 @@ Keep existing Customers, Quotes, Orders, Invoices, Shipments and Supplier Orders
 5. Replace destructive status overwrite with append-only Order Status Events plus a current-status projection.
 6. Add Issues/Returns/Refunds/Quality Checks/Feedback/Communication History APIs behind the existing admin session middleware.
 
-## Phase 3 — Controlled migration and reconciliation
+## Phase 3  -  Controlled migration and reconciliation
 
 - Run a dry-run mapper that reports missing links, duplicate candidates, invalid JSON and status conflicts without writes.
 - Review every duplicate candidate by stable identifiers and legal-entity context.
@@ -49,7 +49,7 @@ Keep existing Customers, Quotes, Orders, Invoices, Shipments and Supplier Orders
 - Reconcile existing orders/invoices before enabling notifications. Never replay old status events or send historical order emails.
 - Validate Swell Fitness `#O1001` manually and mark its notification suppression explicitly.
 
-## Phase 4 — Automation, only after end-to-end tests
+## Phase 4  -  Automation, only after end-to-end tests
 
 1. Add a durable job/idempotency store appropriate to the Cloudflare deployment.
 2. Add supplier update adapters that produce unverified events first; staff approval is required before customer-visible status changes.
