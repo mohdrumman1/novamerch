@@ -21,6 +21,10 @@ function isPublicPath(pathname: string) {
     pathname.startsWith(`${BASE_PATH}/api/public/artwork-approval/`) ||
     pathname.startsWith("/api/public/order-tracking/") ||
     pathname.startsWith(`${BASE_PATH}/api/public/order-tracking/`) ||
+    pathname.startsWith("/api/public/feedback/") ||
+    pathname.startsWith(`${BASE_PATH}/api/public/feedback/`) ||
+    pathname.startsWith("/feedback/") ||
+    pathname.startsWith(`${BASE_PATH}/feedback/`) ||
     pathname === "/api/webhooks/brevo" ||
     pathname === `${BASE_PATH}/api/webhooks/brevo` ||
     pathname.startsWith("/_next/") ||
@@ -41,13 +45,6 @@ export async function middleware(request: NextRequest) {
 
   const sessionSecret = process.env.ADMIN_SESSION_SECRET || expectedPassword;
   const { pathname, search } = request.nextUrl;
-
-  // Keep the short local URL users naturally type while retaining the
-  // `/admin` base path used by the deployed application.
-  const legacyAdminPath = ["/orders", "/quotes", "/invoices", "/shipments", "/customers", "/dashboard", "/financials", "/goods", "/action-centre", "/approvals", "/issues"].find((path) => pathname === path || pathname.startsWith(`${path}/`));
-  if (legacyAdminPath) {
-    return NextResponse.redirect(new URL(`${BASE_PATH}${pathname}${search}`, request.url), 308);
-  }
 
   if (isPublicPath(pathname)) {
     return NextResponse.next();

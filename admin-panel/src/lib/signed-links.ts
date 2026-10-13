@@ -6,12 +6,14 @@ async function sign(secret: string, value: string) {
   return Buffer.from(digest).toString("base64url");
 }
 
-export async function createOrderLinkToken(kind: "approval" | "tracking", orderId: string, secret: string, ttlSeconds = 60 * 60 * 24 * 14) {
+export type CustomerLinkKind = "approval" | "tracking" | "feedback";
+
+export async function createOrderLinkToken(kind: CustomerLinkKind, orderId: string, secret: string, ttlSeconds = 60 * 60 * 24 * 30) {
   const payload = `${kind}.${orderId}.${Math.floor(Date.now() / 1000) + ttlSeconds}.${crypto.randomUUID()}`;
   return `${payload}.${await sign(secret, payload)}`;
 }
 
-export async function verifyOrderLinkToken(token: string, expectedKind: "approval" | "tracking", secret: string) {
+export async function verifyOrderLinkToken(token: string, expectedKind: CustomerLinkKind, secret: string) {
   const parts = token.split(".");
   if (parts.length !== 5 || parts[0] !== expectedKind) return null;
   const [kind, orderId, expiryValue, nonce, signature] = parts;
