@@ -6,7 +6,7 @@
 
 Cooks Hill may be mentioned externally only as a factual capability example, and only with the customer’s written permission before using its name, logo, photos or testimonial. Never disclose internal supplier costs, profit, gross-profit dollars, margins, pricing calculations or commercial terms in customer-facing copy, proposals, case studies, social posts or AI-generated material. Those figures remain internal planning data only.
 
-## Verified from the live operations base — 9 October 2026
+## Verified from the live operations base  -  9 October 2026
 
 | Field | Value |
 |---|---|

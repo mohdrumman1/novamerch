@@ -44,7 +44,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* NovaMerch Studio — public-site foundation */
+/* NovaMerch Studio  -  public-site foundation */
 :root { --paper:#F1F5F9; --ink:#060C18; --lime:#00CFFF; --clay:#8B5CF6; --line:rgba(255,255,255,.14); }
 body { margin:0; }
 a, button { -webkit-tap-highlight-color: transparent; }

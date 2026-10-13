@@ -2,7 +2,7 @@
 
 **Document status:** current admin design, not deployed. This supersedes the initial Hermes outline and tentative experiment budget in the [acquisition strategy](acquisition-research-and-hermes-plan.md). See [implementation status and next work](README.md). Updating this plan does not activate schedules or authorise a purchase.
 
-**Deployment note (2026-09-12):** a first version of the infrastructure this plan describes is now actually running — see [hermes-deployment-and-access.md](hermes-deployment-and-access.md) for what's live, why, and how to access it (server, model provider, Composio integrations, Telegram bot). That doc tracks deployed reality; this one stays the design reference.
+**Deployment note (2026-09-12):** a first version of the infrastructure this plan describes is now actually running  -  see [hermes-deployment-and-access.md](hermes-deployment-and-access.md) for what's live, why, and how to access it (server, model provider, Composio integrations, Telegram bot). That doc tracks deployed reality; this one stays the design reference.
 
 ## Recommendation
 
@@ -127,7 +127,7 @@ This must remain truthful. Do not claim Australian manufacture, local stock, own
 
 Example draft, only when confirmed:
 
-> Hi [name], a quick update on order [NovaMerch ID]: production is complete and the carrier has collected the shipment. The current estimated arrival window is [dates]. We’ll confirm the next step once it arrives with us and has been checked. Cheers, Nick — NovaMerch.
+> Hi [name], a quick update on order [NovaMerch ID]: production is complete and the carrier has collected the shipment. The current estimated arrival window is [dates]. We’ll confirm the next step once it arrives with us and has been checked. Cheers, Nick  -  NovaMerch.
 
 For a delay, state the actual known delay and the next check time. Do not fill an unknown ETA with a reassuring guess. Tracking links should be official carrier links when suitable; marketplace URLs stay internal. If even a carrier link exposes unwanted supplier details, use a text status update and offer tracking assistance.
 
@@ -183,7 +183,7 @@ Confirm the correct phone/signature: current initial and follow-up templates con
 
 Choose an incremental monthly budget and a hosting maintenance owner. Verify Google account eligibility before relying on Gemini or Gmail credentials: the earlier audit found a suspension notice for a different workflow-related project, and this plan must not assume that issue has been resolved. Confirm current account status rather than creating replacement projects to evade restrictions.
 
-Start with read/draft mode, the existing templates, and one product brief tied to a real enquiry. Preserve human sending during the pilot. The system is ready to expand when its outputs are accurate, recoverable and cheaper in total staff effort—not simply when Hermes can answer a chat message.
+Start with read/draft mode, the existing templates, and one product brief tied to a real enquiry. Preserve human sending during the pilot. The system is ready to expand when its outputs are accurate, recoverable and cheaper in total staff effort - not simply when Hermes can answer a chat message.
 
 ## Sources
 

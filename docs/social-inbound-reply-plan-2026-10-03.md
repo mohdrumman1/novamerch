@@ -1,8 +1,8 @@
-# NovaMerch social inbound replies — controlled rollout
+# NovaMerch social inbound replies  -  controlled rollout
 
 **Status:** design and verification plan. No autonomous social replies are enabled by this document.
 
-## Connection check — 3 October 2026
+## Connection check  -  3 October 2026
 
 In the Mohammed Chrome profile, the NovaMerch Composio workspace currently shows:
 
@@ -12,7 +12,7 @@ In the Mohammed Chrome profile, the NovaMerch Composio workspace currently shows
 
 The visible connection names (`spiral-pliny` and `caries-balt`) are Composio aliases, not proof of the selected social handles. Before enabling any reply, run an account-specific read and confirm the returned Page/Instagram identity is NovaMerch. Do not infer identity from the alias.
 
-## Noah hourly job update — 3 October 2026
+## Noah hourly job update  -  3 October 2026
 
 The deployed `social-inbox-monitor` cron (job `5cc37ee78f7b`) now runs every 60 minutes with continuity enabled. Its prompt was tightened so Noah:
 
@@ -31,17 +31,17 @@ The job is configured, but its first production reply still depends on the accou
 
 Until the integration is proven, the live cron is restricted to the exact sender identity `rxmmn_7`. Every other sender is ignored with no reply, follow-up or CRM change. The test cap is three replies per run and five per rolling day. Remove this flag only after the owner explicitly asks for broader processing.
 
-### Test result — `rxmmn_7`
+### Test result  -  `rxmmn_7`
 
 Noah’s manual test run found the exact Instagram message (`Hi, what do you do?`) from `rxmmn_7` to `@novamerch.au`. The verified `INSTAGRAM_SEND_TEXT_MESSAGE` call was attempted once and Meta returned HTTP 403, code 10/subcode 2534022: the message was outside the permitted response window. No retry was made. A new inbound message is required to reopen the window before another send attempt.
 
-### Reliability update — 3 October
+### Reliability update  -  3 October
 
 The Hermes AI cron was paused because it did not have a native Composio toolset and repeatedly spent model time trying to discover shell commands. It has been replaced on the Noah server with a deterministic, no-model monitor running every 15 minutes. It uses the existing Composio CLI, locks against concurrent runs, deduplicates messages, records failures locally, and remains restricted to exact sender `rxmmn_7`. It only attempts the approved product-intent reply; it does not create CRM records, prospect, change lead status or process any other sender.
 
 The Instagram Composio connection for `@novamerch.au` was re-authorised with `instagram_business_manage_messages` on 3 October. The next validation must be a brand-new, clearly product-related inbound DM from `rxmmn_7`; previous messages remain in Meta’s closed response window and must not be retried.
 
-### Retest result — 5 October
+### Retest result  -  5 October
 
 A new product-related inbound DM from `rxmmn_7` was received and the deterministic monitor attempted one reply. Meta again returned error `10/2534022` (“outside of allowed window”), despite the fresh inbound message and refreshed Composio authorisation. The monitor marked that message as window-closed and did not retry. This isolates the outstanding blocker to Meta/Composio messaging eligibility or account configuration, rather than the Noah scheduler, message detection or sender filter. Keep Instagram in `human_only` mode until Composio/Meta confirms the account is eligible for responses.
 
@@ -81,7 +81,7 @@ Do not use personal-account scraping, browser click bots, replacement Meta ad ac
 
 Noah should write as NovaMerch, not claim to be Nick or Rumman, and not mention automation. Use plain language, one question at a time and no hard sell. Example acknowledgement:
 
-> Hey, thanks for reaching out to NovaMerch — happy to help. Is this for a club, business or event, and roughly how many items do you need?
+> Hey, thanks for reaching out to NovaMerch  -  happy to help. Is this for a club, business or event, and roughly how many items do you need?
 
 For a quote request, collect only what is needed: item, quantity, artwork status, decoration preference, delivery suburb and deadline. Link to the free mock-up form when useful. Never invent a price, stock position or delivery date.
 

@@ -71,7 +71,7 @@ Any reply pauses all remaining sequence steps. An opt-out sets suppression and m
 
 ### 2. Repair the enrichment handoff
 
-Replay the 15 September enrichment failure against one pinned, non-sendable test lead. Confirm the workflow produces exactly one enrichment activity row and may write `Email Found` or `No Email Found`—never `Ready to Email`.
+Replay the 15 September enrichment failure against one pinned, non-sendable test lead. Confirm the workflow produces exactly one enrichment activity row and may write `Email Found` or `No Email Found` - never `Ready to Email`.
 
 Then enable it at **10 domains per weekday**, only after its output and the review fields have been checked. It should be an input source for human review, not a direct feeder into Brevo.
 
@@ -303,7 +303,7 @@ Australian commercial email requires consent, accurate sender identification/con
 
 ## Deployment boundary
 
-The repository changes do not change Airtable rows, n8n workflows, Brevo campaigns, schedules, send limits or Monid balance. The live Airtable grid currently does not expose the standardized approval/suppression/ledger fields, and the activity table was not created. The first production change should therefore be the schema/table setup and event/ledger replay, followed by one visible dry run—not a sender-cap increase. Until that is completed, the existing sender remains governed by its old live filter and must not be scaled.
+The repository changes do not change Airtable rows, n8n workflows, Brevo campaigns, schedules, send limits or Monid balance. The live Airtable grid currently does not expose the standardized approval/suppression/ledger fields, and the activity table was not created. The first production change should therefore be the schema/table setup and event/ledger replay, followed by one visible dry run - not a sender-cap increase. Until that is completed, the existing sender remains governed by its old live filter and must not be scaled.
 
 ## CRM decision and current website path
 
@@ -332,7 +332,7 @@ No Jev integration or credentials are currently documented in this repository. U
 1. **Days 1–3: make the conversion path measurable.** Verify the public quote-request endpoint, add a source/campaign field to each request, confirm admin notification delivery, and record first-response owner and time.
 2. **Days 4–7: make local discovery crawlable.** The storefront now emits `sitemap.xml` and `robots.txt`; next, create only the pages supported by real offers (Newcastle sports clubs, Maitland businesses, and one general branded-merchandise page). Avoid thin, duplicated suburb pages.
 3. **Week 2: use proof before volume.** Ask Cooks Hill United FC for written permission to use the 570-shirt result. Publish one factual case study or project note, then repurpose it into a post, a partner introduction, and one local PR angle.
-4. **Week 3: run a small local demand test.** One segment, one offer, one landing path, fixed 14-day budget, and a stop rule based on qualified enquiries and gross margin—not clicks alone.
+4. **Week 3: run a small local demand test.** One segment, one offer, one landing path, fixed 14-day budget, and a stop rule based on qualified enquiries and gross margin - not clicks alone.
 5. **Week 4: review the whole loop.** Compare organic visits, ad leads, mockup requests, qualified opportunities, quotes, wins, fulfilment delays, unsubscribes and cost per qualified opportunity. Only then decide whether to add Sydney or more outreach volume.
 
 ### Tool boundaries

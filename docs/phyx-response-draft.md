@@ -6,7 +6,7 @@ Hi Sheena,
 
 Thanks for letting me know. I’ll check sourcing options for the branded resistance bands and Pilates balls you mentioned.
 
-What hasn’t worked for you with the samples so far—quality, resistance, size or branding? Roughly how many of each item would you need, and is there a date you’re aiming for?
+What hasn’t worked for you with the samples so far - quality, resistance, size or branding? Roughly how many of each item would you need, and is there a date you’re aiming for?
 
 That will help me narrow down suitable options. I’ll confirm specifications, sample availability, pricing and lead times before asking you to commit, and include the 10% discount I offered in my earlier email.
 

@@ -246,7 +246,7 @@ const BODY_HTML = `
             </div>
         </div>
 
-        <!-- Horizontal splitter — drag handle between canvas stage and summary bar -->
+        <!-- Horizontal splitter  -  drag handle between canvas stage and summary bar -->
         <div class="splitter-h" id="splitter-h"
              role="separator"
              aria-label="Resize summary bar"

@@ -4,10 +4,10 @@ The public site uses an editorial, product-led system designed around a warm pap
 
 ## Tokens
 
-- **Ink:** `#102219` — primary text and dark sections.
-- **Paper:** `#f4f0e8` — main surface.
-- **Accent:** `#d8ff46` — primary action and intentional highlights.
-- **Clay:** `#d97852` — secondary detail accent.
+- **Ink:** `#102219`  -  primary text and dark sections.
+- **Paper:** `#f4f0e8`  -  main surface.
+- **Accent:** `#d8ff46`  -  primary action and intentional highlights.
+- **Clay:** `#d97852`  -  secondary detail accent.
 - **Display:** Plus Jakarta Sans through `--font-syne`.
 - **Body:** Inter through `--font-dm-sans`.
 

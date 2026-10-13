@@ -1,8 +1,8 @@
-# Controlled 20-account pilot — Phase A
+# Controlled 20-account pilot  -  Phase A
 
 **Status:** built as a review-and-approval pilot. It is not an automatic-send campaign.
 
-**Queue audit — 9 October 2026:** no verified, sports-club, consent- or referral-based accounts are presently available in Airtable for this pilot. The existing historical records are mainly Google Places chiropractic and veterinary contacts; their public contact details and `Ready to Email` label do not establish permission. No records were relabelled or added to the pilot queue. Build the first ten only from inbound enquiries, explicit referrals, or other documented permission.
+**Queue audit  -  9 October 2026:** no verified, sports-club, consent- or referral-based accounts are presently available in Airtable for this pilot. The existing historical records are mainly Google Places chiropractic and veterinary contacts; their public contact details and `Ready to Email` label do not establish permission. No records were relabelled or added to the pilot queue. Build the first ten only from inbound enquiries, explicit referrals, or other documented permission.
 
 ## Objective
 
@@ -55,7 +55,7 @@ For a repeat form enquiry, the existing lead keeps its operational status and su
 
 ### Release verification
 
-**Production verified — 9 October 2026.** The sports-club CTA and admin intake endpoint are live. A labelled synthetic website enquiry returned successfully, was created as `New` with the expected contact basis, campaign and copy version, was verified in Airtable, then deleted. No customer outreach was sent or enabled by this release. Retain the same verification sequence for any material future changes to the form or intake endpoint.
+**Production verified  -  9 October 2026.** The sports-club CTA and admin intake endpoint are live. A labelled synthetic website enquiry returned successfully, was created as `New` with the expected contact basis, campaign and copy version, was verified in Airtable, then deleted. No customer outreach was sent or enabled by this release. Retain the same verification sequence for any material future changes to the form or intake endpoint.
 
 ## Copy: approved factual starting point
 

@@ -11,7 +11,7 @@
 
 **Profitability data guardrail (9 October 2026):** Internal profitability reporting now treats an absent supplier or transport cost as unknown. It displays `Not recorded` for dependent cost, profit, margin and GST fields rather than assuming a zero cost. This protects the A$10k profit goal from being managed against false margins.
 
-## Implementation log — 8–9 October 2026
+## Implementation log  -  8–9 October 2026
 
 ### Completed and verified
 
@@ -43,7 +43,7 @@ Build the replacement as a dedicated, narrow workflow:
 
 This is the next operational control to complete before any outreach volume increases.
 
-### Controlled 20-account pilot — prepared 9 October 2026
+### Controlled 20-account pilot  -  prepared 9 October 2026
 
 The first campaign is defined in [the controlled pilot runbook](controlled-20-account-pilot-2026-10-09.md): `pilot-2026-10-clubwear`, a maximum of 20 individually approved sports-club accounts, with one factual offer and one copy version for the first 10. The local admin-panel selector now enforces matching segment, campaign, approval evidence, deduplication and the 20-account ceiling. It is intentionally not connected to a sender yet.
 
@@ -51,7 +51,7 @@ The first 10 accounts may be reviewed but **must not be dispatched** until DNC v
 
 The exact access boundary, prohibited actions and acceptance test are recorded in the [DNC v2 Airtable access specification](dnc-v2-airtable-access-spec-2026-10-09.md). The dedicated token is deployed only to the DNC helper, which is now the sole Airtable write path for Noah’s explicit opt-out handling. It passed a no-match read-only acceptance run and a live scheduled-job delivery check; the first unique explicit opt-out will validate the idempotent write path.
 
-### Permission-first inbound funnel — built 9 October 2026
+### Permission-first inbound funnel  -  built 9 October 2026
 
 The public `lead-intake` endpoint now records the timestamped contact basis **Requested material via website enquiry** on each new inbound lead. It deliberately keeps the lead at `New`; it does not clear suppression, promote it to `Ready to Email`, or start an email sequence. This creates the cleanest near-term path to qualified sports-club opportunities while outbound permission evidence is collected.
 
@@ -59,11 +59,11 @@ The sports-clubs CTA now routes to the quote form with `utm_source=sports-clubs`
 
 Both website and admin-panel production builds pass, and all 15 outreach and financial-integrity tests pass. On 9 October 2026, the sports-club CTA and admin intake endpoint were released to production. A labelled synthetic website enquiry returned successfully, was created in Airtable as `New` with its required contact basis, campaign and copy version, and was then deleted. No customer outreach was sent as part of this verification.
 
-**DNC v2 acceptance — 10 October 2026:** To avoid using a prospect, a temporary `NovaMerch INTERNAL DNC TEST — DELETE` lead was created with a non-deliverable internal test address. The dedicated helper returned `suppressed`; verification showed only the allowlisted status/suppression/reply-date/audit-note changes. The record was then deleted and verified absent. This completes the helper’s shadow-to-write acceptance without touching a prospect. The first genuine opt-out will still be monitored separately for classification and idempotency evidence; cold email remains paused until the broader contact-basis and reply checks are also satisfied.
+**DNC v2 acceptance  -  10 October 2026:** To avoid using a prospect, a temporary `NovaMerch INTERNAL DNC TEST  -  DELETE` lead was created with a non-deliverable internal test address. The dedicated helper returned `suppressed`; verification showed only the allowlisted status/suppression/reply-date/audit-note changes. The record was then deleted and verified absent. This completes the helper’s shadow-to-write acceptance without touching a prospect. The first genuine opt-out will still be monitored separately for classification and idempotency evidence; cold email remains paused until the broader contact-basis and reply checks are also satisfied.
 
 ### What must not happen before the operational gate is cleared
 
-- Do not publish the weekly workflow—it is deliberately kept unpublished until its destination/reporting route is agreed.
+- Do not publish the weekly workflow - it is deliberately kept unpublished until its destination/reporting route is agreed.
 - Do not increase sending volume or automatically advance researched emails to `Ready to Email`.
 - Do not treat the 148 existing `Ready to Email` records as approved under the new permission-first model without reviewing their contact basis and suppression state.
 
@@ -100,7 +100,7 @@ These attacks share one scorecard but should be measured separately. Do not let 
 
 ### Attack 1: reproduce the high-value order
 
-Build a list of 30–50 **Cooks Hill lookalikes**: organisations with the same purchase trigger, approximate order size, local buying authority and realistic repeat potential. For each account, identify the use case first—season launch, staff onboarding, event, club registration, sponsorship, office opening, team refresh or client-handover program.
+Build a list of 30–50 **Cooks Hill lookalikes**: organisations with the same purchase trigger, approximate order size, local buying authority and realistic repeat potential. For each account, identify the use case first - season launch, staff onboarding, event, club registration, sponsorship, office opening, team refresh or client-handover program.
 
 Use a one-page offer with a real next step: “Send your logo, approximate quantity and deadline; NovaMerch will return three viable options and landed-price ranges.” No invented delivery claims, price claims or unapproved customer proof.
 
@@ -130,7 +130,7 @@ This is the lowest-cost way to increase order quality.
 
 - Ask every happy customer for two relevant introductions after delivery and again when the result is visible.
 - Create a 60/90/180-day reorder prompt based on the buyer’s use case: new staff, season registration, event calendar, client gifting or uniform refresh.
-- Establish referral relationships with event organisers, design studios, signwriters, web agencies, local business networks and sports administrators. Give each partner a clear, profitable use case—not a generic “send us leads” request.
+- Establish referral relationships with event organisers, design studios, signwriters, web agencies, local business networks and sports administrators. Give each partner a clear, profitable use case - not a generic “send us leads” request.
 - Track partner name, referred account, quote value, won revenue, gross profit and any referral cost. Pay or promise nothing until the arrangement and margin are approved.
 
 Success metric: gross profit per acquired customer and reorder pipeline.
@@ -244,7 +244,7 @@ Do not scale past the 10-per-business-day pilot until all are true:
 - Sender identity, reply-to mailbox and phone details are current and monitored.
 - Quotes show direct cost and expected gross profit.
 - One segment has produced a consistent path from permissioned contact to quote.
-- The weekly review is classifying results by source/campaign/segment—not only total sends.
+- The weekly review is classifying results by source/campaign/segment - not only total sends.
 
 ## Phase B: Admin Panel Growth OS integration
 
@@ -298,7 +298,7 @@ Customers → Quotes → Orders → Invoices → Supplier costs → realised pro
 - Re-running an inbound event leaves one activity entry and one correct final state.
 - A won prospect converts once, links to the resulting Customer/Quote/Order, and retains its acquisition attribution.
 - Growth totals reconcile to Airtable and downstream won gross profit reconciles to the existing Orders/Supplier Orders data.
-- Missing field/table data displays an error state—not a misleading `0`.
+- Missing field/table data displays an error state - not a misleading `0`.
 - Existing Customers, Quotes, Orders, financial calculations and CRUD tests remain green.
 
 ## Next decision needed from the owner
@@ -307,7 +307,7 @@ Confirm the Cooks Hill gross profit and whether NovaMerch has permission to use 
 
 ## Acquisition lesson applied: warm, value-first experiments
 
-The reviewed acquisition material reinforces a safe Phase A principle: early growth should come from a small number of relevant, permission-first conversations and useful proof—not a larger volume of cold sends. For NovaMerch this means:
+The reviewed acquisition material reinforces a safe Phase A principle: early growth should come from a small number of relevant, permission-first conversations and useful proof - not a larger volume of cold sends. For NovaMerch this means:
 
 - Start with warm introductions, existing community relationships and inbound social interest where a person has raised their hand.
 - Offer a concrete, low-friction artifact first: a three-product mockup, sizing/merch checklist or club-kit recommendation. Do not send a generic sales pitch.
@@ -319,6 +319,6 @@ The reviewed acquisition material reinforces a safe Phase A principle: early gro
 
 Run an internal dry-run of the value-first loop using NovaMerch as the subject: submit one test enquiry, generate the three-product mockup/quote brief, verify attribution and follow-up dates, confirm DNC/reply safeguards, and remove the test record. Then publish the reviewed offer to warm/community channels only when the owner approves the copy. This keeps prospects out of testing while producing the evidence needed for the first real experiment.
 
-**Dry-run result — 10 October 2026:** completed against the live intake endpoint using NovaMerch-only test data. The endpoint rejected a request without consent (`400 contact_consent_required`), then accepted the consented test and returned one `New` lead with the expected campaign, copy version and contact-basis fields. No outbound message or quote was sent. The exact Airtable test record was deleted and a follow-up read confirmed it was no longer accessible. No prospect data was used.
+**Dry-run result  -  10 October 2026:** completed against the live intake endpoint using NovaMerch-only test data. The endpoint rejected a request without consent (`400 contact_consent_required`), then accepted the consented test and returned one `New` lead with the expected campaign, copy version and contact-basis fields. No outbound message or quote was sent. The exact Airtable test record was deleted and a follow-up read confirmed it was no longer accessible. No prospect data was used.
 
 The first warm/community experiment is prepared in [phase-a-warm-community-experiment-2026-10-10.md](phase-a-warm-community-experiment-2026-10-10.md). It is ready for channel approval; publication remains intentionally gated.

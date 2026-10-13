@@ -1,4 +1,4 @@
-# Phase A warm/community experiment — 10 October 2026
+# Phase A warm/community experiment  -  10 October 2026
 
 ## Objective
 
@@ -18,7 +18,7 @@ NovaMerch will prepare a free three-product mockup pack and indicative pricing f
 
 Reply template for an interested person:
 
-> Thanks — send through your logo, the rough quantity, what the merch is for and when you need it. We’ll prepare three options and indicative pricing for review. We won’t contact you about anything unrelated to this request.
+> Thanks  -  send through your logo, the rough quantity, what the merch is for and when you need it. We’ll prepare three options and indicative pricing for review. We won’t contact you about anything unrelated to this request.
 
 ## Operating rules
 
