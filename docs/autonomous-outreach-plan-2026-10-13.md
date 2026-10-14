@@ -84,3 +84,7 @@ Owner explicitly authorised, in chat: activate workflows 9, 11 and 12; waive unl
 - Follow-ups 1 and 2 (workflows 3, 4) now exclude leads with a `Replied Date`. Published 2026-10-14.
 - Lead Finder (Google) deactivated by owner.
 - Email finder drafted as n8n `KO9HUp8Q8vI8YAPx` (inactive): scans a lead's own website and contact pages for a published email. Tested on 15 "No Email Found" leads that have a website: 0 emails found. Those leads previously failed an earlier scrape too, so the yield from this cohort is near zero; it is not a supply source. Kept inactive. New field `Email Finder At` on Leads.
+
+## Update 2026-10-14 (Templates table, Google diagnosis)
+- Airtable `Templates` table `tblCPoYVYpAGUIdO5` created and seeded: sports, construction, realestate, generic (copied from live workflow 2, Active) and a wedding draft (inactive, not wired). Senders do NOT read it yet; wiring the four send nodes is a live-sender change that needs a "publish workflow 2" approval.
+- Google Places 403 diagnosis from the live key: Places API (New) returns PERMISSION_DENIED "The caller does not have permission"; Geocoding says the API is not activated on the project; a Discovery call returns API_KEY_SERVICE_BLOCKED. The key is valid and the project exists. Most likely cause: the key's API restriction does not include Places API (New), and/or Places API (New) is not enabled on the project. Owner to check in Google Cloud console.
