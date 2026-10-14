@@ -88,3 +88,9 @@ Owner explicitly authorised, in chat: activate workflows 9, 11 and 12; waive unl
 ## Update 2026-10-14 (Templates table, Google diagnosis)
 - Airtable `Templates` table `tblCPoYVYpAGUIdO5` created and seeded: sports, construction, realestate, generic (copied from live workflow 2, Active) and a wedding draft (inactive, not wired). Senders do NOT read it yet; wiring the four send nodes is a live-sender change that needs a "publish workflow 2" approval.
 - Google Places 403 diagnosis from the live key: Places API (New) returns PERMISSION_DENIED "The caller does not have permission"; Geocoding says the API is not activated on the project; a Discovery call returns API_KEY_SERVICE_BLOCKED. The key is valid and the project exists. Most likely cause: the key's API restriction does not include Places API (New), and/or Places API (New) is not enabled on the project. Owner to check in Google Cloud console.
+
+## Update 2026-10-14 (Google discovery back on)
+- Google Places key works again (HTTP 200). Places API (New) enabled, key restricted to Places API (New), no application restriction. Quota `SearchTextRequest per day` set to 50 on project `nova-merch-n8n-495309` by owner approval.
+- Lead Finder `JqsHoiKlwSjUwdHb` reactivated (every 12 hours, one Search Queue row, up to 10 results). First manual run created 8 `Needs Review` leads for the "wedding planner, Lake Macquarie" search; all 8 had no website on Google, so no email can be scanned for.
+- Email Finder `KO9HUp8Q8vI8YAPx` (workflow 13) activated, weekdays 09:00, 20 leads, scans own site and contact pages for a published email, skips emails already in Leads. Writes `Email Found` and evidence; the Qualifier then picks them up.
+- Expected yield: Google gives names, phones and sometimes websites, rarely emails. Many wedding and event businesses list no website. Watch how many reach `Ready to Email` over the next week before trusting the 20 a day target.
