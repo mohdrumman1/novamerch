@@ -78,3 +78,9 @@ Owner explicitly authorised, in chat: activate workflows 9, 11 and 12; waive unl
 - `Auto Promote` is TRUE. The gate promotes at most 5 leads a day, only `Club` or `Events` tagged leads with `MX Valid` and an evidence URL.
 - The gate stays closed while any hard bounce, block or spam event exists in the last 7 days (Aqua Legal bounce on 2026-10-13 keeps it closed until about 2026-10-20).
 - To stop everything: set `Auto Promote` FALSE (stops promotion) or `Sending Enabled` FALSE (stops all sends).
+
+## Update 2026-10-14 (volume, reply check, email finder)
+- Volume raised by owner instruction: `Daily Send Cap` 20 (ceiling 40), promotion gate cap 20 and `Business` tag allowed, sender 2 per-run limit 20. This goes ahead of the "ramp after 14 clean days" rule by owner decision. Backstops unchanged: auto-pause on 2 hard bounces in 7 days; gate closes on any bounce, block or spam in 7 days.
+- Follow-ups 1 and 2 (workflows 3, 4) now exclude leads with a `Replied Date`. Published 2026-10-14.
+- Lead Finder (Google) deactivated by owner.
+- Email finder drafted as n8n `KO9HUp8Q8vI8YAPx` (inactive): scans a lead's own website and contact pages for a published email. Tested on 15 "No Email Found" leads that have a website: 0 emails found. Those leads previously failed an earlier scrape too, so the yield from this cohort is near zero; it is not a supply source. Kept inactive. New field `Email Finder At` on Leads.
