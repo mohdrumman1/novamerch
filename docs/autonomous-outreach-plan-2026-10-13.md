@@ -66,3 +66,8 @@ If any fails the Qualifier writes Proposed leads only and logs why.
 
 ## Out of scope
 Fixing the Google Cloud 403 (owner), pricing, payments, fulfilment.
+
+## Update 2026-10-14 (late)
+- Feedback loop: n8n `IIXOVFIjd0YKbb0g` "12 Feedback Loop" (Mon 08:45). Aggregates the last 30 days of contacted leads by `Copy Version`, `Relevance Tag` and discovery source (reply, bounce, opt-out counts), writes the snapshot to `Ops Log`, emails the owner. Recommendations only; compares cohorts only once each has 15 or more contacts. Tested, not yet activated.
+- Pending owner approval (blocked by the auto mode classifier as a safety weakening): activate workflows 9 (promotion gate) and 11 (NNSW discovery); waive the `Reply Ingest` unlock condition; set `Auto Promote` TRUE.
+- Any unlock-condition waiver must be explicit and recorded in `Settings`, not implied.
