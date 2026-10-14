@@ -51,16 +51,16 @@ If any fails the Qualifier writes Proposed leads only and logs why.
 | Health check and auto-pause | Done, tested (pause path fired once for real, then fixed) | n8n `Nova Merch - 8 Health Check and Auto-Pause` (`xsWNfGMfMB6RL3hF`), 08:00 daily plus manual hook |
 | Per-domain cap in sender 2 | Done 2026-10-14: `Domain Cap` node keeps one lead per business domain per run, free-mail exempt. No 90-day domain history check yet. Follow-ups unchanged | n8n `DePrEszDYXp5xgHL` |
 | Templates table read, wedding variant in senders | Not built | |
-| Qualifier (evidence gate, `Auto Promote`) | Started 2026-10-14: evidence fields added to Leads (`Evidence URL`, `Evidence Snippet`, `Relevance Tag`, `MX Valid`, `Qualified At`). Shadow workflow `e4nVghJRkqwkgfk2` imported inactive (repo JSON has no credentials; reselect the Airtable credential on import), tested on 10 leads (evidence only, no Status change). `Auto Promote` is FALSE and nothing reads it. Leads `Status` has no `Proposed` choice yet | Airtable Leads `tbl1p7cvWR84ZjoKD` |
+| Qualifier (evidence gate, `Auto Promote`) | Started 2026-10-14: evidence fields added to Leads (`Evidence URL`, `Evidence Snippet`, `Relevance Tag`, `MX Valid`, `Qualified At`). Shadow workflow `e4nVghJRkqwkgfk2` imported inactive (repo JSON has no credentials; reselect the Airtable credential on import), tested on 10 leads (evidence only, no Status change). Active 2026-10-14, weekdays 09:30, 20 leads per run. `Auto Promote` is FALSE and nothing reads it. Leads `Status` has no `Proposed` choice yet | Airtable Leads `tbl1p7cvWR84ZjoKD` |
 | Free discovery (OSM Overpass, association directories) | Not built. Overpass timed out on 2026-10-13 | |
-| Weekly improvement report | Built 2026-10-14 as n8n `AsOD8SQT5cCUN76F` (Mon 08:30, emails owner, logs to `Ops Log`, recommendations only, applies nothing). Manual run succeeded. Not yet activated | n8n `AsOD8SQT5cCUN76F` |
-| Daily digest and alerts to the owner | Done: existing 6pm report email (workflow 6) plus new `Alert Gate` and `Alert Owner` nodes in workflow 8 that email on auto-pause or when Brevo event ingest is silent over 96h. Alert send accepted by Brevo in test; inbox delivery not confirmed | n8n `xsWNfGMfMB6RL3hF` |
+| Weekly improvement report | Built 2026-10-14 as n8n `AsOD8SQT5cCUN76F` (Mon 08:30, emails owner, logs to `Ops Log`, recommendations only, applies nothing). Manual run succeeded. Active | n8n `AsOD8SQT5cCUN76F` |
+| Daily digest and alerts to the owner | Done: existing 6pm report email (workflow 6) plus new `Alert Gate` and `Alert Owner` nodes in workflow 8 that email on auto-pause or when Brevo event ingest is silent over 96h. Alert send accepted by Brevo in test; delivered per Brevo | n8n `xsWNfGMfMB6RL3hF` |
 | Google Places lead finder (403) | Owner decision 2026-10-14: skipped | |
 
 ### Behaviour to know
 - The three senders run `Get Settings`, then `Kill Switch Gate` (Code), then their original search. If the `Sending Enabled` row is missing, duplicated, or not exactly `TRUE`, the run throws and sends nothing.
 - Health check pauses sending (writes `FALSE`, logs an `Ops Log` row of type `Pause`) when 7-day `hard_bounce` plus `blocked` events reach `Pause Hard Bounces Per 50 Sends` (2) or any `spam` event appears. It is a 7-day window, a deliberately conservative stand-in for "last 50 sends". Resume by setting `Sending Enabled` to `TRUE` after investigating.
-- A synthetic hard-bounce test row (`ZZ E2E TEST (delete me)`) counts as 1 toward the 7-day bounce total until 2026-10-21.
+- The synthetic hard-bounce test row was deleted by the owner on 2026-10-14.
 - Brevo webhook URL path contains the shared secret. It is not recorded here; read it from the n8n workflow.
 - The webhook workflow only logs hard bounce, soft bounce, blocked, spam, unsubscribe, invalid, deferred and error events; it suppresses the matching Lead for hard bounce, blocked, spam, unsubscribe and invalid.
 
