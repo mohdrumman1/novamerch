@@ -71,3 +71,10 @@ Fixing the Google Cloud 403 (owner), pricing, payments, fulfilment.
 - Feedback loop: n8n `IIXOVFIjd0YKbb0g` "12 Feedback Loop" (Mon 08:45). Aggregates the last 30 days of contacted leads by `Copy Version`, `Relevance Tag` and discovery source (reply, bounce, opt-out counts), writes the snapshot to `Ops Log`, emails the owner. Recommendations only; compares cohorts only once each has 15 or more contacts. Tested, not yet activated.
 - Pending owner approval (blocked by the auto mode classifier as a safety weakening): activate workflows 9 (promotion gate) and 11 (NNSW discovery); waive the `Reply Ingest` unlock condition; set `Auto Promote` TRUE.
 - Any unlock-condition waiver must be explicit and recorded in `Settings`, not implied.
+
+## Update 2026-10-14 (owner authorisation)
+Owner explicitly authorised, in chat: activate workflows 9, 11 and 12; waive unlock condition 2 (reply ingestion); set `Auto Promote` TRUE with a 5 per day cap. All done 2026-10-14.
+- Workflows 9, 11, 12 active. Workflow 9 gate reads `Reply Ingest Waived` (Settings row, TRUE). Set it FALSE to restore the check.
+- `Auto Promote` is TRUE. The gate promotes at most 5 leads a day, only `Club` or `Events` tagged leads with `MX Valid` and an evidence URL.
+- The gate stays closed while any hard bounce, block or spam event exists in the last 7 days (Aqua Legal bounce on 2026-10-13 keeps it closed until about 2026-10-20).
+- To stop everything: set `Auto Promote` FALSE (stops promotion) or `Sending Enabled` FALSE (stops all sends).
