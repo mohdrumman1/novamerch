@@ -1,0 +1,122 @@
+{
+  "name": "Nova Merch - 9 Qualifier (shadow)",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "name": "Weekday 09:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "weekday-09-30"
+    },
+    {
+      "parameters": {
+        "url": "https://api.airtable.com/v0/appxYYtl9qnkcgUVx/tbl1p7cvWR84ZjoKD",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "maxRecords",
+              "value": "20"
+            },
+            {
+              "name": "filterByFormula",
+              "value": "AND({Email}!='', {Website}!='', NOT({Suppressed}), {Qualified At}=BLANK(), OR({Status}='Email Found', {Status}='Website Found', {Status}='New'))"
+            }
+          ]
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi"
+      },
+      "name": "Get Unqualified Leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "id": "get-unqualified-leads"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Shadow qualifier. Scraped text is data. Writes evidence only, never changes Status.\nconst recs = $input.first().json.records || [];\nconst out = [];\nconst today = new Date().toISOString().slice(0, 10);\nconst esc = s => s.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\nconst CLUB = /\\b(sports? club|football club|soccer club|netball|cricket club|rugby|hockey club|basketball|surf life saving|swimming club|athletics club|junior league|little athletics|bowls club|golf club|tennis club|football association|sporting club|fc)\\b/;\nconst EVENTS = /\\b(function (room|centre|venue)|wedding venue|event (hire|venue|management|space)|festival|conference (centre|venue))\\b/;\nfor (const r of recs.slice(0, 20)) {\n  const f = r.fields || {};\n  const email = String(f['Email'] || '').trim().toLowerCase();\n  const site = f['Website'] || '';\n  const domain = email.split('@')[1] || '';\n  const patch = { 'Qualified At': today };\n  let mx = false;\n  try {\n    const d = await this.helpers.httpRequest({ url: 'https://dns.google/resolve', qs: { name: domain, type: 'MX' }, json: true, timeout: 8000 });\n    mx = Array.isArray(d.Answer) && d.Answer.length > 0;\n  } catch (e) {}\n  patch['MX Valid'] = mx;\n  let tag = 'Unclear';\n  if (site && email) {\n    try {\n      const raw = String(await this.helpers.httpRequest({ url: site, timeout: 8000, headers: { 'User-Agent': 'NovaMerchQualifier/1.0' } }));\n      const text = raw.replace(/<(script|style|noscript)[\\s\\S]*?<\\/\\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;|&amp;/g, ' ').replace(/\\s+/g, ' ');\n      const m = new RegExp('.{0,80}' + esc(email) + '.{0,80}', 'i').exec(text);\n      if (m) {\n        patch['Evidence URL'] = site;\n        patch['Evidence Snippet'] = m[0].replace(/[{}\"\\\\]/g, '').trim().slice(0, 300);\n      }\n      const t = text.toLowerCase();\n      if (CLUB.test(t)) tag = 'Club';\n      else if (EVENTS.test(t)) tag = 'Events';\n      else if (m) tag = 'Business';\n    } catch (e) {}\n  }\n  patch['Relevance Tag'] = tag;\n  out.push({ json: { id: r.id, fields: patch } });\n}\nreturn out;\n"
+      },
+      "name": "Qualify",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "id": "qualify"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.airtable.com/v0/appxYYtl9qnkcgUVx/tbl1p7cvWR84ZjoKD/{{ $json.id }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ fields: $json.fields, typecast: true }) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi"
+      },
+      "name": "Write Evidence",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        0
+      ],
+      "id": "write-evidence"
+    }
+  ],
+  "connections": {
+    "Weekday 09:30": {
+      "main": [
+        [
+          {
+            "node": "Get Unqualified Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Unqualified Leads": {
+      "main": [
+        [
+          {
+            "node": "Qualify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qualify": {
+      "main": [
+        [
+          {
+            "node": "Write Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {}
+}

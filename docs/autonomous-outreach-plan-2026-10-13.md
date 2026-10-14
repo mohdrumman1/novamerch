@@ -50,7 +50,7 @@ If any fails the Qualifier writes Proposed leads only and logs why.
 | Brevo events to Airtable | Done, tested with synthetic soft and hard bounce | n8n `Nova Merch - 7 Brevo Events to Airtable` (`YjIYpxQj7OSG36OS`); Brevo outbound webhook `novamerch-events-to-airtable` (Transactional email, all events) |
 | Health check and auto-pause | Done, tested (pause path fired once for real, then fixed) | n8n `Nova Merch - 8 Health Check and Auto-Pause` (`xsWNfGMfMB6RL3hF`), 08:00 daily plus manual hook |
 | Per-domain cap, Templates table read, wedding variant in senders | Not built | |
-| Qualifier (evidence gate, `Auto Promote`) | Not built. `Auto Promote` is FALSE and nothing reads it | |
+| Qualifier (evidence gate, `Auto Promote`) | Started 2026-10-14: evidence fields added to Leads (`Evidence URL`, `Evidence Snippet`, `Relevance Tag`, `MX Valid`, `Qualified At`). Shadow workflow `e4nVghJRkqwkgfk2` imported inactive (repo JSON has no credentials; reselect the Airtable credential on import), tested on 10 leads (evidence only, no Status change). `Auto Promote` is FALSE and nothing reads it. Leads `Status` has no `Proposed` choice yet | Airtable Leads `tbl1p7cvWR84ZjoKD` |
 | Free discovery (OSM Overpass, association directories) | Not built. Overpass timed out on 2026-10-13 | |
 | Noah weekly improvement report | Not built | |
 | Daily digest and alerts to the owner | Done: existing 6pm report email (workflow 6) plus new `Alert Gate` and `Alert Owner` nodes in workflow 8 that email on auto-pause or when Brevo event ingest is silent over 96h. Alert send accepted by Brevo in test; inbox delivery not confirmed | n8n `xsWNfGMfMB6RL3hF` |
