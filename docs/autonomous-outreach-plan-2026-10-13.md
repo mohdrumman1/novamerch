@@ -53,7 +53,7 @@ If any fails the Qualifier writes Proposed leads only and logs why.
 | Qualifier (evidence gate, `Auto Promote`) | Not built. `Auto Promote` is FALSE and nothing reads it | |
 | Free discovery (OSM Overpass, association directories) | Not built. Overpass timed out on 2026-10-13 | |
 | Noah weekly improvement report | Not built | |
-| Daily digest to the owner with heartbeat alert | Partial: the health check writes a daily `Ops Log` row with ingest age; nothing is pushed to the owner yet | |
+| Daily digest and alerts to the owner | Done: existing 6pm report email (workflow 6) plus new `Alert Gate` and `Alert Owner` nodes in workflow 8 that email on auto-pause or when Brevo event ingest is silent over 96h. Alert send accepted by Brevo in test; inbox delivery not confirmed | n8n `xsWNfGMfMB6RL3hF` |
 | Google Places lead finder (403) | Owner decision 2026-10-14: skipped | |
 
 ### Behaviour to know
