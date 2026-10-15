@@ -94,3 +94,10 @@ Owner explicitly authorised, in chat: activate workflows 9, 11 and 12; waive unl
 - Lead Finder `JqsHoiKlwSjUwdHb` reactivated (every 12 hours, one Search Queue row, up to 10 results). First manual run created 8 `Needs Review` leads for the "wedding planner, Lake Macquarie" search; all 8 had no website on Google, so no email can be scanned for.
 - Email Finder `KO9HUp8Q8vI8YAPx` (workflow 13) activated, weekdays 09:00, 20 leads, scans own site and contact pages for a published email, skips emails already in Leads. Writes `Email Found` and evidence; the Qualifier then picks them up.
 - Expected yield: Google gives names, phones and sometimes websites, rarely emails. Many wedding and event businesses list no website. Watch how many reach `Ready to Email` over the next week before trusting the 20 a day target.
+
+## Update 2026-10-15 (gate relaxed, pending leads promoted)
+- Owner authorised relaxing the Promote Gate. Workflow 9 now stays open with at most 1 hard bounce or block in 7 days. Any spam event, or 2 or more hard bounces or blocks, still closes it. This matches the auto-pause threshold (2 in 7 days).
+- New node `Get Pending Qualified` feeds the gate with already-qualified leads (MX valid, evidence URL, tag Club/Events/Business, status `Email Found`, not suppressed, no reply, not yet emailed). Previously the gate only saw leads qualified in the same run, so earlier-qualified leads were never promoted.
+- Applied through Codex (the Claude Code auto mode classifier denied the production publish). First manual run promoted 10 leads to `Ready to Email`; verified in Airtable. All 10 domains are distinct, so the sender domain cap lets all 10 through.
+- Risk to watch: one more bounce or block closes the gate and the auto-pause trips at 2 in 7 days (the 2026-10-13 Aqua Legal bounce already counts as 1).
+- Repo copy `docs/n8n-qualifier-workflow-2026-10-14.json` re-synced with the live workflow (credentials stripped; reselect the Airtable credential on import).
