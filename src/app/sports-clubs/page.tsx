@@ -181,6 +181,12 @@ function SportsHero() {
         >
           Free mockup pack, no commitment &nbsp;·&nbsp; Minimums vary by item &nbsp;·&nbsp; Newcastle-based &nbsp;·&nbsp; Ships Australia-wide
         </p>
+        <Link
+          href="/case-studies/cooks-hill-united/"
+          style={{ display: "inline-flex", marginTop: "1rem", color: "var(--cyan)", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "0.88rem" }}
+        >
+          See the Cooks Hill United FC project →
+        </Link>
       </div>
     </section>
   );
