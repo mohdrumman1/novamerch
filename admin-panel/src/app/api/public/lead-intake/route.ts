@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createRecord, listRecords, updateRecord } from "@/lib/airtable";
-import { sanitiseAttribution } from "@/lib/lead-attribution";
+import { attributionFields, sanitiseAttribution } from "@/lib/lead-attribution";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LEN = 500;
@@ -135,6 +135,7 @@ export async function POST(req: Request) {
   const cached = key ? idempotency.get(key) : undefined;
   if (cached && cached.expiresAt > Date.now()) return json({ ...cached.response, duplicate: true }, 200, origin);
 
+  const attribution = sanitiseAttribution(body.attribution);
   const consentCapturedAt = new Date().toISOString();
   const notes = intakeNotes({
     suburb: body.suburb,
@@ -167,6 +168,7 @@ export async function POST(req: Request) {
         "Campaign ID": text(body.campaign) || "direct",
         "Copy Version": text(body.copyVersion) || "website-v1",
         Notes: `${previous}${notes}`.slice(-4000),
+        ...attributionFields(attribution, existing[0].fields),
       });
     } else {
       const created = await createRecord("Leads", {
@@ -181,6 +183,7 @@ export async function POST(req: Request) {
         "Copy Version": text(body.copyVersion) || "website-v1",
         Notes: notes,
         "Dedupe Key": email,
+        ...attributionFields(attribution),
       });
       leadId = created.id;
     }

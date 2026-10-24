@@ -69,3 +69,33 @@ export function sanitiseAttribution(raw: unknown): LeadAttribution {
   if (typeof input.leadEventId === "string" && EVENT_ID.test(input.leadEventId)) result.leadEventId = input.leadEventId;
   return result;
 }
+
+/**
+ * Maps sanitised attribution onto the structured Leads fields. First touch is
+ * written only when the lead has none yet, so a repeat enquiry never replaces
+ * the original source. Last touch always reflects the latest enquiry.
+ * Empty values are omitted so Airtable never receives blank strings.
+ */
+export function attributionFields(
+  attribution: LeadAttribution,
+  existing: Record<string, unknown> = {},
+): Record<string, string> {
+  const fields: Record<string, string> = {};
+  const put = (name: string, value?: string) => {
+    if (value) fields[name] = value;
+  };
+  const hasFirst = ["First Touch Source", "First Touch Medium", "First Touch Campaign"].some(
+    (name) => typeof existing[name] === "string" && existing[name] !== "",
+  );
+  const first = attribution.first ?? attribution.last;
+  if (!hasFirst && first) {
+    put("First Touch Source", first.source);
+    put("First Touch Medium", first.medium);
+    put("First Touch Campaign", first.campaign);
+  }
+  put("Last Touch Source", attribution.last?.source ?? attribution.first?.source);
+  put("Last Touch Medium", attribution.last?.medium ?? attribution.first?.medium);
+  put("Last Touch Campaign", attribution.last?.campaign ?? attribution.first?.campaign);
+  if (!existing["Lead Event ID"]) put("Lead Event ID", attribution.leadEventId);
+  return fields;
+}
