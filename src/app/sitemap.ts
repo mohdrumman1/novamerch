@@ -46,3 +46,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...industrySlugs.map((slug) => ({ url: `${siteUrl}/industries/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
   ];
 }
+    {
+      url: `${siteUrl}/solutions/custom-merchandise-newcastle/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
