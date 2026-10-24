@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "What Affects the Cost of Custom Merchandise? | NovaMerch",
   description: "The main factors that change the price of custom apparel, caps, bottles and gifts, and what to ask before you compare quotes.",
   alternates: { canonical: "/guides/what-affects-custom-merchandise-cost/" },
+  openGraph: { type: "article", images: [{ url: "/products-showcase.png", width: 1100, height: 1430, alt: "NovaMerch branded merchandise concept" }] },
 };
 
 const h2 = { fontFamily: "var(--font-syne)", color: "var(--text-primary)", marginTop: "2.5rem" } as const;

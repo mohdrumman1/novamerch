@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter, Instrument_Serif, DM_Mono } from "next/font/google";
 import "./globals.css";
 import ConsentBanner from "@/components/ConsentBanner";
 
@@ -13,6 +13,19 @@ const inter = Inter({
   variable: "--font-dm-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["italic"],
+});
+
+const dmMono = DM_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 const siteUrl = "https://novamerchau.com";
@@ -87,7 +100,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${plusJakarta.variable} ${inter.variable} antialiased`}>
+      <body className={`${plusJakarta.variable} ${inter.variable} ${instrumentSerif.variable} ${dmMono.variable} antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

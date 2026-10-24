@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "How Long Does Custom Merchandise Take? A Practical Checklist | NovaMerch",
   description: "What decides production time for custom apparel, caps and bottles, and how to plan back from your deadline.",
   alternates: { canonical: "/guides/how-long-does-custom-merchandise-take/" },
+  openGraph: { type: "article", images: [{ url: "/products-showcase.png", width: 1100, height: 1430, alt: "NovaMerch branded merchandise concept" }] },
 };
 
 const h2 = { fontFamily: "var(--font-syne)", color: "var(--text-primary)", marginTop: "2.5rem" } as const;

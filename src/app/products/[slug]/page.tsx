@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -7,12 +8,37 @@ import { products } from "@/data/products";
 
 const siteUrl = "https://novamerchau.com";
 
+// Illustrative concept mockups already on the site. Never presented as delivered orders.
+const heroImages: Record<string, string> = {
+  "custom-drink-bottles": "/bottle-mockup.png",
+  "embroidered-caps": "/cap-mockup.png",
+  "custom-hoodies": "/hoodie-mockup.png",
+  "branded-polos": "/staff-pack-mockup.png",
+  "branded-workwear": "/construction-team.png",
+  "promotional-pens": "/pen-mockup.png",
+  "branded-tote-bags": "/tote-mockup.png",
+  "corporate-gifts": "/giftbox-mockup.png",
+};
+
 export function generateStaticParams() { return Object.keys(products).map((slug) => ({ slug })); }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const product = products[slug];
-  return product ? { title: `${product.name} Australia | NovaMerch`, description: product.summary.slice(0, 155), alternates: { canonical: `/products/${slug}/` } } : {};
+  if (!product) return {};
+  const image = heroImages[slug];
+  return {
+    title: `${product.name} Australia | NovaMerch`,
+    description: product.summary.slice(0, 155),
+    alternates: { canonical: `/products/${slug}/` },
+    openGraph: {
+      title: `${product.name} Australia | NovaMerch`,
+      description: product.summary.slice(0, 155),
+      url: `${siteUrl}/products/${slug}/`,
+      type: "website",
+      images: image ? [{ url: image, width: 1536, height: 1024, alt: `Illustrative ${product.name.toLowerCase()} mockup` }] : undefined,
+    },
+  };
 }
 
 const h2 = { fontFamily: "var(--font-syne)", fontSize: "1.5rem", margin: "3rem 0 1rem", color: "var(--text-primary)" } as const;
@@ -38,13 +64,20 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <>
       <Nav />
-      <main style={{ padding: "8rem 1.5rem 5rem", minHeight: "100vh", background: "#060c18", color: "var(--text-secondary)" }}>
+      <main className="nm-hero-glow" style={{ padding: "8rem 1.5rem 5rem", minHeight: "100vh", background: "#060c18", color: "var(--text-secondary)" }}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-        <article style={{ maxWidth: 850, margin: "auto" }}>
-          <p style={{ letterSpacing: ".12em", fontSize: ".75rem", fontWeight: 700 }}><Link href="/products/" style={{ color: "var(--cyan)" }}>PRODUCTS</Link></p>
-          <h1 style={{ fontFamily: "var(--font-syne)", fontSize: "clamp(2.2rem,7vw,4.5rem)", letterSpacing: "-.04em", lineHeight: 1, margin: "1.5rem 0", color: "var(--text-primary)" }}>{product.name}</h1>
+        <article className="nm-prose" style={{ maxWidth: 850, margin: "auto" }}>
+          <p className="nm-eyebrow"><Link href="/products/" style={{ color: "inherit" }}>Products</Link></p>
+          <h1 style={{ fontFamily: "var(--font-syne)", fontSize: "clamp(2.2rem,7vw,4.5rem)", letterSpacing: "-.04em", lineHeight: 1, margin: "1rem 0 1.5rem", color: "var(--text-primary)" }}>{product.name.split(" ").slice(0, -1).join(" ")} <span className="nm-accent">{product.name.split(" ").slice(-1)}</span></h1>
           <p style={{ ...p, fontSize: "1.15rem", color: "var(--text-primary)" }}>{product.summary}</p>
-          <p><Link href={cta} style={{ display: "inline-block", marginTop: 12, padding: "15px 22px", borderRadius: 99, background: "#00CFFF", color: "#06101D", fontWeight: 700, textDecoration: "none" }}>Get a free three-product mockup pack</Link></p>
+          <p><Link className="nm-cta" href={cta}>Get a free three-product mockup pack</Link></p>
+
+          {heroImages[slug] && (
+            <figure>
+              <Image src={heroImages[slug]} alt={`Illustrative ${product.name.toLowerCase()} mockup`} width={1536} height={1024} priority />
+              <figcaption>Illustrative concept mockup, not a delivered order.</figcaption>
+            </figure>
+          )}
 
           <h2 style={h2}>Best for</h2>
           <ul style={{ lineHeight: 1.9 }}>{product.bestFor.map((x) => <li key={x}>{x}</li>)}</ul>
@@ -61,7 +94,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <p style={p}>Price, minimums and production timing depend on the product, decoration method, quantity and supplier availability. We confirm these in your quote before you commit. Colours are matched as closely as the material and process allow, and we confirm the result with you before production.</p>
 
           <h2 style={h2}>Questions</h2>
-          {product.faqs.map(([q, a]) => <div key={q} style={{ marginBottom: "1.25rem" }}><h3 style={{ fontSize: "1.1rem", margin: "0 0 .35rem", color: "var(--text-primary)" }}>{q}</h3><p style={{ ...p, margin: 0 }}>{a}</p></div>)}
+          {product.faqs.map(([q, a]) => <div key={q} className="nm-faq-item"><h3>{q}</h3><p style={{ ...p, margin: 0 }}>{a}</p></div>)}
 
           <h2 style={h2}>Related products</h2>
           <ul style={{ lineHeight: 1.9 }}>{product.related.map((r) => <li key={r}><Link style={{ color: "var(--cyan)" }} href={`/products/${r}/`}>{products[r].name}</Link></li>)}</ul>

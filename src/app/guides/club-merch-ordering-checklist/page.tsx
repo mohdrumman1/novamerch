@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Club Merchandise Ordering Checklist: Artwork, Sizes, Sponsors and Deadlines | NovaMerch",
   description: "A practical checklist for sports clubs ordering training tees, caps, bottles and supporter gear: artwork, sizing, sponsors, budget and timing.",
   alternates: { canonical: "/guides/club-merch-ordering-checklist/" },
+  openGraph: { type: "article", images: [{ url: "/products-showcase.png", width: 1100, height: 1430, alt: "NovaMerch branded merchandise concept" }] },
 };
 
 const h2 = { fontFamily: "var(--font-syne)", color: "var(--text-primary)", marginTop: "2.5rem" } as const;
