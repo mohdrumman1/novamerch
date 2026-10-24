@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { captureAttribution } from "@/lib/attribution";
+import { trackLead } from "@/lib/analytics";
 
 const productOptions = [
   "Drink Bottles",
@@ -54,8 +56,10 @@ export default function QuoteForm() {
   const [attribution, setAttribution] = useState({ source: "website", campaign: "direct", copyVersion: "website-v1", landingPage: "home" });
   const sectionRef = useRef<HTMLElement>(null);
   const requestIdRef = useRef<string | null>(null);
+  const touchesRef = useRef<ReturnType<typeof captureAttribution>>({});
 
   useEffect(() => {
+    touchesRef.current = captureAttribution();
     const params = new URLSearchParams(window.location.search);
     setAttribution({
         source: params.get("utm_source") || params.get("source") || "website",
@@ -109,11 +113,14 @@ export default function QuoteForm() {
           landingPage: data.get("landing_page"),
           consent: data.get("contact_consent"),
           requestId: requestIdRef.current,
+          attribution: { ...touchesRef.current, leadEventId: requestIdRef.current },
         }),
         headers: { "Content-Type": "application/json", Accept: "application/json" },
       });
 
       if (res.ok) {
+        const result = (await res.json().catch(() => ({}))) as { duplicate?: boolean };
+        if (!result.duplicate && requestIdRef.current) trackLead(requestIdRef.current);
         setSubmitted(true);
       } else {
         setError(true);
@@ -302,7 +309,7 @@ export default function QuoteForm() {
                   Request received.
                 </h3>
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "0.875rem", color: "var(--text-secondary)", lineHeight: 1.65 }}>
-                  We&apos;ll be in touch with your 3 branded mockup ideas and rough pricing within 24–48 hours. If you have a logo file ready, reply to our confirmation email with it attached.
+                  We&apos;ll review your brief and reply with 3 branded mockup ideas and rough pricing. If you have a logo file ready, reply to our confirmation email with it attached.
                 </p>
               </div>
             ) : (
@@ -477,7 +484,7 @@ export default function QuoteForm() {
                     style={{ marginTop: "0.2rem", accentColor: "var(--cyan)" }}
                   />
                   <label style={{ ...labelStyle, textTransform: "none", letterSpacing: 0, fontSize: "0.78rem", lineHeight: 1.5, marginBottom: 0 }}>
-                    I agree that NovaMerch may contact me about this request. I can opt out at any time. *
+                    I agree that NovaMerch may contact me about this request. I can opt out at any time. See our <a href="/privacy/" style={{ color: "var(--cyan)" }}>privacy policy</a>. *
                   </label>
                 </div>
 

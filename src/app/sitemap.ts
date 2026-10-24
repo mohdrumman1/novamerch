@@ -8,7 +8,8 @@ export const dynamic = "force-static";
 export const revalidate = false;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  // Fixed dates: bump a page's entry only on a material content change.
+  const now = new Date("2026-10-24");
 
   return [
     {
@@ -18,30 +19,78 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteUrl}/sports-clubs`,
+      url: `${siteUrl}/sports-clubs/`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/products`,
+      url: `${siteUrl}/products/`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/mockup-builder`,
+      url: `${siteUrl}/mockup-builder/`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${siteUrl}/free-mockup`,
+      url: `${siteUrl}/free-mockup/`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    ...productSlugs.map((slug) => ({ url: `${siteUrl}/products/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 })),
-    ...industrySlugs.map((slug) => ({ url: `${siteUrl}/industries/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
+    {
+      url: `${siteUrl}/case-studies/cooks-hill-united/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/solutions/custom-merchandise-newcastle/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/guides/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/guides/club-merch-ordering-checklist/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/guides/embroidery-vs-screen-printing-vs-dtf/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/privacy/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.3,
+    },
+    {
+      url: `${siteUrl}/guides/what-affects-custom-merchandise-cost/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/guides/how-long-does-custom-merchandise-take/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    ...productSlugs.map((slug) => ({ url: `${siteUrl}/products/${slug}/`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 })),
+    ...industrySlugs.map((slug) => ({ url: `${siteUrl}/industries/${slug}/`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
   ];
 }

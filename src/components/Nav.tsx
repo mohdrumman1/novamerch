@@ -8,6 +8,7 @@ const links = [
   { label: "Products", href: "/#products" },
   { label: "Industries", href: "/#industries" },
   { label: "How It Works", href: "/#how-it-works" },
+  { label: "Club Project", href: "/case-studies/cooks-hill-united/" },
   { label: "FAQs", href: "/#faq" },
 ];
 

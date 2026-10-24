@@ -6,7 +6,7 @@ const faqs = [
   {
     question: "Do you have minimum order quantities?",
     answer:
-      "No fixed minimums. Whether you need 5 items or 500, let us know what you are after and we will work with your quantity. Some products do have supplier minimums and we will flag those upfront.",
+      "Minimums vary by product and decoration method. Tell us what you are after and your rough quantity, and we will confirm suitable options before you commit.",
   },
   {
     question: "Can you help me choose products?",
