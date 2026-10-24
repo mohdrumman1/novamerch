@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { captureAttribution } from "@/lib/attribution";
 
 const productOptions = [
   "Drink Bottles",
@@ -54,8 +55,10 @@ export default function QuoteForm() {
   const [attribution, setAttribution] = useState({ source: "website", campaign: "direct", copyVersion: "website-v1", landingPage: "home" });
   const sectionRef = useRef<HTMLElement>(null);
   const requestIdRef = useRef<string | null>(null);
+  const touchesRef = useRef<ReturnType<typeof captureAttribution>>({});
 
   useEffect(() => {
+    touchesRef.current = captureAttribution();
     const params = new URLSearchParams(window.location.search);
     setAttribution({
         source: params.get("utm_source") || params.get("source") || "website",
@@ -109,6 +112,7 @@ export default function QuoteForm() {
           landingPage: data.get("landing_page"),
           consent: data.get("contact_consent"),
           requestId: requestIdRef.current,
+          attribution: { ...touchesRef.current, leadEventId: requestIdRef.current },
         }),
         headers: { "Content-Type": "application/json", Accept: "application/json" },
       });
