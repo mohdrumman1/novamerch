@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
+import ConsentBanner from "@/components/ConsentBanner";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-syne",
@@ -136,6 +137,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <ConsentBanner />
       </body>
     </html>
   );
