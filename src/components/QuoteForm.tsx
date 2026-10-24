@@ -481,7 +481,7 @@ export default function QuoteForm() {
                     style={{ marginTop: "0.2rem", accentColor: "var(--cyan)" }}
                   />
                   <label style={{ ...labelStyle, textTransform: "none", letterSpacing: 0, fontSize: "0.78rem", lineHeight: 1.5, marginBottom: 0 }}>
-                    I agree that NovaMerch may contact me about this request. I can opt out at any time. *
+                    I agree that NovaMerch may contact me about this request. I can opt out at any time. See our <a href="/privacy/" style={{ color: "var(--cyan)" }}>privacy policy</a>. *
                   </label>
                 </div>
 

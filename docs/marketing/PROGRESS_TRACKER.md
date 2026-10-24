@@ -17,6 +17,9 @@ Updated 2026-10-24. Source plan: `NOVAMERCH_GROWTH_MASTER_PLAN.md`.
 ## Newcastle page and SEO/AEO review
 Branch `feat/mkt-newcastle-page`: new `/solutions/custom-merchandise-newcastle/` page (draft for owner approval, not deployed) and `SEO_AEO_REVIEW.md`. We are NOT shown as top for Newcastle; see review for evidence and measurement method.
 
+## Competitive gap fixes
+Branch `feat/competitive-gap-fixes` (not deployed): rebuilt product pages, guides, privacy page, products index nav. See `COMPETITOR_ANALYSIS.md`. Privacy page needs legal review.
+
 ## Notes from implementation
 - MKT-004 stores campaign params and click ids in localStorage before any consent banner exists. Needs consent decision at MKT-003/005 (GA4 and ads consent).
 - MKT-009 slice done on `chore/mkt-009-seo-guard`: `npm run test:seo` (after build), root lint ignores fixed (0 errors). Sitemap `lastModified` NOT changed: `src/app/sitemap.ts` has your uncommitted edits, so I left it.
