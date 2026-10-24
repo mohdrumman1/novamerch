@@ -9,12 +9,16 @@ Updated 2026-10-24. Source plan: `NOVAMERCH_GROWTH_MASTER_PLAN.md`.
 | MKT-001 | Repo/access/stack baseline audit | DONE (code, live HTTP); account access items BLOCKED on owner | `BASELINE_AUDIT.md` |
 | MKT-002 | Claims and permissions register | DONE (register only; no copy changed) | `CLAIMS_REGISTER.md` |
 | MKT-003 | Search Console / GA4 / Bing access | BLOCKED: owner access | audit section 4, 8 |
-| MKT-004 | First-touch attribution + UTMs | READY | see below |
+| MKT-004 | First-touch attribution + UTMs | CODE DONE on `feat/mkt-004-attribution`, not deployed | 32/32 admin tests; src lint clean; OCR review no findings >= medium |
 | MKT-005 | `generate_lead` event | waits on 004 and GA4 access |
 | MKT-006 | Lead to quote to Orders link | waits on Airtable schema export |
 | MKT-007 | Claims copy edits | BLOCKED: owner decisions on supplier minimums |
 
-## Next two tasks (ready, small, no spend, no publishing)
+## Notes from implementation
+- MKT-004 stores campaign params and click ids in localStorage before any consent banner exists. Needs consent decision at MKT-003/005 (GA4 and ads consent).
+- MKT-009 slice done on `chore/mkt-009-seo-guard`: `npm run test:seo` (after build), root lint ignores fixed (0 errors). Sitemap `lastModified` NOT changed: `src/app/sitemap.ts` has your uncommitted edits, so I left it.
+
+## Previous plan (kept for reference) (ready, small, no spend, no publishing)
 
 ### Task A: MKT-004 first-touch attribution capture
 - Client: small helper in `src/lib/attribution.ts` capturing utm_medium/content/term, gclid, gbraid, wbraid, fbclid, referring domain, landing path, first and last touch timestamps, stored in sessionStorage/localStorage with try/catch. Wire into `src/components/QuoteForm.tsx`. Generate a non-PII `leadEventId`.
