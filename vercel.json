@@ -43,5 +43,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.novamerchau.com"
+        }
+      ],
+      "destination": "https://novamerchau.com/:path",
+      "permanent": true
+    }
   ]
 }
