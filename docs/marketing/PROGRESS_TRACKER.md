@@ -12,7 +12,7 @@ Updated 2026-10-24. Source plan: `NOVAMERCH_GROWTH_MASTER_PLAN.md`.
 | MKT-004 | First-touch attribution + UTMs | CODE DONE on `feat/mkt-004-attribution`, not deployed | 32/32 admin tests; src lint clean; OCR review no findings >= medium |
 | MKT-005 | `generate_lead` event | waits on 004 and GA4 access |
 | MKT-006 | Lead to quote to Orders link | waits on Airtable schema export |
-| MKT-007 | Claims copy edits | BLOCKED: owner decisions on supplier minimums |
+| MKT-007 | Claims copy edits | CODE DONE on `feat/mkt-007-claims-copy`, not deployed. Owner review of wording needed before deploy |
 
 ## Notes from implementation
 - MKT-004 stores campaign params and click ids in localStorage before any consent banner exists. Needs consent decision at MKT-003/005 (GA4 and ads consent).
