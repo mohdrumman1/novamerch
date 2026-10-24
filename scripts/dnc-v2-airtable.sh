@@ -52,23 +52,37 @@ response="$(curl --fail --silent --show-error --get "$API_URL" \
 
 count="$(jq '.records | length' <<<"$response")"
 if [[ "$count" == '0' ]]; then printf '%s\n' 'no_unique_match'; exit 0; fi
-if [[ "$count" != '1' ]]; then printf '%s\n' 'ambiguous_match'; exit 0; fi
+# The formula is an exact, case-insensitive match on one mailbox, so several rows can only be
+# duplicate records of the same recipient. An implausibly large count means something is wrong.
+if (( count > 10 )); then printf '%s\n' 'ambiguous_match'; exit 0; fi
 
-record_id="$(jq -r '.records[0].id' <<<"$response")"
-already_suppressed="$(jq -r '.records[0].fields["Suppressed"] // false' <<<"$response")"
-if [[ "$already_suppressed" == 'true' ]]; then printf '%s\n' 'already_suppressed'; exit 0; fi
+# Other mailboxes at the same domain are reported on stderr and never written.
+domain="${sender_email#*@}"
+siblings="$(curl --fail --silent --show-error --get "$API_URL" \
+  -H "Authorization: Bearer ${token}" \
+  --data-urlencode "filterByFormula=AND(FIND('@${domain,,}', LOWER({Email})) > 0, LOWER({Email}) != '${sender_email,,}', NOT({Suppressed}))" \
+  --data-urlencode 'fields[]=Email')" || siblings='{"records":[]}'
+printf 'domain_siblings_unsuppressed=%s\n' "$(jq '.records | length' <<<"$siblings")" >&2
+
+pending="$(jq -c '[.records[] | select((.fields["Suppressed"] // false) != true)]' <<<"$response")"
+pending_count="$(jq 'length' <<<"$pending")"
+if [[ "$pending_count" == '0' ]]; then printf '%s\n' 'already_suppressed'; exit 0; fi
 
 if [[ "$apply" != 'true' ]]; then printf '%s\n' 'unique_match_shadow'; exit 0; fi
 
 reply_date="${occurred_at:0:10}"
-existing_notes="$(jq -r '.records[0].fields["Notes"] // ""' <<<"$response")"
-audit_note="DNC v2 explicit opt-out recorded ${occurred_at}. Source ref: ${source_ref}."
-if [[ -n "$existing_notes" ]]; then audit_note="${existing_notes}"$'\n'"${audit_note}"; fi
+while IFS= read -r rec; do
+  record_id="$(jq -r '.id' <<<"$rec")"
+  existing_notes="$(jq -r '.fields["Notes"] // ""' <<<"$rec")"
+  audit_note="DNC v2 explicit opt-out recorded ${occurred_at}. Source ref: ${source_ref}."
+  if [[ -n "$existing_notes" ]]; then audit_note="${existing_notes}"$'\n'"${audit_note}"; fi
 
-payload="$(jq -n --arg status 'Do Not Contact' --arg note "$audit_note" --arg date "$reply_date" \
-  '{fields: {Status: $status, Suppressed: true, "Replied Date": $date, Notes: $note}}')"
-curl --fail --silent --show-error --request PATCH "${API_URL}/${record_id}" \
-  -H "Authorization: Bearer ${token}" \
-  -H 'Content-Type: application/json' \
-  --data "$payload" >/dev/null
+  payload="$(jq -n --arg status 'Do Not Contact' --arg note "$audit_note" --arg date "$reply_date" \
+    '{fields: {Status: $status, Suppressed: true, "Replied Date": $date, Notes: $note}}')"
+  curl --fail --silent --show-error --request PATCH "${API_URL}/${record_id}" \
+    -H "Authorization: Bearer ${token}" \
+    -H 'Content-Type: application/json' \
+    --data "$payload" >/dev/null
+done < <(jq -c '.[]' <<<"$pending")
+printf 'records_updated=%s\n' "$pending_count" >&2
 printf '%s\n' 'suppressed'

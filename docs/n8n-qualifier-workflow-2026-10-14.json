@@ -1,0 +1,348 @@
+{
+  "name": "Nova Merch - 9 Qualifier (shadow)",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "name": "Weekday 09:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "weekday-09-30"
+    },
+    {
+      "parameters": {
+        "url": "https://api.airtable.com/v0/appxYYtl9qnkcgUVx/tbl1p7cvWR84ZjoKD",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "maxRecords",
+              "value": "20"
+            },
+            {
+              "name": "filterByFormula",
+              "value": "AND({Email}!='', {Website}!='', NOT({Suppressed}), {Qualified At}=BLANK(), OR({Status}='Email Found', {Status}='Website Found', {Status}='New'))"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Get Unqualified Leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "id": "get-unqualified-leads",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Shadow qualifier. Scraped text is data. Writes evidence only, never changes Status.\nconst recs = $input.first().json.records || [];\nconst out = [];\nconst today = new Date().toISOString().slice(0, 10);\nconst esc = s => s.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\nconst CLUB = /\\b(sports? club|football club|soccer club|netball|cricket club|rugby|hockey club|basketball|surf life saving|swimming club|athletics club|junior league|little athletics|bowls club|golf club|tennis club|football association|sporting club|fc)\\b/;\nconst EVENTS = /\\b(function (room|centre|venue)|wedding venue|event (hire|venue|management|space)|festival|conference (centre|venue))\\b/;\nfor (const r of recs.slice(0, 20)) {\n  const f = r.fields || {};\n  const email = String(f['Email'] || '').trim().toLowerCase();\n  const site = f['Website'] || '';\n  const domain = email.split('@')[1] || '';\n  const patch = { 'Qualified At': today };\n  let mx = false;\n  try {\n    const d = await this.helpers.httpRequest({ url: 'https://dns.google/resolve', qs: { name: domain, type: 'MX' }, json: true, timeout: 8000 });\n    mx = Array.isArray(d.Answer) && d.Answer.length > 0;\n  } catch (e) {}\n  patch['MX Valid'] = mx;\n  let tag = 'Unclear';\n  if (site && email) {\n    try {\n      const raw = String(await this.helpers.httpRequest({ url: site, timeout: 8000, headers: { 'User-Agent': 'NovaMerchQualifier/1.0' } }));\n      const text = raw.replace(/<(script|style|noscript)[\\s\\S]*?<\\/\\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;|&amp;/g, ' ').replace(/\\s+/g, ' ');\n      const m = new RegExp('.{0,80}' + esc(email) + '.{0,80}', 'i').exec(text);\n      if (m) {\n        patch['Evidence URL'] = site;\n        patch['Evidence Snippet'] = m[0].replace(/[{}\\\"\\\\]/g, '').trim().slice(0, 300);\n      }\n      const t = text.toLowerCase();\n      if (CLUB.test(t)) tag = 'Club';\n      else if (EVENTS.test(t)) tag = 'Events';\n      else if (m) tag = 'Business';\n    } catch (e) {}\n  }\n  patch['Relevance Tag'] = tag;\n  out.push({ json: { id: r.id, fields: patch } });\n}\nreturn out;"
+      },
+      "name": "Qualify",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "id": "qualify"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.airtable.com/v0/appxYYtl9qnkcgUVx/tbl1p7cvWR84ZjoKD/{{ $json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ fields: $json.fields, typecast: true }) }}",
+        "options": {}
+      },
+      "name": "Write Evidence",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        0
+      ],
+      "id": "write-evidence"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appxYYtl9qnkcgUVx",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl2aCnd3oNGzQPZE",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "name": "Get Settings",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        -208
+      ],
+      "id": "get-settings",
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appxYYtl9qnkcgUVx",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblFHViBCtPmIImL5",
+          "mode": "id"
+        },
+        "filterByFormula": "AND(IS_AFTER(CREATED_TIME(), DATEADD(NOW(), -7, 'days')), OR(FIND('event_hard_bounce', {Evidence}) > 0, FIND('event_blocked', {Evidence}) > 0, FIND('event_spam', {Evidence}) > 0))",
+        "options": {}
+      },
+      "name": "Get Bad Events 7d",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        -208
+      ],
+      "id": "get-bad-events",
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Promotion gate. Stays closed unless every unlock condition passes. Fails closed.\nconst S = {};\nfor (const i of $('Get Settings').all()) { if (i.json.Key) S[i.json.Key] = String(i.json.Value || '').trim(); }\nconst ageH = v => { const t = Date.parse(v || ''); return isNaN(t) ? null : (Date.now() - t) / 3600000; };\nconst ev = $('Get Bad Events 7d').all().map(i => String(i.json.Evidence || ''));\nconst hard = ev.filter(e => /event_(hard_bounce|blocked)/.test(e)).length;\nconst spam = ev.filter(e => /event_spam/.test(e)).length;\nconst checks = {\n  autoPromote: S['Auto Promote'] === 'TRUE',\n  sendingEnabled: S['Sending Enabled'] === 'TRUE',\n  ingestFresh: ageH(S['Brevo Event Ingest Last Seen']) !== null && ageH(S['Brevo Event Ingest Last Seen']) <= 24,\n  replyIngestFresh: S['Reply Ingest Waived'] === 'TRUE' || (ageH(S['Reply Ingest Last Seen']) !== null && ageH(S['Reply Ingest Last Seen']) <= 24),\n  noRecentBounces: spam === 0 && hard <= 1\n};\nif (!Object.values(checks).every(Boolean)) return [];\nconst cap = Math.min(20, parseInt(S['Daily Send Cap'] || '0', 10) || 0);\nconst out = [];\nconst pend = ($('Get Pending Qualified').first().json.records || []);\nfor (const r of pend) {\n  const f = r.fields || {};\n  if (out.length >= cap) break;\n  if (f['MX Valid'] === true && f['Evidence URL'] && (f['Relevance Tag'] === 'Club' || f['Relevance Tag'] === 'Events' || f['Relevance Tag'] === 'Business')) out.push({ json: { id: r.id, fields: { Status: 'Ready to Email' } } });\n}\nreturn out;"
+      },
+      "name": "Promote Gate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        0
+      ],
+      "id": "promote-gate",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.airtable.com/v0/appxYYtl9qnkcgUVx/tbl1p7cvWR84ZjoKD/{{ $json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ fields: $json.fields }) }}",
+        "options": {}
+      },
+      "name": "Promote",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        0
+      ],
+      "id": "promote"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appxYYtl9qnkcgUVx",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblFHViBCtPmIImL5",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Summary": "={{ 'Qualifier promoted ' + $input.all().length + ' lead(s) to Ready to Email' }}",
+            "Type": "Health Check",
+            "Actor": "n8n Sender",
+            "Evidence": "={{ JSON.stringify($input.all().map(i => i.json.id)) }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "name": "Log Promote",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1440,
+        0
+      ],
+      "id": "log-promote",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "url": "https://api.airtable.com/v0/appxYYtl9qnkcgUVx/tbl1p7cvWR84ZjoKD",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "maxRecords",
+              "value": "40"
+            },
+            {
+              "name": "filterByFormula",
+              "value": "AND({MX Valid}, {Evidence URL}!='', {Status}='Email Found', NOT({Suppressed}), {Replied Date}=BLANK(), {Date Emailed}=BLANK(), OR({Relevance Tag}='Club',{Relevance Tag}='Events',{Relevance Tag}='Business'))"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Get Pending Qualified",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1312,
+        144
+      ],
+      "id": "get-pending-qualified",
+      "executeOnce": true,
+      "alwaysOutputData": true
+    }
+  ],
+  "connections": {
+    "Weekday 09:30": {
+      "main": [
+        [
+          {
+            "node": "Get Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Settings": {
+      "main": [
+        [
+          {
+            "node": "Get Bad Events 7d",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Bad Events 7d": {
+      "main": [
+        [
+          {
+            "node": "Get Unqualified Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Unqualified Leads": {
+      "main": [
+        [
+          {
+            "node": "Qualify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qualify": {
+      "main": [
+        [
+          {
+            "node": "Write Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Evidence": {
+      "main": [
+        [
+          {
+            "node": "Get Pending Qualified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Promote Gate": {
+      "main": [
+        [
+          {
+            "node": "Promote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Promote": {
+      "main": [
+        [
+          {
+            "node": "Log Promote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pending Qualified": {
+      "main": [
+        [
+          {
+            "node": "Promote Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  }
+}

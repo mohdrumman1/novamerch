@@ -6,6 +6,7 @@ const navLinks = [
   { label: "Products", href: "/#products" },
   { label: "Industries", href: "/#industries" },
   { label: "Sports Clubs", href: "/sports-clubs/" },
+  { label: "Cooks Hill United FC project", href: "/case-studies/cooks-hill-united/" },
   { label: "How It Works", href: "/#how-it-works" },
   { label: "FAQ", href: "/#faq" },
   { label: "Get a Quote", href: "/#quote" },
@@ -130,9 +131,26 @@ export default function Footer() {
               >
                 support@novamerchau.com
               </a>
+              <a
+                href="tel:+61422518149"
+                style={{
+                  fontFamily: "var(--font-dm-sans)",
+                  fontSize: "0.85rem",
+                  color: "var(--text-secondary)",
+                  textDecoration: "none",
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-primary)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")}
+              >
+                0422 518 149
+              </a>
               <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
                 Newcastle · Lake Macquarie<br />
                 Hunter Valley · NSW, Australia
+              </p>
+              <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "0.75rem", color: "var(--text-muted)", lineHeight: 1.6 }}>
+                ABN 60 917 373 894
               </p>
             </div>
           </div>

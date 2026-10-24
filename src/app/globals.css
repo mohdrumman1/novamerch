@@ -196,3 +196,33 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .marquee-track:hover {
   animation-play-state: paused;
 }
+
+/* Long-form content pages (guides, products, Newcastle, privacy) */
+.nm-prose ul, .nm-prose ol { list-style: none; padding-left: 0 !important; margin: 0 0 1.25rem; }
+.nm-prose ul li { position: relative; padding-left: 1.4rem; margin: 0.55rem 0; }
+.nm-prose ul li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
+.nm-prose ol { counter-reset: nm-step; }
+.nm-prose ol li { counter-increment: nm-step; position: relative; padding-left: 2.8rem; margin: 1rem 0; min-height: 1.9rem; }
+.nm-prose ol li::before { content: counter(nm-step); position: absolute; left: 0; top: -0.1rem; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: rgba(0, 207, 255, 0.14); color: var(--cyan); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
+.nm-prose h2 { padding-top: 1.75rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.nm-prose h3 { color: var(--text-primary); }
+.nm-prose a:not([class]) { color: var(--cyan); text-underline-offset: 3px; }
+.nm-prose figure { margin: 2rem 0; }
+.nm-prose figure img { width: 100%; height: auto; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); display: block; }
+.nm-prose figcaption { margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted); }
+.nm-prose dl dt { margin-top: 1rem; }
+.nm-faq-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 1rem 1.25rem; margin: 0.75rem 0; }
+.nm-faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; }
+.nm-faq-item p { margin: 0; }
+
+/* Editorial accents for content pages: mono labels, serif italic accent word, soft glow, glass cards */
+.nm-eyebrow { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cyan); }
+.nm-accent { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-weight: 400; color: var(--cyan); letter-spacing: -0.01em; }
+.nm-hero-glow { background-image: radial-gradient(60rem 28rem at 50% -8rem, rgba(0, 207, 255, 0.14), transparent 70%), radial-gradient(40rem 22rem at 100% 12rem, rgba(139, 92, 246, 0.10), transparent 70%); }
+.nm-prose h1 { letter-spacing: -0.045em; }
+.nm-faq-item { backdrop-filter: blur(6px); transition: border-color 0.2s, background 0.2s; }
+.nm-faq-item:hover { border-color: rgba(0, 207, 255, 0.35); background: rgba(0, 207, 255, 0.04); }
+.nm-cta { display: inline-flex; align-items: center; gap: 0.5rem; background: #00cfff; color: #06101d; padding: 1rem 1.5rem; border-radius: 999px; font-weight: 800; text-decoration: none; box-shadow: 0 0 0 0 rgba(0, 207, 255, 0.4); transition: box-shadow 0.25s, transform 0.25s; }
+.nm-cta:hover { box-shadow: 0 8px 30px rgba(0, 207, 255, 0.35); transform: translateY(-1px); }
+.nm-cta::after { content: "\2192"; }
+@media (prefers-reduced-motion: reduce) { .nm-cta, .nm-faq-item { transition: none; } .nm-cta:hover { transform: none; } }

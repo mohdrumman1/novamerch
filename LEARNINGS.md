@@ -1,3 +1,41 @@
+## 2026-10-14 - n8n per-item node fan-out wrongly auto-paused sending (one bounce counted five times)
+
+**Tags:** n8n, airtable, kill-switch, auto-pause, brevo, webhook, executeOnce, rest-api
+**Status:** Fixed
+
+**Issue:** The new health check workflow (`xsWNfGMfMB6RL3hF`) reported `hard=5` for a single hard-bounce row and set `Settings.Sending Enabled` to FALSE. Sending was restored the same hour.
+
+**Root cause:** An Airtable "search" node runs once per incoming item. It sat after "Get Settings", which returns 5 rows, so the Ops Log search ran 5 times and the Code node counted each duplicate. Separately, rows created by the Brevo webhook workflow have no `Logged At`, so a `Logged At` date filter silently matches nothing; use `CREATED_TIME()`.
+
+**Fix:** `executeOnce: true` on the search, log and pause nodes; date filter uses `IS_AFTER(CREATED_TIME(), DATEADD(NOW(), -7, 'days'))`. Verified `hard=1` with sending left TRUE.
+
+**Verify:** POST the health workflow's manual hook (`health-check-<secret>` path, read it from the workflow). Execution output must show `hard=<real count> spam=0`. Do not trust a count that equals the number of Settings rows (5).
+
+**If it recurs:** Any n8n node placed after a multi-row node needs `executeOnce` or a Code node in between that collapses to one item. Fetch the REST API from the editor tab with the `browser-id` header from `localStorage['n8n-browserId']`; the session dies if the tab is navigated, so keep one signed-in tab and re-sign-in after navigation. Publish with `POST /rest/workflows/{id}/activate {versionId}` after `PATCH`.
+
+**Autonomy build (same day):** kill switch wired into senders 2, 3 and 4 (fail closed), Brevo event webhook workflow `YjIYpxQj7OSG36OS` live, health check and auto-pause workflow `xsWNfGMfMB6RL3hF` live, Brevo outbound webhook active. Details: `docs/autonomous-outreach-plan-2026-10-13.md` "Implementation status".
+
+## 2026-10-13 - Opt-out not applied: DNC helper called duplicate rows "ambiguous", and the opt-out reached the sender anyway
+
+**Tags:** hermes, noah, dnc, suppression, airtable, n8n, opt-out, duplicates
+**Status:** Fixed (helper); sender gate still open, see If it recurs
+
+**Issue:** Healing Wave replied "no thanks" on 12 and 13 Oct. Noah's `noah-inbound-outreach-review` job reported `ambiguous_match` and suppressed nothing, so the practice stayed in the send queue. One Healing Wave lead was `Ready to Email` for the next 09:00 send.
+
+**Root cause:** `scripts/dnc-v2-airtable.sh` matches on the exact, lowercased email and returned `ambiguous_match` whenever more than one row had that email. That is not a domain collision (Noah's report wording was wrong): the Leads table held two rows with the identical address `newcastle@...`, created by two separate discovery searches (Newcastle and Lake Macquarie). Separately, other mailboxes at the same domain (`thejunction@`, `warnersbay@`) were different rows and never matched at all. The n8n sender filters only on `Status = Ready to Email` and a non-empty email, so it ignores `Suppressed`.
+
+**Fix:**
+- Helper now suppresses every unsuppressed row with the exact sender email (duplicates are one recipient), refuses only above 10 rows, and prints `domain_siblings_unsuppressed=N` on stderr for other mailboxes at the domain. It never writes those.
+- Deployed to `/root/.hermes/bin/dnc-v2-airtable.sh` (backup `.bak-pre-dup-20261013`), mode 0700.
+- Noah's prompt for job `19dc832a9724` updated to report same-domain leads as a manual-review count (backup at `/root/.hermes/cron/prompt-backup-19dc832a9724-20261013.txt`; text in `docs/noah-dnc-v2-live-prompt-2026-10-09.txt`).
+- All four Healing Wave rows set to `Do Not Contact`, `Suppressed` ticked.
+
+**Verify:** `dnc-v2-airtable.sh --sender-email <addr> --occurred-at <ISO> --source-ref <ref>` (no `--apply`) should print `unique_match_shadow` for an unsuppressed address, `already_suppressed` afterwards, `no_unique_match` for an unknown one. Check Airtable: filter `Suppressed` checked, then confirm none of those rows has `Status = Ready to Email`.
+
+**If it recurs:** The n8n sender filters were updated and published on 2026-10-13 to add `NOT({Suppressed})` (initial `DePrEszDYXp5xgHL`, follow-up 1 `FATcH49PudVff1g9`, follow-up 2 `Q8ciDwZpFCcN9HZe`). Previous formulas, for rollback: initial `AND({Status} = 'Ready to Email', {Email} != '')`; follow-up 1 `AND({Status} = 'Emailed', {Date Emailed} != '', DATETIME_DIFF(TODAY(), {Date Emailed}, 'days') >= 4)`; follow-up 2 `AND({Status} = 'Follow-up 1', {Follow-up 1 Sent} != '', DATETIME_DIFF(TODAY(), {Follow-up 1 Sent}, 'days') >= 6)`. A business-wide opt-out is still not applied to other mailboxes at the same domain, by design.
+
+**Same day, focus shift to clubs and weddings:** 116 of 117 `Ready to Email` leads were moved to `Email Found` (only the wedding venue Pier Ninety Seven stayed), restore list in `backups/airtable/2026-10-13-ready-to-email-hold-ids.txt` (gitignored, local). 85 Search Queue rows were set `Ready` to `Paused` (`backups/airtable/2026-10-13-search-queue-paused-ids.txt`), and 19 wedding and club searches were added. **The lead finder (`JqsHoiKlwSjUwdHb`) returns HTTP 403 from Google Places on every run, with no success in the last 28 runs (about two weeks), so none of those searches will return leads until the Google key or project is fixed.**
+
 ## 2026-09-16 - Noah (Hermes agent) down with generic "model provider failed after retries"  -  bad model ID copied from OpenRouter's `~`-prefixed alias listing
 
 **Tags:** hermes, noah, openrouter, model-provider, freellmapi, deploy, cron, fallback-chain
