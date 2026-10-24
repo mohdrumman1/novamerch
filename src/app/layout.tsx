@@ -111,8 +111,11 @@ export default function RootLayout({
                     "@type": "ContactPoint",
                     contactType: "sales",
                     email: "support@novamerchau.com",
+                    telephone: "+61422518149",
                     availableLanguage: "en",
                   },
+                  telephone: "+61422518149",
+                  taxID: "60917373894",
                   knowsAbout: ["Custom apparel", "Promotional products", "Branded merchandise", "Corporate gifts", "Sports club merchandise"],
                 },
                 {

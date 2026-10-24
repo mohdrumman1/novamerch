@@ -37,7 +37,7 @@ export default function PrivacyPage() {
           <p>Enquiries are sent to our systems over an encrypted connection and access to our records is restricted to authorised people. No system is perfectly secure, so please do not send sensitive information such as payment card details through the enquiry form.</p>
 
           <h2 style={h2}>Access, correction and opting out</h2>
-          <p>You can ask to see, correct or delete the information we hold about you, or opt out of contact, at any time by emailing <a href="mailto:support@novamerchau.com" style={{ color: "var(--cyan)" }}>support@novamerchau.com</a>. If you have a complaint about how we handle your information, contact us first. You may also contact the Office of the Australian Information Commissioner.</p>
+          <p>You can ask to see, correct or delete the information we hold about you, or opt out of contact, at any time by emailing <a href="mailto:support@novamerchau.com" style={{ color: "var(--cyan)" }}>support@novamerchau.com</a> or calling 0422 518 149. NovaMerch ABN 60 917 373 894. If you have a complaint about how we handle your information, contact us first. You may also contact the Office of the Australian Information Commissioner.</p>
 
           <h2 style={h2}>Changes</h2>
           <p>We may update this policy and will change the date above when we do.</p>
