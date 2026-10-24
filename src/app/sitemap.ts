@@ -19,33 +19,35 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteUrl}/sports-clubs`,
+      url: `${siteUrl}/sports-clubs/`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/products`,
+      url: `${siteUrl}/products/`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/mockup-builder`,
+      url: `${siteUrl}/mockup-builder/`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${siteUrl}/free-mockup`,
+      url: `${siteUrl}/free-mockup/`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    ...productSlugs.map((slug) => ({ url: `${siteUrl}/products/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 })),
-    ...industrySlugs.map((slug) => ({ url: `${siteUrl}/industries/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
-  ];
-}
+    {
+      url: `${siteUrl}/case-studies/cooks-hill-united/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
     {
       url: `${siteUrl}/solutions/custom-merchandise-newcastle/`,
       lastModified: now,
@@ -88,3 +90,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    ...productSlugs.map((slug) => ({ url: `${siteUrl}/products/${slug}/`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 })),
+    ...industrySlugs.map((slug) => ({ url: `${siteUrl}/industries/${slug}/`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
+  ];
+}
