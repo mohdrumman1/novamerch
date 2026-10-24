@@ -1,5 +1,7 @@
 # NovaMerch Claims and Permissions Register (MKT-002)
 
+**Update 2026-10-24:** rows 1-6 have conservative replacement copy on branch `feat/mkt-007-claims-copy` (not deployed). Wording uses only the plan's approved phrasing and states no new facts. Also fixed: `src/components/FAQ.tsx` said "No fixed minimums" (component currently unused, corrected anyway). Row 5 "No upfront cost" on the sports-clubs strip became "Free mockup pack, no commitment"; other pages still say "No upfront cost" next to the mockup offer (Hero, form, ShortlistCTA, WhatYouGet) and are left for owner review.
+
 Audited 2026-10-24. Nothing here has been edited on the live site. "Needs approval" means a human (Rumman/Nick) must confirm facts with supplier or client evidence before copy changes (MKT-007).
 
 Status values: VERIFIED-OK (consistent with plan rules), CONFLICT, UNSUPPORTED, NEEDS APPROVAL.

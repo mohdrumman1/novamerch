@@ -8,7 +8,8 @@ export const dynamic = "force-static";
 export const revalidate = false;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  // Fixed dates: bump a page's entry only on a material content change.
+  const now = new Date("2026-10-24");
 
   return [
     {

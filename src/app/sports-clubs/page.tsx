@@ -179,7 +179,7 @@ function SportsHero() {
             animationDelay: "0.32s",
           }}
         >
-          No upfront cost &nbsp;·&nbsp; No minimums &nbsp;·&nbsp; Newcastle-based &nbsp;·&nbsp; Ships Australia-wide
+          Free mockup pack, no commitment &nbsp;·&nbsp; Minimums vary by item &nbsp;·&nbsp; Newcastle-based &nbsp;·&nbsp; Ships Australia-wide
         </p>
       </div>
     </section>
@@ -198,8 +198,8 @@ function ClubBenefits() {
   }, []);
 
   const benefits = [
-    { title: "No Minimums", body: "Need 10 caps or 500 bottles? We work with your quantity, not the other way around.", accent: "cyan" as AccentColor, icon: "01" },
-    { title: "Club Colours & Logos", body: "We match your club's branding exactly: right colours, right placement, right finish.", accent: "violet" as AccentColor, icon: "02" },
+    { title: "Flexible Quantities", body: "Minimums vary by item. Tell us the quantity you have in mind and we will confirm suitable options.", accent: "cyan" as AccentColor, icon: "01" },
+    { title: "Club Colours & Logos", body: "We work from your club logo and colour references, and confirm the closest achievable colours, placement and finish on each product before production.", accent: "violet" as AccentColor, icon: "02" },
     { title: "Budget-Friendly Options", body: "From small fundraising runs to full-season merch orders, we find curated product options that fit.", accent: "cyan" as AccentColor, icon: "03" },
     { title: "One Point of Contact", body: "We handle artwork, sourcing and supplier communication. You just approve and order.", accent: "violet" as AccentColor, icon: "04" },
   ];
@@ -411,7 +411,7 @@ function ClubPacks() {
       num: "02",
       name: "Club Fundraising Bundle",
       items: ["Caps", "Supporter Merch", "Drink Bottles"],
-      description: "Low minimum quantities, good value. Ideal for fundraising drives or membership sign-up gifts. We can match these to your club colours.",
+      description: "Ideal for fundraising drives or membership sign-up gifts. Minimums vary by item. We will recommend options that suit your club colours.",
       accent: "violet" as AccentColor,
     },
     {

@@ -306,7 +306,7 @@ export default function QuoteForm() {
                   Request received.
                 </h3>
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "0.875rem", color: "var(--text-secondary)", lineHeight: 1.65 }}>
-                  We&apos;ll be in touch with your 3 branded mockup ideas and rough pricing within 24–48 hours. If you have a logo file ready, reply to our confirmation email with it attached.
+                  We&apos;ll review your brief and reply with 3 branded mockup ideas and rough pricing. If you have a logo file ready, reply to our confirmation email with it attached.
                 </p>
               </div>
             ) : (
