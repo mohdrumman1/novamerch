@@ -15,7 +15,7 @@ export default function PrivacyPage() {
     <>
       <Nav />
       <main style={{ background: "#060c18", color: "var(--text-primary)", minHeight: "100vh", padding: "8rem 1.5rem 5rem" }}>
-        <article style={{ maxWidth: "46rem", margin: "0 auto", lineHeight: 1.75, color: "var(--text-secondary)" }}>
+        <article className="nm-prose" style={{ maxWidth: "46rem", margin: "0 auto", lineHeight: 1.75, color: "var(--text-secondary)" }}>
           <h1 style={{ fontFamily: "var(--font-syne)", color: "var(--text-primary)" }}>Privacy Policy</h1>
           <p>Last updated 24 October 2026.</p>
           <p>NovaMerch is a Newcastle-based custom merchandise supplier. This page explains what we collect when you use this website and request a mockup or quote.</p>

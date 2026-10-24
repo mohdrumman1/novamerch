@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Embroidery vs Screen Printing vs DTF: Which Suits Your Logo? | NovaMerch",
   description: "A plain-English comparison of embroidery, screen printing and DTF for custom clothing, caps and merchandise, and how to choose for your logo and quantity.",
   alternates: { canonical: "/guides/embroidery-vs-screen-printing-vs-dtf/" },
+  openGraph: { type: "article", images: [{ url: "/products-showcase.png", width: 1100, height: 1430, alt: "NovaMerch branded merchandise concept" }] },
 };
 
 const h2 = { fontFamily: "var(--font-syne)", color: "var(--text-primary)", marginTop: "2.5rem" } as const;

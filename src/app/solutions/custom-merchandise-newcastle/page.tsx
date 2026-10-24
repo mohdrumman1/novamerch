@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     url: pageUrl,
     type: "website",
     locale: "en_AU",
+    images: [{ url: "/products-showcase.png", width: 1100, height: 1430, alt: "NovaMerch branded merchandise concept" }],
   },
 };
 
@@ -112,20 +114,26 @@ export default function NewcastleMerchandisePage() {
   return (
     <>
       <Nav />
-      <main style={{ background: "#060c18", color: "var(--text-primary)", minHeight: "100vh", padding: "8rem 1.5rem 5rem" }}>
+      <main className="nm-hero-glow" style={{ background: "#060c18", color: "var(--text-primary)", minHeight: "100vh", padding: "8rem 1.5rem 5rem" }}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <div style={wrap}>
-          <h1 style={{ fontFamily: "var(--font-syne)", fontSize: "clamp(2.2rem,6vw,3.6rem)", lineHeight: 1.05, margin: "0 0 1.25rem" }}>
-            Custom merchandise in Newcastle
+        <div className="nm-prose" style={wrap}>
+          <p className="nm-eyebrow">Newcastle NSW</p>
+          <h1 style={{ fontFamily: "var(--font-syne)", fontSize: "clamp(2.4rem,7vw,4.2rem)", lineHeight: 1.02, margin: "0.5rem 0 1.25rem" }}>
+            Custom merchandise in <span className="nm-accent">Newcastle</span>
           </h1>
           <p style={{ ...body, fontSize: "1.15rem", color: "var(--text-primary)" }}>
             NovaMerch is a Newcastle-based custom merchandise supplier for businesses, sports clubs and teams. Send us your logo, quantity and deadline and we will reply with three product ideas and rough pricing, free and with no commitment. We deliver across Australia.
           </p>
           <p style={{ margin: "1.75rem 0 3rem" }}>
-            <Link href={cta} style={{ display: "inline-flex", background: "#00CFFF", color: "#06101D", padding: "1rem 1.5rem", borderRadius: 999, fontWeight: 800, textDecoration: "none" }}>
+            <Link className="nm-cta" href={cta}>
               Get my free mockup pack
             </Link>
           </p>
+
+          <figure>
+            <Image src="/products-showcase.png" alt="Illustrative concept of branded merchandise: bottles, caps, apparel and gift packs" width={1100} height={1430} priority style={{ maxHeight: 520, objectFit: "cover" }} />
+            <figcaption>Illustrative concept mockup, not a delivered order.</figcaption>
+          </figure>
 
           <section style={{ marginBottom: "3rem" }}>
             <h2 style={h2}>What we supply</h2>
@@ -165,8 +173,8 @@ export default function NewcastleMerchandisePage() {
           <section style={{ marginBottom: "3rem" }}>
             <h2 style={h2}>Newcastle merchandise questions</h2>
             {faqs.map((f) => (
-              <div key={f.q} style={{ marginBottom: "1.5rem" }}>
-                <h3 style={{ fontSize: "1.1rem", margin: "0 0 .4rem" }}>{f.q}</h3>
+              <div key={f.q} className="nm-faq-item">
+                <h3>{f.q}</h3>
                 <p style={{ ...body, margin: 0 }}>{f.a}</p>
               </div>
             ))}
