@@ -76,3 +76,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.3,
     },
+    {
+      url: `${siteUrl}/guides/what-affects-custom-merchandise-cost/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/guides/how-long-does-custom-merchandise-take/`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },

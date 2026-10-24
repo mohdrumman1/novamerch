@@ -12,6 +12,8 @@ export const metadata: Metadata = {
 const guides = [
   ["/guides/club-merch-ordering-checklist/", "Club merchandise ordering checklist", "Artwork, sizes, sponsors, budget and deadlines in one checklist."],
   ["/guides/embroidery-vs-screen-printing-vs-dtf/", "Embroidery vs screen printing vs DTF", "Which decoration method suits your logo, garment and quantity."],
+  ["/guides/what-affects-custom-merchandise-cost/", "What affects the cost of custom merchandise?", "The main price drivers and how to compare quotes fairly."],
+  ["/guides/how-long-does-custom-merchandise-take/", "How long does custom merchandise take?", "What decides timing and how to plan back from your deadline."],
 ];
 
 export default function GuidesIndex() {

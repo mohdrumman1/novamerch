@@ -20,6 +20,9 @@ Branch `feat/mkt-newcastle-page`: new `/solutions/custom-merchandise-newcastle/`
 ## Competitive gap fixes
 Branch `feat/competitive-gap-fixes` (not deployed): rebuilt product pages, guides, privacy page, products index nav. See `COMPETITOR_ANALYSIS.md`. Privacy page needs legal review.
 
+## Sense2 teardown round
+Branches `perf/optimise-images` and `feat/aeo-resources-headers`: image compression, llms.txt, security headers, 2 more guides. See `SENSE2_TEARDOWN.md`.
+
 ## Notes from implementation
 - MKT-004 stores campaign params and click ids in localStorage before any consent banner exists. Needs consent decision at MKT-003/005 (GA4 and ads consent).
 - MKT-009 slice done on `chore/mkt-009-seo-guard`: `npm run test:seo` (after build), root lint ignores fixed (0 errors). Sitemap `lastModified` NOT changed: `src/app/sitemap.ts` has your uncommitted edits, so I left it.
