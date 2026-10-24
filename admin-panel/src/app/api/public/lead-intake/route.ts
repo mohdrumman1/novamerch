@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createRecord, listRecords, updateRecord } from "@/lib/airtable";
+import { attributionFields, sanitiseAttribution } from "@/lib/lead-attribution";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LEN = 500;
@@ -26,6 +27,7 @@ interface IntakeBody {
   consent?: unknown;
   requestId?: unknown;
   website?: unknown;
+  attribution?: unknown;
 }
 
 interface IntakeResponse {
@@ -85,6 +87,7 @@ function requestKey(value: string): string | undefined {
 function intakeNotes(
   input: Required<Pick<IntakeBody, "suburb" | "neededBy" | "product" | "quantity" | "budget" | "message" | "source" | "campaign" | "copyVersion" | "landingPage" | "website">>,
   consentCapturedAt: string,
+  attribution: unknown,
 ): string {
   return JSON.stringify({
     pipelineStatus: "New",
@@ -100,6 +103,7 @@ function intakeNotes(
     landingPage: text(input.landingPage) || "/free-mockup",
     website: text(input.website),
     consentCapturedAt,
+    attribution: sanitiseAttribution(attribution),
   });
 }
 
@@ -131,6 +135,7 @@ export async function POST(req: Request) {
   const cached = key ? idempotency.get(key) : undefined;
   if (cached && cached.expiresAt > Date.now()) return json({ ...cached.response, duplicate: true }, 200, origin);
 
+  const attribution = sanitiseAttribution(body.attribution);
   const consentCapturedAt = new Date().toISOString();
   const notes = intakeNotes({
     suburb: body.suburb,
@@ -144,7 +149,7 @@ export async function POST(req: Request) {
     copyVersion: body.copyVersion,
     landingPage: body.landingPage,
     website: body.website,
-  }, consentCapturedAt);
+  }, consentCapturedAt, body.attribution);
 
   try {
     const existing = await listRecords("Leads", {
@@ -163,6 +168,7 @@ export async function POST(req: Request) {
         "Campaign ID": text(body.campaign) || "direct",
         "Copy Version": text(body.copyVersion) || "website-v1",
         Notes: `${previous}${notes}`.slice(-4000),
+        ...attributionFields(attribution, existing[0].fields),
       });
     } else {
       const created = await createRecord("Leads", {
@@ -177,6 +183,7 @@ export async function POST(req: Request) {
         "Copy Version": text(body.copyVersion) || "website-v1",
         Notes: notes,
         "Dedupe Key": email,
+        ...attributionFields(attribution),
       });
       leadId = created.id;
     }
