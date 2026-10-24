@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { captureAttribution } from "@/lib/attribution";
+import { trackLead } from "@/lib/analytics";
 
 const productOptions = [
   "Drink Bottles",
@@ -118,6 +119,8 @@ export default function QuoteForm() {
       });
 
       if (res.ok) {
+        const result = (await res.json().catch(() => ({}))) as { duplicate?: boolean };
+        if (!result.duplicate && requestIdRef.current) trackLead(requestIdRef.current);
         setSubmitted(true);
       } else {
         setError(true);
