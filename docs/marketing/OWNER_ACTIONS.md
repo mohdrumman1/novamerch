@@ -1,5 +1,12 @@
 # Owner actions: step by step (what only you can do)
 
+## Done on 2026-10-25 (via your signed-in browser)
+- Search Console: Domain property `novamerchau.com` created and **verified** with a DNS TXT record I added in Cloudflare (record must stay).
+- Sitemap `https://novamerchau.com/sitemap.xml` submitted: Success, 26 pages discovered.
+- Indexing requested for: /solutions/custom-merchandise-newcastle/, /sports-clubs/ (already indexed, re-crawl requested), /guides/, /products/.
+- A second, unverified URL-prefix property `https://novamerchau.com/` also exists in Search Console from a verification attempt; you can delete it in Settings, or ignore it.
+- Not possible for me: Google Analytics (analytics.google.com showed a browser error page in the automated browser) and Bing Webmaster Tools (needs a sign-in or new account, which I will not do for you). Do steps 2 and 3 below yourself.
+
 Updated 2026-10-25. Order matters: do 1 to 3 first, they unlock the rest.
 
 ## 1. Google Search Console (about 10 minutes)
