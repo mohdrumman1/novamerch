@@ -123,6 +123,17 @@ export default function CooksHillUnitedCaseStudy() {
         </div>
       </section>
 
+      <section style={{ padding: "4rem 1.5rem", background: "#060c18" }}>
+        <figure style={{ maxWidth: "46rem", margin: "0 auto" }}>
+          <blockquote style={{ margin: 0, fontFamily: "var(--font-syne)", fontSize: "clamp(1.3rem, 3vw, 1.9rem)", lineHeight: 1.35, color: "var(--text-primary)" }}>
+            &ldquo;We appreciate the timeliness and the communication, it was all perfect.&rdquo;
+          </blockquote>
+          <figcaption style={{ marginTop: "1rem", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+            Feedback from Cooks Hill United FC
+          </figcaption>
+        </figure>
+      </section>
+
       <section style={{ padding: "5rem 1.5rem", background: "linear-gradient(135deg, #00b8d4, #007da3)", color: "#06111d" }}>
         <div style={{ maxWidth: "72rem", margin: "0 auto", display: "flex", gap: "2rem", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ maxWidth: "600px" }}>
