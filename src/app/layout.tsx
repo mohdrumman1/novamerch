@@ -30,34 +30,6 @@ const dmMono = DM_Mono({
 
 const siteUrl = "https://novamerchau.com";
 
-const frequentlyAskedQuestions = [
-  {
-    question: "Is there a minimum order quantity?",
-    answer:
-      "It depends on the product and decoration method. Tell us what you have in mind and we will explain the applicable options before you commit.",
-  },
-  {
-    question: "What affects the price?",
-    answer:
-      "Product choice, quantities, branding method, number of print positions and delivery requirements all shape the final quote.",
-  },
-  {
-    question: "Can you match our brand colours?",
-    answer:
-      "We can review your artwork and recommend appropriate product colours and branding methods. Exact colour matching depends on the material and production process.",
-  },
-  {
-    question: "Can we order several products together?",
-    answer:
-      "Yes. A mixed pack can be a practical way to cover uniforms, gifts, events or a campaign in one brief.",
-  },
-  {
-    question: "Do you deliver Australia-wide?",
-    answer:
-      "Yes. NovaMerch is Newcastle-based and works with businesses, clubs and teams around Australia.",
-  },
-];
-
 export const metadata: Metadata = {
   title: "Custom Branded Merchandise Australia | NovaMerch Newcastle",
   description:
@@ -138,15 +110,6 @@ export default function RootLayout({
                   url: `${siteUrl}/`,
                   inLanguage: "en-AU",
                   publisher: { "@id": `${siteUrl}/#organization` },
-                },
-                {
-                  "@type": "FAQPage",
-                  "@id": `${siteUrl}/#faq`,
-                  mainEntity: frequentlyAskedQuestions.map(({ question, answer }) => ({
-                    "@type": "Question",
-                    name: question,
-                    acceptedAnswer: { "@type": "Answer", text: answer },
-                  })),
                 },
               ],
             }),
