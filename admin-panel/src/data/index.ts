@@ -15,7 +15,6 @@ export const initialState: AppState = {
   shipments,
   supplierOrders: [],
   goods,
-  supplierOrders: [],
   settings: DEFAULT_SETTINGS,
 };
 
