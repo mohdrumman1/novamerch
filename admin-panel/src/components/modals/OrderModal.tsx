@@ -9,7 +9,7 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { LineItemsEditor } from "@/components/ui/LineItemsEditor";
 import { formatAUD } from "@/lib/format";
-import { lineItemsTotal, orderExpectedProfit, orderProjectedCost } from "@/lib/calc";
+import { lineItemsCost, lineItemsTotal } from "@/lib/calc";
 import {
   ORDER_GOODS_STATUSES,
   ORDER_INVOICE_STATUSES,

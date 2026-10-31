@@ -6,7 +6,7 @@ import { StatCard } from "@/components/ui/StatCard";
 import { Table } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
 import { formatAUD, formatDate } from "@/lib/format";
-import { lineItemsTotal, orderNetRevenue, orderProjectedCost, pendingOrdersValue, sumRecordedMoney } from "@/lib/calc";
+import { lineItemsTotal, orderBookedSupplierPayment, orderNetRevenue, orderPendingSupplierBalanceAud, orderProjectedCost, pendingOrdersValue, sumRecordedMoney } from "@/lib/calc";
 import { FY_ALL } from "@/lib/constants";
 import { ORDER_GOODS_STATUS_TONE } from "@/lib/status";
 import type { Order } from "@/lib/types";
@@ -34,25 +34,19 @@ export default function DashboardPage() {
   // cost only when every included order has a complete cost record.
   const recordedProjectedCosts = sumRecordedMoney(filteredOrders.map((order) => orderProjectedCost(order, supplierOrders)));
   const cashLessProjectedCosts = recordedProjectedCosts === undefined ? undefined : cashReceived - recordedProjectedCosts;
+  // Booked supplier payments, only when every included order has one recorded.
+  const costsPaid = sumRecordedMoney(
+    filteredOrders.map((order) => orderBookedSupplierPayment(order, supplierOrders))
+  );
+  const actualProfit = costsPaid === undefined ? undefined : cashReceived - costsPaid;
+  const owedToSuppliers = sumRecordedMoney(
+    orders.map((order) => orderPendingSupplierBalanceAud(order, supplierOrders))
+  );
   // outstanding: ALL-TIME, floor at 0 per order
   const outstandingInvoices = orders.reduce(
     (sum, o) => sum + Math.max(0, lineItemsTotal(o.lineItems) - (o.amountReceived ?? 0)) + Math.max(0, (o.refundAmountAud ?? 0) - (o.amountReceived ?? 0)),
     0
   );
-  const owedToSuppliers = sumRecordedMoney(
-    orders.map((order) => orderPendingSupplierBalanceAud(order, supplierOrders))
-  );
-  const outstandingInvoices = sumRecordedMoney(
-    orders.map((order) =>
-      order.amountReceived === undefined
-        ? undefined
-        : Math.max(0, lineItemsTotal(order.lineItems) - order.amountReceived)
-    )
-  );
-  const actualProfit =
-    cashReceived === undefined || costsPaid === undefined
-      ? undefined
-      : cashReceived - costsPaid;
 
   // ── Pipeline ────────────────────────────────────────────────────────────
   const pendingValue = pendingOrdersValue(orders);
@@ -133,7 +127,7 @@ export default function DashboardPage() {
           <StatCard label="Recorded Projected Costs" value={formatKnownAUD(recordedProjectedCosts)} tone="red" />
           <StatCard
             label="Outstanding Invoices"
-            value={outstandingInvoices === undefined ? "Not recorded" : formatAUD(outstandingInvoices)}
+            value={formatAUD(outstandingInvoices)}
             tone="orange"
             accentColor="#FF9800"
           />
@@ -141,6 +135,16 @@ export default function DashboardPage() {
             label="Cash Less Projected Costs"
             value={formatKnownAUD(cashLessProjectedCosts)}
             tone={cashLessProjectedCosts === undefined ? undefined : cashLessProjectedCosts >= 0 ? "green" : "red"}
+          />
+          <StatCard
+            label="Owed to Suppliers"
+            value={owedToSuppliers === undefined ? "Not recorded" : formatAUD(owedToSuppliers)}
+            tone="red"
+          />
+          <StatCard
+            label="Cash Flow"
+            value={actualProfit === undefined ? "Not recorded" : formatAUD(actualProfit)}
+            tone={actualProfit === undefined || actualProfit >= 0 ? "green" : "red"}
           />
         </div>
       </section>

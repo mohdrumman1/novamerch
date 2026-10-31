@@ -15,7 +15,6 @@ const baseState: AppState = {
   shipments: [],
   supplierOrders: [],
   goods: defaultGoods,
-  supplierOrders: [],
   settings: DEFAULT_SETTINGS,
 };
 
